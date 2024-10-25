@@ -4,7 +4,7 @@
 // @version      2024-10-24
 // @description  Efficiently swap bsky color palette
 // @author       Me :3
-// @match        https://bsky.app
+// @match        https://bsky.app/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bsky.app
 // ==/UserScript==
 
