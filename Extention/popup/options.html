@@ -79,13 +79,42 @@
       </div>
     </div>
 
-    <div>
-      <input /> //selector
-      <input /> //r
-      <input /> //g
-      <input /> //b
+    <div calss="row">
+      <div class="col form-group">
+        <select>
+          <option>Accent color</option>
+          <option>Accent color hover</option>
+          <option>Butterfly icon</option>
+          <option>Background</option>
+          <option>Content warnings</option>
+          <option>Content warnings hover</option>
+          <option>Text primary</option>
+          <option>Text secondary</option>
+          <option>Border color</option>
+        </select> 
+        <svg width="30" height="30">
+          <rect id="ColorMap--content-warnings-hover" width="30" height="30" fill="rgb(0,0,0)" />
+        </svg>
+      </div>
+      <div class="form-group">
+        <div>
+          <label>Red</label>
+          <input id="red" class="col" min="0" max="255" value="0" type ="range"/>
+        </div>
+        <div>
+          <label class="form-label">Blue</label>
+          <input id="blue" class="col" min="0" max="255" value="0" type ="range"/>
+        </div>
+        <div>
+          <label class="form-label">Green</label>
+        <input id="green" class="col" min="0" max="255" value="0" type ="range"/>
+        </div>
+      </div>
     </div>
   </div>
+  <script>
+    document.getElementById("red").onchange += func;
+  </script>
 </body>
 
 </html>
