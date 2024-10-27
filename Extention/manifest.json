@@ -1,0 +1,29 @@
+{
+  "description": "Allows users to freely swap color themes",
+  "manifest_version": 2,
+  "name": "BlueSkyColorPalletSwapper",
+  "version": "1",
+  "homepage_url": "https://github.com/Basedfloppa/Bsky-Color-Swapper",
+  "icons": {
+    "38": "bluesky.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://bsky.app/*",
+        "http://bsky.app/*"
+      ],
+      "js": [
+        "content_scripts/swap_pallet.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "browser_action": {
+    "default_title": "BlueSkyColorPalletSwapper",
+    "default_popup": "popup/options.html"
+  }
+}
