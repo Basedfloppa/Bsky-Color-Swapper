@@ -1,16 +1,3 @@
-// Define CSS variables for colors
-const colorMap = {
-  '--accent-color': localStorage.getItem("ColorMap--accent-color"),
-  '--accent-color-hover': localStorage.getItem("ColorMap--accent-color-hover"),
-  '--butterfly-icon': localStorage.getItem("ColorMap--butterfly-icon"),
-  '--background': localStorage.getItem("ColorMap--background"),
-  '--content-warnings': localStorage.getItem("ColorMap--content-warnings"),
-  '--content-warnings-hover': localStorage.getItem("ColorMap--content-warnings-hover"),
-  '--text-primary': localStorage.getItem("ColorMap--text-primary"),
-  '--text-secondary': localStorage.getItem("ColorMap--text-secondary"),
-  '--border-color': localStorage.getItem("ColorMap--border-color")
-};
-
 const dimTheme = {
   '--accent-color-val1': 'rgb(32, 139, 254)',
   '--accent-color-val2': '#0085ff',
@@ -195,12 +182,55 @@ function applyTheme(colorMap) {
   }
 }
 
-let BrowserApi = browser || chrome;
+function getColor() {
+  const colorMap = {
+    '--accent-color': localStorage.getItem("ColorMap--accent-color"),
+    '--accent-color-hover': localStorage.getItem("ColorMap--accent-color-hover"),
+    '--butterfly-icon': localStorage.getItem("ColorMap--butterfly-icon"),
+    '--background': localStorage.getItem("ColorMap--background"),
+    '--content-warnings': localStorage.getItem("ColorMap--content-warnings"),
+    '--content-warnings-hover': localStorage.getItem("ColorMap--content-warnings-hover"),
+    '--text-primary': localStorage.getItem("ColorMap--text-primary"),
+    '--text-secondary': localStorage.getItem("ColorMap--text-secondary"),
+    '--border-color': localStorage.getItem("ColorMap--border-color")
+  };
 
-// Listen for messages from background script
+  return colorMap;
+}
+
+function setColor(colorMap) {
+  localStorage.setItem("ColorMap--accent-color", colorMap["--accent-color"]);
+  localStorage.setItem("ColorMap--accent-color-hover", colorMap["--accent-color-hover"]);
+  localStorage.setItem("ColorMap--butterfly-icon", colorMap["--butterfly-icon"]);
+  localStorage.setItem("ColorMap--background", colorMap["--background"]);
+  localStorage.setItem("ColorMap--content-warnings", colorMap["--content-warnings"]);
+  localStorage.setItem("ColorMap--content-warnings-hover", colorMap["--content-warnings-hover"]);
+  localStorage.setItem("ColorMap--text-primary", colorMap["--text-primary"]);
+  localStorage.setItem("ColorMap--text-secondary", colorMap["--text-secondary"]);
+  localStorage.setItem("ColorMap--border-color", colorMap["--border-color"]);
+}
+
+let BrowserApi = browser || chrome;
 BrowserApi.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'applyTheme') {
     applyTheme(message.response['ColorMap']);
+    setColor(message.response['ColorMap'])
   }
 });
 
+
+
+// Use MutationObserver to wait for class changes
+const observer = new MutationObserver((mutationsList) => {
+  for (const mutation of mutationsList) {
+    if (mutation.attributeName === 'class' && document.documentElement.classList.length > 0) {
+      applyTheme(getColor());
+    }
+  }
+});
+// Start observing changes to the class attribute on the html element
+observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+if (document.documentElement.classList.length > 0) {
+  applyTheme(getColor());
+}

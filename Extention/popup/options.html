@@ -13,95 +13,118 @@
 </head>
 
 <body class="bg-dark">
-  <div class="m-4">
-    <div class="text-white">
-      <h1 id="log"></h1>
-      <p>BlueSkyColorPalletSwapper</p>
+  <div class="m-1 text-white d-flex flex-column align-items-center">
+    <p class="align-middle">BlueSkyColorPalletSwapper</p>
 
-      <div class="row m-1">
-        <div class="col m-2">
-          <div class="row">
-            <label class="col">Accent Color</label>
-            <div class="col" id="ColorMap--accent-color"
-              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-          </div>
-          <div class="row">
-            <label class="col">Accent Color Hover</label>
-            <div class="col" id="ColorMap--accent-color-hover"
-              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-          </div>
-          <div class="row">
-            <label class="col">Butterfly Icon</label>
-            <div class="col" id="ColorMap--butterfly-icon"
-              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-          </div>
-          <div class="row">
-            <label class="col">Background</label>
-            <div class="col" id="ColorMap--background"
-              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-          </div>
-          <div class="row">
-            <label class="col">Content Warnings</label>
-            <div class="col" id="ColorMap--content-warnings"
-              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-          </div>
-        </div>
-        <div class="col m-2">
-          <div class="row">
-            <label class="col">Content Warnings Hover</label>
-            <div class="col" id="ColorMap--content-warnings-hover"
-              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-          </div>
-          <div class="row">
-            <label class="col">Text Primary</label>
-            <div class="col" id="ColorMap--text-primary"
-              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-          </div>
-          <div class="row">
-            <label class="col">Text Secondary</label>
-            <div class="col" id="ColorMap--text-secondary"
-              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-          </div>
-          <div class="row">
-            <label class="col">Border Color</label>
-            <div class="col" id="ColorMap--border-color"
-              style="max-width:30px; max-eight:30px; background-color: rgb(0,0,0);"></div>
-          </div>
+    <table class="table table-dark">
+      <tbody>
+        <tr>
+          <td>
+            <div class="row m-2">
+              <label class="col">Accent Color</label>
+              <div class="col" id="ColorMap--accent-color"
+                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+            </div>
+          </td>
+          <td>
+            <div class="row m-2">
+              <label class="col">Hover</label>
+              <div class="col" id="ColorMap--accent-color-hover"
+                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="row m-2">
+              <label class="col">Content Warnings</label>
+              <div class="col" id="ColorMap--content-warnings"
+                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+            </div>
+          </td>
+          <td>
+            <div class="row m-2">
+              <label class="col">Hover</label>
+              <div class="col" id="ColorMap--content-warnings-hover"
+                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="row m-2">
+              <label class="col">Text Primary</label>
+              <div class="col" id="ColorMap--text-primary"
+                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+            </div>
+          </td>
+          <td>
+            <div class="row m-2">
+              <label class="col">Secondary</label>
+              <div class="col" id="ColorMap--text-secondary"
+                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="row m-2">
+              <label class="col">Icons</label>
+              <div class="col" id="ColorMap--butterfly-icon"
+                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+            </div>
+          </td>
+          <td>
+            <div class="row m-2">
+              <label class="col">Background</label>
+              <div class="col" id="ColorMap--background"
+                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="row m-2">
+              <label class="col">Border Color</label>
+              <div class="col" id="ColorMap--border-color"
+                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div calss="row">
+      <div class="row">
+        <select id="colorName" class="col m-1">
+          <option value="ColorMap--accent-color">Accent color</option>
+          <option value="ColorMap--accent-color-hover">Accent color hover</option>
+          <option value="ColorMap--butterfly-icon">Butterfly icon</option>
+          <option value="ColorMap--background">Background</option>
+          <option value="ColorMap--content-warnings">Content warnings</option>
+          <option value="ColorMap--content-warnings-hover">Content warnings hover</option>
+          <option value="ColorMap--text-primary">Text primary</option>
+          <option value="ColorMap--text-secondary">Text secondary</option>
+          <option value="ColorMap--border-color">Border color</option>
+        </select>
+        <div id="colorSwatch" class="col m-1" style="max-height: 30px; max-width: 30px; background-color: rgb(0,0,0);">
         </div>
       </div>
-
-      <div calss="row">
-        <div class="row">
-          <select id="colorName" class="col">
-            <option value="ColorMap--accent-color">Accent color</option>
-            <option value="ColorMap--accent-color-hover">Accent color hover</option>
-            <option value="ColorMap--butterfly-icon">Butterfly icon</option>
-            <option value="ColorMap--background">Background</option>
-            <option value="ColorMap--content-warnings">Content warnings</option>
-            <option value="ColorMap--content-warnings-hover">Content warnings hover</option>
-            <option value="ColorMap--text-primary">Text primary</option>
-            <option value="ColorMap--text-secondary">Text secondary</option>
-            <option value="ColorMap--border-color">Border color</option>
-          </select>
-          <div id="colorSwatch" class="col" style="max-height: 30px; max-width: 30px; background-color: rgb(0,0,0);">
-          </div>
+      <div class="form-group">
+        <div>
+          <label>Red</label>
+          <input id="red" class="col" min="0" max="255" step="1" type="range" />
+          <label id="redValue"></label>
         </div>
-        <div class="form-group">
-          <div>
-            <label>Red</label>
-            <input id="red" class="col" min="0" max="255" step="1" type="range" />
-            <label id="redValue"></label>
-          </div>
-          <div>
-            <label class="form-label">Green</label>
-            <input id="green" class="col" min="0" max="255" step="1" type="range" />
-            <label id="greenValue"></label>
-          </div>
-          <div>
-            <label class="form-label">Blue</label>
-            <input id="blue" class="col" min="0" max="255" step="1" type="range" />
-            <label id="blueValue"></label>
-          </div>
+        <div>
+          <label class="form-label">Green</label>
+          <input id="green" class="col" min="0" max="255" step="1" type="range" />
+          <label id="greenValue"></label>
+        </div>
+        <div>
+          <label class="form-label">Blue</label>
+          <input id="blue" class="col" min="0" max="255" step="1" type="range" />
+          <label id="blueValue"></label>
         </div>
       </div>
     </div>
