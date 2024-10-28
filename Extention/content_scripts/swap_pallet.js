@@ -31,7 +31,6 @@ const dimTheme = {
   '--text-secondary-val5': 'hsl(211, 20%, 62.4%)',
   '--border-color-val': 'rgb(46, 64, 82)',
 };
-
 const darkTheme = {
   '--accent-color-val1': 'rgb(16, 131, 254)',
   '--accent-color-val2': '#0085ff',
@@ -52,7 +51,6 @@ const darkTheme = {
   '--text-secondary-val5': 'hsl(211, 20%, 62.4%)',
   '--border-color-val': 'rgb(37, 51, 66)',
 };
-
 const lightTheme = {
   '--accent-color-val1': 'rgb(16, 131, 254)',
   '--accent-color-val2': '#0085ff',
@@ -74,28 +72,7 @@ const lightTheme = {
   '--border-color-val': 'rgb(212, 219, 226)'
 };
 
-function init() {
-  if (localStorage.getItem("ColorMap--accent-color") === null)
-    localStorage.setItem("ColorMap--accent-color", '#bb98ff');
-  if (localStorage.getItem("ColorMap--accent-color-hover") === null)
-    localStorage.setItem("ColorMap--accent-color-hover", '#8a2be2');
-  if (localStorage.getItem("ColorMap--butterfly-icon") === null)
-    localStorage.setItem("ColorMap--butterfly-icon", '#8a2be2');
-  if (localStorage.getItem("ColorMap--background") === null)
-    localStorage.setItem("ColorMap--background", '#200d46');
-  if (localStorage.getItem("ColorMap--content-warnings") === null)
-    localStorage.setItem("ColorMap--content-warnings", '#322d3c');
-  if (localStorage.getItem("ColorMap--content-warnings-hover") === null)
-    localStorage.setItem("ColorMap--content-warnings-hover", '#4b435b');
-  if (localStorage.getItem("ColorMap--text-primary") === null)
-    localStorage.setItem("ColorMap--text-primary", '#fff');
-  if (localStorage.getItem("ColorMap--text-secondary") === null)
-    localStorage.setItem("ColorMap--text-secondary", '#7f7f7f');
-  if (localStorage.getItem("ColorMap--border-color") === null)
-    localStorage.setItem("ColorMap--border-color", 'rgb(46, 64, 82)');
-}
-
-function applyTheme() {
+function applyTheme(colorMap) {
   let pickedTheme = {};
   const themeClass = document.documentElement.classList[0];
 
@@ -130,10 +107,14 @@ function applyTheme() {
     }
 
     *[style*="background-color: ${pickedTheme['--accent-color-val1']}"],
-    *[style*="background-color: ${pickedTheme['--accent-color-val2']}"], 
-    *[style*="background-color: ${pickedTheme['--accent-color-val5']}"] {
+    *[style*="background-color: ${pickedTheme['--accent-color-val2']}"] {
         background-color: var(--accent-color) !important;
     }
+
+    .r-wzwllv {
+      background-color: var(--accent-color) !important;
+    }
+      
     *[style*="color: ${pickedTheme['--accent-color-val1']}"],
     *[style*="color: ${pickedTheme['--accent-color-val2']}"] {
         color: var(--accent-color) !important;
@@ -214,21 +195,12 @@ function applyTheme() {
   }
 }
 
-// Use MutationObserver to wait for class changes
-const observer = new MutationObserver((mutationsList) => {
-  for (const mutation of mutationsList) {
-    if (mutation.attributeName === 'class' && document.documentElement.classList.length > 0) {
-      applyTheme();
-    }
+let BrowserApi = browser || chrome;
+
+// Listen for messages from background script
+BrowserApi.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'applyTheme') {
+    applyTheme(message.response['ColorMap']);
   }
 });
 
-// Start observing changes to the class attribute on the html element
-observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-
-// Check initially if the class is already present
-if (document.documentElement.classList.length > 0) {
-  applyTheme();
-}
-
-init();

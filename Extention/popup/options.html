@@ -10,111 +10,103 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
-
-  <script src="options.js"></script>
 </head>
 
-<body>
-  <div class="bg-dark text-white">
+<body class="bg-dark">
+  <div class="m-4">
+    <div class="text-white">
+      <h1 id="log"></h1>
+      <p>BlueSkyColorPalletSwapper</p>
 
-    <p>BlueSkyColorPalletSwapper</p>
-    <div class="row">
-      <div class="col">
-        <div class="">
-          <label for="ColorMap--accent-color">Accent Color</label>
-          <svg width="30" height="30">
-            <rect id="ColorMap--accent-color" width="30" height="30" fill="rgb(0,0,0)" />
-          </svg>
+      <div class="row m-1">
+        <div class="col m-2">
+          <div class="row">
+            <label class="col">Accent Color</label>
+            <div class="col" id="ColorMap--accent-color"
+              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+          </div>
+          <div class="row">
+            <label class="col">Accent Color Hover</label>
+            <div class="col" id="ColorMap--accent-color-hover"
+              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+          </div>
+          <div class="row">
+            <label class="col">Butterfly Icon</label>
+            <div class="col" id="ColorMap--butterfly-icon"
+              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+          </div>
+          <div class="row">
+            <label class="col">Background</label>
+            <div class="col" id="ColorMap--background"
+              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+          </div>
+          <div class="row">
+            <label class="col">Content Warnings</label>
+            <div class="col" id="ColorMap--content-warnings"
+              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+          </div>
         </div>
-        <div class="">
-          <label for="ColorMap--accent-color-hover">Accent Color Hover</label>
-          <svg width="30" height="30">
-            <rect id="ColorMap--accent-color-hover" width="30" height="30" fill="rgb(0,0,0)" />
-          </svg>
-        </div>
-        <div class="">
-          <label for="ColorMap--butterfly-icon">Butterfly Icon</label>
-          <svg width="30" height="30">
-            <rect id="ColorMap--butterfly-icon" width="30" height="30" fill="rgb(0,0,0)" />
-          </svg>
-        </div>
-        <div class="">
-          <label for="ColorMap--background">Background</label>
-          <svg width="30" height="30">
-            <rect id="ColorMap--background" width="30" height="30" fill="rgb(0,0,0)" />
-          </svg>
-        </div>
-        <div class="">
-          <label for="ColorMap--content-warnings">Content Warnings</label>
-          <svg width="30" height="30">
-            <rect id="ColorMap--content-warnings" width="30" height="30" fill="rgb(0,0,0)" />
-          </svg>
-        </div>
-      </div>
-      <div class="col">
-        <div class="">
-          <label for="ColorMap--content-warnings-hover">Content Warnings Hover</label>
-          <svg width="30" height="30">
-            <rect id="ColorMap--content-warnings-hover" width="30" height="30" fill="rgb(0,0,0)" />
-          </svg>
-        </div>
-        <div class="">
-          <label for="ColorMap--text-primary">Text Primary</label>
-          <svg width="30" height="30">
-            <rect id="ColorMap--text-primary" width="30" height="30" fill="rgb(0,0,0)" />
-          </svg>
-        </div>
-        <div>
-          <label for="ColorMap--text-secondary">Text Secondary</label>
-          <svg width="30" height="30">
-            <rect id="ColorMap--text-secondary" width="30" height="30" fill="rgb(0,0,0)" />
-          </svg>
-        </div>
-        <div class="">
-          <label for="ColorMap--border-color">Border Color</label>
-          <svg width="30" height="30">
-            <rect id="ColorMap--border-color" width="30" height="30" fill="rgb(0,0,0)" />
-          </svg>
+        <div class="col m-2">
+          <div class="row">
+            <label class="col">Content Warnings Hover</label>
+            <div class="col" id="ColorMap--content-warnings-hover"
+              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+          </div>
+          <div class="row">
+            <label class="col">Text Primary</label>
+            <div class="col" id="ColorMap--text-primary"
+              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+          </div>
+          <div class="row">
+            <label class="col">Text Secondary</label>
+            <div class="col" id="ColorMap--text-secondary"
+              style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+          </div>
+          <div class="row">
+            <label class="col">Border Color</label>
+            <div class="col" id="ColorMap--border-color"
+              style="max-width:30px; max-eight:30px; background-color: rgb(0,0,0);"></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div calss="row">
-      <div class="col form-group">
-        <select>
-          <option>Accent color</option>
-          <option>Accent color hover</option>
-          <option>Butterfly icon</option>
-          <option>Background</option>
-          <option>Content warnings</option>
-          <option>Content warnings hover</option>
-          <option>Text primary</option>
-          <option>Text secondary</option>
-          <option>Border color</option>
-        </select> 
-        <svg width="30" height="30">
-          <rect id="ColorMap--content-warnings-hover" width="30" height="30" fill="rgb(0,0,0)" />
-        </svg>
-      </div>
-      <div class="form-group">
-        <div>
-          <label>Red</label>
-          <input id="red" class="col" min="0" max="255" value="0" type ="range"/>
+      <div calss="row">
+        <div class="row">
+          <select id="colorName" class="col">
+            <option value="ColorMap--accent-color">Accent color</option>
+            <option value="ColorMap--accent-color-hover">Accent color hover</option>
+            <option value="ColorMap--butterfly-icon">Butterfly icon</option>
+            <option value="ColorMap--background">Background</option>
+            <option value="ColorMap--content-warnings">Content warnings</option>
+            <option value="ColorMap--content-warnings-hover">Content warnings hover</option>
+            <option value="ColorMap--text-primary">Text primary</option>
+            <option value="ColorMap--text-secondary">Text secondary</option>
+            <option value="ColorMap--border-color">Border color</option>
+          </select>
+          <div id="colorSwatch" class="col" style="max-height: 30px; max-width: 30px; background-color: rgb(0,0,0);">
+          </div>
         </div>
-        <div>
-          <label class="form-label">Blue</label>
-          <input id="blue" class="col" min="0" max="255" value="0" type ="range"/>
-        </div>
-        <div>
-          <label class="form-label">Green</label>
-        <input id="green" class="col" min="0" max="255" value="0" type ="range"/>
+        <div class="form-group">
+          <div>
+            <label>Red</label>
+            <input id="red" class="col" min="0" max="255" step="1" type="range" />
+            <label id="redValue"></label>
+          </div>
+          <div>
+            <label class="form-label">Green</label>
+            <input id="green" class="col" min="0" max="255" step="1" type="range" />
+            <label id="greenValue"></label>
+          </div>
+          <div>
+            <label class="form-label">Blue</label>
+            <input id="blue" class="col" min="0" max="255" step="1" type="range" />
+            <label id="blueValue"></label>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <script>
-    document.getElementById("red").onchange += func;
-  </script>
+  <script src="options.js"></script>
 </body>
 
 </html>

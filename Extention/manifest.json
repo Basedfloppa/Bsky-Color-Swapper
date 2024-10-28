@@ -10,17 +10,24 @@
   "content_scripts": [
     {
       "matches": [
-        "https://bsky.app/*",
-        "http://bsky.app/*"
+        "*://bsky.app/*"
       ],
       "js": [
         "content_scripts/swap_pallet.js"
       ]
     }
   ],
+  "background":
+  {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
   "permissions": [
     "storage",
-    "activeTab"
+    "tabs",
+    "scripting",
+    "activeTab",
+    "*://bsky.app/*"
   ],
   "browser_action": {
     "default_title": "BlueSkyColorPalletSwapper",
