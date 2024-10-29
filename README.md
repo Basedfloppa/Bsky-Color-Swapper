@@ -1,6 +1,6 @@
 # BlueSky Collor Paller Swapper
 
-A cross browser extentions that allows swapping colors on bsky.app for creation of personalized color themes.
+A cross browser extention that allows swapping colors on bsky.app for creating personalized color themes.
 
 Link for firefox: https://addons.mozilla.org/en-US/firefox/addon/bluesky-color-pallet-swapper/
 
