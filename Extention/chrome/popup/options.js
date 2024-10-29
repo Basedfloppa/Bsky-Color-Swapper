@@ -12,13 +12,22 @@ red.addEventListener("input", updateColor);
 green.addEventListener("input", updateColor);
 blue.addEventListener("input", updateColor);
 
-function init() {
-  for (let i = 0; i <= colorName.options.length; i++) {
-    if (!colorName.options[i])
-      continue;
-    document.getElementById(colorName.options[i].value).style["background-color"] = localStorage.getItem(colorName.options[i].value) ?? "rgb(0,0,0)";
+async function init() {
+  for (let i = 0; i < colorName.options.length; i++) {
+    const option = colorName.options[i];
+    if (option) {
+      const color = await getStorageValue(option.value) ?? "rgb(0,0,0)";
+      document.getElementById(option.value).style["background-color"] = color;
+    }
   }
   setColor();
+}
+function getStorageValue(key) {
+  return new Promise((resolve) => {
+    chrome.storage.local.get([key], (result) => {
+      resolve(result[key]);
+    });
+  });
 }
 function updateColor() {
   let color = "rgb(" + red.value + "," + green.value + "," + blue.value + ")";
@@ -29,18 +38,22 @@ function updateColor() {
   document.getElementById("greenValue").innerHTML = green.value;
   document.getElementById("blueValue").innerHTML = blue.value;
 
-  localStorage.setItem(colorName.value, color);
+  let variable = { Name: colorName.value, Value: color };
+  chrome.storage.local.set({ [variable.Name]: variable.Value });
 
   chrome.runtime.sendMessage({ type: 'applyTheme' });
 }
-function setColor() {
-  let colors = convertToRgb(localStorage.getItem(colorName.value) ?? "rgb(0,0,0)");
+async function setColor() {
+  const color = await getStorageValue(colorName.value);
+  const colors = convertToRgb(color) ?? { 'r':0,'g':0,'b':0};
 
-  document.getElementById("red").value = colors[0];
-  document.getElementById("green").value = colors[1];
-  document.getElementById("blue").value = colors[2];
+  document.getElementById("log").innerHTML = JSON.stringify(colors);
 
-  swatch.style["background-color"] = localStorage.getItem(colorName.value);
+  red.value = colors['r'];
+  green.value = colors['g'];
+  blue.value = colors['b'];
+
+  swatch.style["background-color"] = color;
 
   document.getElementById("redValue").innerHTML = red.value;
   document.getElementById("greenValue").innerHTML = green.value;
@@ -64,35 +77,27 @@ function hslToRgb(h, s, l) {
 
   return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
 }
-function hexToRgb(hex) {
-  hex = hex.replace(/^#/, '');
-  if (hex.length === 3) {
-    hex = hex.split('').map(c => c + c).join('');
-  }
-
-  const bigint = parseInt(hex, 16);
-  return [
-    (bigint >> 16) & 255,
-    (bigint >> 8) & 255,
-    bigint & 255
-  ];
-}
 function parseRgbString(rgbString) {
   const match = rgbString.match(/\d+/g);
   if (!match) return null;
   return match.map(Number);
 }
 function convertToRgb(color) {
-  if (color.startsWith('hsl')) {
-    const match = color.match(/(\d+),\s*(\d+)%,\s*(\d+)%/);
-    if (!match) return null;
-    return hslToRgb(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
-  } else if (color.startsWith('#')) {
-    return hexToRgb(color);
-  } else if (color.startsWith('rgb')) {
-    return parseRgbString(color);
+  try {
+    if (String(color).startsWith('hsl')) {
+      const match = color.match(/(\d+),\s*(\d+)%,\s*(\d+)%/);
+      if (!match) throw new Error("Invalid HSL format");
+      return hslToRgb(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
+    } else if (String(color).startsWith('#')) {
+      return hexToRgb(color);
+    } else if (String(color).startsWith('rgb')) {
+      return parseRgbString(color);
+    }
+    throw new Error("Unsupported color format");
+  } catch (error) {
+    console.error("Failed to convert color:", error);
+    return [0, 0, 0]; // Default color
   }
-  return null;
 }
 
-init();
+document.addEventListener("DOMContentLoaded", init);
