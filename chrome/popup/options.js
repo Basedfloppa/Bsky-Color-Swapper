@@ -2,6 +2,20 @@ let red = document.getElementById("red");
 let blue = document.getElementById("blue");
 let green = document.getElementById("green");
 
+let redVal = document.getElementById("redValue");
+let blueVal = document.getElementById("blueValue");
+let greenVal = document.getElementById("greenValue");
+
+let hue = document.getElementById("hue");
+let saturation = document.getElementById("saturation");
+let lightness = document.getElementById("lightness");
+
+let hueVal = document.getElementById("hueValue");
+let saturationVal = document.getElementById("saturationValue");
+let lightnessVal = document.getElementById("lightnessValue");
+
+let hex = document.getElementById("hex");
+
 let swatch = document.getElementById("colorSwatch");
 
 let colorName = document.getElementById("colorName");
@@ -12,14 +26,20 @@ red.addEventListener("input", updateColor);
 green.addEventListener("input", updateColor);
 blue.addEventListener("input", updateColor);
 
+hue.addEventListener("input", updateColor);
+saturation.addEventListener("input", updateColor);
+lightness.addEventListener("input", updateColor);
+
+hex.addEventListener("input", updateColor);
+
 async function init() {
-  for (let i = 0; i < colorName.options.length; i++) {
-    const option = colorName.options[i];
-    if (option) {
-      const color = await getStorageValue(option.value) ?? "rgb(0,0,0)";
-      document.getElementById(option.value).style["background-color"] = color;
-    }
-  }
+  const options = Array.from(colorName.options);
+  const colors = await Promise.all(
+    options.map(option => getStorageValue(option.value) ?? "rgb(0,0,0)")
+  );
+  colors.forEach((color, i) => {
+    document.getElementById(options[i].value).style["background-color"] = color;
+  });
   setColor();
 }
 function getStorageValue(key) {
@@ -30,13 +50,27 @@ function getStorageValue(key) {
   });
 }
 function updateColor() {
-  let color = "rgb(" + red.value + "," + green.value + "," + blue.value + ")";
+  let tab = document.querySelector(".nav-link.active").id.split("-")[0];
+  let color = "";
+
+  switch (tab) {
+    case "rgb":
+      color = "rgb(" + red.value + "," + green.value + "," + blue.value + ")";
+      updateRgbVal();
+      break;
+    case "hsl":
+      color = convertToRgb("hsl(" + hue.value + "," + saturation.value + "%," + lightness.value + "%)");
+      color = "rgb(" + color['r'] + "," + color['g'] + "," + color['b'] + ")";
+      updateHslVal();
+      break;
+    case "hex":
+      color = hexToRgb(hex.value);
+      color = "rgb(" + color['r'] + "," + color['g'] + "," + color['b'] + ")";
+      break;
+  }
+
   swatch.style["background-color"] = color;
   document.getElementById(colorName.value).style["background-color"] = color;
-
-  document.getElementById("redValue").innerHTML = red.value;
-  document.getElementById("greenValue").innerHTML = green.value;
-  document.getElementById("blueValue").innerHTML = blue.value;
 
   let variable = { Name: colorName.value, Value: color };
   chrome.storage.local.set({ [variable.Name]: variable.Value });
@@ -44,60 +78,127 @@ function updateColor() {
   chrome.runtime.sendMessage({ type: 'applyTheme' });
 }
 async function setColor() {
-  const color = await getStorageValue(colorName.value);
-  const colors = convertToRgb(color) ?? { 'r':0,'g':0,'b':0};
+  let color = await getStorageValue(colorName.value) ?? "rgb(0,0,0)";
+  color = convertToRgb(color);
 
-  document.getElementById("log").innerHTML = JSON.stringify(colors);
+  swatch.style["background-color"] = "rgb(" + color['r'] + "," + color['g'] + "," + color['b'] + ")";
 
-  red.value = colors['r'];
-  green.value = colors['g'];
-  blue.value = colors['b'];
+  red.value = color['r'];
+  green.value = color['g'];
+  blue.value = color['b'];
+  updateRgbVal();
 
-  swatch.style["background-color"] = color;
+  let hslColor = rgbToHsl(color['r'], color['g'], color['b']);
+  hue.value = hslColor['h'];
+  saturation.value = hslColor['s'];
+  lightness.value = hslColor['l'];
+  updateHslVal();
 
-  document.getElementById("redValue").innerHTML = red.value;
-  document.getElementById("greenValue").innerHTML = green.value;
-  document.getElementById("blueValue").innerHTML = blue.value;
+  hex.value = rgbToHex(color['r'], color['g'], color['b']);
 }
-function hexToRgb(hex) {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
-}
-function hslToRgb(h, s, l) {
-  s /= 100;
-  l /= 100;
 
-  const k = n => (n + h / 30) % 12;
-  const a = s * Math.min(l, 1 - l);
-  const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
-
-  return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
+function updateRgbVal() {
+  redVal.innerHTML = red.value;
+  greenVal.innerHTML = green.value;
+  blueVal.innerHTML = blue.value;
 }
-function parseRgbString(rgbString) {
-  const match = rgbString.match(/\d+/g);
-  if (!match) return null;
-  return match.map(Number);
-}
-function convertToRgb(color) {
-  try {
-    if (String(color).startsWith('hsl')) {
-      const match = color.match(/(\d+),\s*(\d+)%,\s*(\d+)%/);
-      if (!match) throw new Error("Invalid HSL format");
-      return hslToRgb(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
-    } else if (String(color).startsWith('#')) {
-      return hexToRgb(color);
-    } else if (String(color).startsWith('rgb')) {
-      return parseRgbString(color);
-    }
-    throw new Error("Unsupported color format");
-  } catch (error) {
-    console.error("Failed to convert color:", error);
-    return [0, 0, 0]; // Default color
-  }
+function updateHslVal() {
+  hueVal.innerHTML = hue.value;
+  saturationVal.innerHTML = saturation.value;
+  lightnessVal.innerHTML = lightness.value;
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+// #region Colors
+function hexToRgb(hex) {
+  hex = hex.replace(/^#/, '');
+  if (hex.length === 3) {
+    hex = hex.split('').map(c => c + c).join('');
+  }
+  const bigint = parseInt(hex, 16);
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255
+  };
+}
+// Convert RGB to Hex
+function rgbToHex(r, g, b) {
+  return (
+    "#" +
+    [r, g, b]
+      .map(x => {
+        const hex = x.toString(16);
+        return hex.length === 1 ? "0" + hex : hex;
+      })
+      .join("")
+  );
+}
+// Convert HSL to RGB
+function hslToRgb(h, s, l) {
+  s /= 100;
+  l /= 100;
+  const k = n => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  return {
+    r: Math.round(f(0) * 255),
+    g: Math.round(f(8) * 255),
+    b: Math.round(f(4) * 255)
+  };
+}
+// Convert RGB to HSL
+function rgbToHsl(r, g, b) {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+
+  if (max === min) {
+    h = s = 0; // achromatic
+  } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
+    }
+    h *= 60;
+  }
+  return { h: Math.round(h), s: Math.round(s * 100), l: Math.round(l * 100) };
+}
+// Convert Hex to HSL
+function hexToHsl(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  return rgbToHsl(r, g, b);
+}
+// Parse an RGB string to RGB object
+function parseRgbString(rgbString) {
+  const match = rgbString.match(/\d+/g);
+  if (!match) return null;
+  return { r: parseInt(match[0]), g: parseInt(match[1]), b: parseInt(match[2]) };
+}
+// Convert color string to RGB
+function convertToRgb(color) {
+  if (color.startsWith("hsl")) {
+    const match = color.match(/(\d+),\s*(\d+)%,\s*(\d+)%/);
+    if (!match) return null;
+    return hslToRgb(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
+  } else if (color.startsWith("#")) {
+    return hexToRgb(color);
+  } else if (color.startsWith("rgb")) {
+    return parseRgbString(color);
+  }
+  return null;
+}
+// #endregions
