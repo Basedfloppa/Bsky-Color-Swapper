@@ -1,4 +1,9 @@
-# Bsky-Color-Swapper
+# BlueSky Collor Paller Swapper
 
-Browser extention for changing color pallet on bsky.app, repo also includes a
-Little user-script for changing color pallet on bsky, works dynamically, runs inside Tampermonkey browser extention
+A cross browser extentions that allows swapping colors on bsky.app for creation of personalized color themes.
+
+Link for firefox: https://addons.mozilla.org/en-US/firefox/addon/bluesky-color-pallet-swapper/
+
+There is no link for chrome as i am not able to pay registration fee right now, so here link on how to add this extention manually: https://certera.com/kb/how-to-manually-install-a-chrome-extension-in-2-ways/
+
+If you have any questions or additions you would like me to make, feel free to create issue on github or message me on bsky at [@catinvoid.bsky.social](https://bsky.app/profile/catinvoid.bsky.social)
