@@ -1,4 +1,3 @@
-// Initialize default theme if not set
 function init() {
   chrome.storage.local.get(null, (items) => {
     if (!Object.keys(items).some(key => key.startsWith("ColorMap"))) {
@@ -16,7 +15,8 @@ function init() {
     }
   });
 }
-function getMap() {
+
+async function getMap() {
   return new Promise((resolve) => {
     chrome.storage.local.get([
       "ColorMap--accent-color",
@@ -28,17 +28,17 @@ function getMap() {
       "ColorMap--text-primary",
       "ColorMap--text-secondary",
       "ColorMap--border-color"
-    ], (items) => {
+    ], (result) => {
       const colorMap = {
-        '--accent-color': items["ColorMap--accent-color"],
-        '--accent-color-hover': items["ColorMap--accent-color-hover"],
-        '--butterfly-icon': items["ColorMap--butterfly-icon"],
-        '--background': items["ColorMap--background"],
-        '--content-warnings': items["ColorMap--content-warnings"],
-        '--content-warnings-hover': items["ColorMap--content-warnings-hover"],
-        '--text-primary': items["ColorMap--text-primary"],
-        '--text-secondary': items["ColorMap--text-secondary"],
-        '--border-color': items["ColorMap--border-color"]
+        '--accent-color': result["ColorMap--accent-color"],
+        '--accent-color-hover': result["ColorMap--accent-color-hover"],
+        '--butterfly-icon': result["ColorMap--butterfly-icon"],
+        '--background': result["ColorMap--background"],
+        '--content-warnings': result["ColorMap--content-warnings"],
+        '--content-warnings-hover': result["ColorMap--content-warnings-hover"],
+        '--text-primary': result["ColorMap--text-primary"],
+        '--text-secondary': result["ColorMap--text-secondary"],
+        '--border-color': result["ColorMap--border-color"]
       };
       resolve(colorMap);
     });
@@ -108,11 +108,18 @@ const themes = {
   }
 };
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === 'applyTheme') {
-    getMap().then((map) => {
-      let theme = themes[message.themeName];
-      let response = { "ColorMap": map, "Theme": theme };
+    const theme = themes[message.themeName] || themes['dimTheme'];
+
+    if (!theme) {
+      console.error("Invalid theme name:", message.themeName);
+      return;
+    }
+
+    try {
+      const map = await getMap();
+      const response = { "ColorMap": map, "Theme": theme };
 
       // Send message to the content script of the active tab
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -120,10 +127,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           chrome.tabs.sendMessage(tabs[0].id, { type: 'applyTheme', response });
         }
       });
-    });
+    } catch (error) {
+      console.error("Error fetching the map:", error);
+    }
   }
   return true; // Keep the message channel open for async sendResponse
 });
+
 
 
 // Initialize theme on load
