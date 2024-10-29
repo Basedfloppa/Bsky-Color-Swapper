@@ -31,8 +31,7 @@ function updateColor() {
 
   localStorage.setItem(colorName.value, color);
 
-  let BrowserApi = window.browser || window.chrome;
-  BrowserApi.runtime.sendMessage({ type: 'applyTheme' });
+  chrome.runtime.sendMessage({ type: 'applyTheme' });
 }
 function setColor() {
   let colors = convertToRgb(localStorage.getItem(colorName.value) ?? "rgb(0,0,0)");

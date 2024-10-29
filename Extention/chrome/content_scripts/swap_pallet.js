@@ -210,15 +210,12 @@ function setColor(colorMap) {
   localStorage.setItem("ColorMap--border-color", colorMap["--border-color"]);
 }
 
-let BrowserApi = browser || chrome;
-BrowserApi.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'applyTheme') {
     applyTheme(message.response['ColorMap']);
     setColor(message.response['ColorMap'])
   }
 });
-
-
 
 // Use MutationObserver to wait for class changes
 const observer = new MutationObserver((mutationsList) => {
