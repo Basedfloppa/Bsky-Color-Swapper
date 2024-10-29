@@ -80,7 +80,7 @@ function applyTheme(colorMap) {
 
   // Inject CSS variables into the document
 
-  let innerStyle = `
+  const innerStyle = `
     :root {
         --accent-color: ${colorMap['--accent-color']};
         --accent-color-hover: ${colorMap['--accent-color-hover']};
@@ -175,7 +175,7 @@ function applyTheme(colorMap) {
     document.getElementById('style-inject-bsky').innerHTML = innerStyle;
   }
   else {
-    let styleElement = document.createElement('style');
+    const styleElement = document.createElement('style');
     styleElement.innerHTML = innerStyle;
     styleElement.id = 'style-inject-bsky';
     document.head.appendChild(styleElement);
