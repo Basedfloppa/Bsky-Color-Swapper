@@ -90,18 +90,16 @@ const themes = {
   }
 };
 
-let BrowserApi = window.browser || window.chrome;
-
-BrowserApi.runtime.onMessage.addListener((message, sender, sendResponse) => {
+window.browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'applyTheme') {
     let map = getMap();
     let theme = themes[message.themeName];
     let response = { "ColorMap": map, 'Theme': theme };
 
     // Send message to the content script of the active tab
-    BrowserApi.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    window.browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]) {
-        BrowserApi.tabs.sendMessage(tabs[0].id, { type: 'applyTheme', response });
+        window.browser.tabs.sendMessage(tabs[0].id, { type: 'applyTheme', response });
       }
     });
   }
