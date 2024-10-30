@@ -13,157 +13,178 @@
   <div class="m-1 text-white d-flex flex-column align-items-center">
     <p class="align-middle">BlueSkyColorPalletSwapper</p>
 
-    <table class="table table-dark">
-      <tbody>
-        <tr>
-          <td>
-            <div class="row m-2">
-              <label class="col">Accent Color</label>
-              <div class="col" id="ColorMap--accent-color"
-                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-            </div>
-          </td>
-          <td>
-            <div class="row m-2">
-              <label class="col">Hover</label>
-              <div class="col" id="ColorMap--accent-color-hover"
-                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="row m-2">
-              <label class="col">Content Warnings</label>
-              <div class="col" id="ColorMap--content-warnings"
-                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-            </div>
-          </td>
-          <td>
-            <div class="row m-2">
-              <label class="col">Hover</label>
-              <div class="col" id="ColorMap--content-warnings-hover"
-                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="row m-2">
-              <label class="col">Text Primary</label>
-              <div class="col" id="ColorMap--text-primary"
-                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-            </div>
-          </td>
-          <td>
-            <div class="row m-2">
-              <label class="col">Secondary</label>
-              <div class="col" id="ColorMap--text-secondary"
-                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="row m-2">
-              <label class="col">Icons</label>
-              <div class="col" id="ColorMap--butterfly-icon"
-                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-            </div>
-          </td>
-          <td>
-            <div class="row m-2">
-              <label class="col">Background</label>
-              <div class="col" id="ColorMap--background"
-                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="row m-2">
-              <label class="col">Border Color</label>
-              <div class="col" id="ColorMap--border-color"
-                style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <ul class="nav nav-tabs d-flex w-100" id="themeTab">
+      <li class="nav-item flex-grow-1">
+        <button class="nav-link active w-100" id="custom-tab" data-bs-toggle="tab" data-bs-target="#custom-tab-pane"
+          type="button" aria-controls="custom-tab-pane" aria-selected="true">Custom</button>
+      </li>
+      <li class="nav-item flex-grow-1">
+        <button class="nav-link w-100" id="premade-tab" data-bs-toggle="tab" data-bs-target="#premade-tab-pane"
+          type="button" aria-controls="premade-tab-pane" aria-selected="false">PreMade</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="themeTabContent">
+      <div class="tab-pane fade show active" id="custom-tab-pane" aria-labelledby="custom-tab" tabindex="0">
+        <table class="table table-dark">
+          <tbody>
+            <tr>
+              <td>
+                <div class="row m-2">
+                  <label class="col">Accent Color</label>
+                  <div class="col" id="ColorMap--accent-color"
+                    style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+                </div>
+              </td>
+              <td>
+                <div class="row m-2">
+                  <label class="col">Hover</label>
+                  <div class="col" id="ColorMap--accent-color-hover"
+                    style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row m-2">
+                  <label class="col">Content Warnings</label>
+                  <div class="col" id="ColorMap--content-warnings"
+                    style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+                </div>
+              </td>
+              <td>
+                <div class="row m-2">
+                  <label class="col">Hover</label>
+                  <div class="col" id="ColorMap--content-warnings-hover"
+                    style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row m-2">
+                  <label class="col">Text Primary</label>
+                  <div class="col" id="ColorMap--text-primary"
+                    style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+                </div>
+              </td>
+              <td>
+                <div class="row m-2">
+                  <label class="col">Secondary</label>
+                  <div class="col" id="ColorMap--text-secondary"
+                    style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row m-2">
+                  <label class="col">Icons</label>
+                  <div class="col" id="ColorMap--butterfly-icon"
+                    style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+                </div>
+              </td>
+              <td>
+                <div class="row m-2">
+                  <label class="col">Background</label>
+                  <div class="col" id="ColorMap--background"
+                    style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row m-2">
+                  <label class="col">Border Color</label>
+                  <div class="col" id="ColorMap--border-color"
+                    style="max-width:30px; max-height:30px; background-color: rgb(0,0,0);"></div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-    <div>
-      <div class="d-flex jusatify-content-center">
-        <select id="colorName" class="col m-1 align-middle">
-          <option value="ColorMap--accent-color">Accent color</option>
-          <option value="ColorMap--accent-color-hover">Accent color hover</option>
-          <option value="ColorMap--butterfly-icon">Butterfly icon</option>
-          <option value="ColorMap--background">Background</option>
-          <option value="ColorMap--content-warnings">Content warnings</option>
-          <option value="ColorMap--content-warnings-hover">Content warnings hover</option>
-          <option value="ColorMap--text-primary">Text primary</option>
-          <option value="ColorMap--text-secondary">Text secondary</option>
-          <option value="ColorMap--border-color">Border color</option>
-        </select>
-      </div>
-      <div id="colorSwatch" style="height: 30px; background-color: rgb(0,0,0);">
-      </div>
+        <div>
+          <div class="d-flex jusatify-content-center">
+            <select id="colorName" class="col m-1 align-middle">
+              <option value="ColorMap--accent-color">Accent color</option>
+              <option value="ColorMap--accent-color-hover">Accent color hover</option>
+              <option value="ColorMap--butterfly-icon">Butterfly icon</option>
+              <option value="ColorMap--background">Background</option>
+              <option value="ColorMap--content-warnings">Content warnings</option>
+              <option value="ColorMap--content-warnings-hover">Content warnings hover</option>
+              <option value="ColorMap--text-primary">Text primary</option>
+              <option value="ColorMap--text-secondary">Text secondary</option>
+              <option value="ColorMap--border-color">Border color</option>
+            </select>
+          </div>
+          <div id="colorSwatch" style="height: 30px; background-color: rgb(0,0,0);">
+          </div>
 
-      <ul class="nav nav-tabs d-flex w-100" id="colorTab">
-        <li class="nav-item flex-grow-1">
-          <button class="nav-link active w-100" id="rgb-tab" data-bs-toggle="tab" data-bs-target="#rgb-tab-pane"
-            type="button" aria-controls="rgb-tab-pane" aria-selected="true">RGB</button>
-        </li>
-        <li class="nav-item flex-grow-1">
-          <button class="nav-link w-100" id="hsl-tab" data-bs-toggle="tab" data-bs-target="#hsl-tab-pane" type="button"
-            aria-controls="profile-tab-pane" aria-selected="false">HSL</button>
-        </li>
-        <li class="nav-item flex-grow-1">
-          <button class="nav-link w-100" id="hex-tab" data-bs-toggle="tab" data-bs-target="#hex-tab-pane" type="button"
-            aria-controls="contact-tab-pane" aria-selected="false">HEX</button>
-        </li>
-      </ul>
-      <div class="tab-content" id="colorTabContent">
-        <div class="tab-pane fade show active" id="rgb-tab-pane" aria-labelledby="rgb-tab" tabindex="0">
-          <table>
-            <tr>
-              <td>Red</td>
-              <td><input id="red" class="col" min="0" max="255" step="1" type="range" /></td>
-              <td id="redValue"></td>
-            </tr>
-            <tr>
-              <td class="form-label">Green</td>
-              <td><input id="green" class="col" min="0" max="255" step="1" type="range" /></td>
-              <td id="greenValue"></td>
-            </tr>
-            <tr>
-              <td class="form-label">Blue</td>
-              <td><input id="blue" class="col" min="0" max="255" step="1" type="range" /></td>
-              <td id="blueValue"></td>
-            </tr>
-          </table>
+          <ul class="nav nav-tabs d-flex w-100" id="colorTab">
+            <li class="nav-item flex-grow-1">
+              <button class="nav-link active w-100" id="rgb-tab" data-bs-toggle="tab" data-bs-target="#rgb-tab-pane"
+                type="button" aria-controls="rgb-tab-pane" aria-selected="true">RGB</button>
+            </li>
+            <li class="nav-item flex-grow-1">
+              <button class="nav-link w-100" id="hsl-tab" data-bs-toggle="tab" data-bs-target="#hsl-tab-pane"
+                type="button" aria-controls="profile-tab-pane" aria-selected="false">HSL</button>
+            </li>
+            <li class="nav-item flex-grow-1">
+              <button class="nav-link w-100" id="hex-tab" data-bs-toggle="tab" data-bs-target="#hex-tab-pane"
+                type="button" aria-controls="contact-tab-pane" aria-selected="false">HEX</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="colorTabContent">
+            <div class="tab-pane fade show active" id="rgb-tab-pane" aria-labelledby="rgb-tab" tabindex="0">
+              <table>
+                <tr>
+                  <td>Red</td>
+                  <td><input id="red" class="col" min="0" max="255" step="1" type="range" /></td>
+                  <td id="redValue"></td>
+                </tr>
+                <tr>
+                  <td class="form-label">Green</td>
+                  <td><input id="green" class="col" min="0" max="255" step="1" type="range" /></td>
+                  <td id="greenValue"></td>
+                </tr>
+                <tr>
+                  <td class="form-label">Blue</td>
+                  <td><input id="blue" class="col" min="0" max="255" step="1" type="range" /></td>
+                  <td id="blueValue"></td>
+                </tr>
+              </table>
+            </div>
+            <div class="tab-pane fade" id="hsl-tab-pane" aria-labelledby="hsl-tab" tabindex="0">
+              <table>
+                <tr>
+                  <td>Hue</td>
+                  <td><input id="hue" class="col" min="0" max="360" step="1" type="range" /></td>
+                  <td id="hueValue"></td>
+                </tr>
+                <tr>
+                  <td class="form-label">Saturation</td>
+                  <td><input id="saturation" class="col" min="0" max="100" step="1" type="range" /></td>
+                  <td id="saturationValue"></td>
+                </tr>
+                <tr>
+                  <td class="form-label">Lightness</td>
+                  <td><input id="lightness" class="col" min="0" max="100" step="1" type="range" /></td>
+                  <td id="lightnessValue"></td>
+                </tr>
+              </table>
+            </div>
+            <div class="tab-pane fade" id="hex-tab-pane" aria-labelledby="hex-tab" tabindex="0">
+              <input type="text" id="hex" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" maxlength="7">
+            </div>
+          </div>
         </div>
-        <div class="tab-pane fade" id="hsl-tab-pane" role="tabpanel" aria-labelledby="hsl-tab" tabindex="0">
-          <table>
-            <tr>
-              <td>Hue</td>
-              <td><input id="hue" class="col" min="0" max="360" step="1" type="range" /></td>
-              <td id="hueValue"></td>
-            </tr>
-            <tr>
-              <td class="form-label">Saturation</td>
-              <td><input id="saturation" class="col" min="0" max="100" step="1" type="range" /></td>
-              <td id="saturationValue"></td>
-            </tr>
-            <tr>
-              <td class="form-label">Lightness</td>
-              <td><input id="lightness" class="col" min="0" max="100" step="1" type="range" /></td>
-              <td id="lightnessValue"></td>
-            </tr>
-          </table>
-        </div>
-        <div class="tab-pane fade" id="hex-tab-pane" role="tabpanel" aria-labelledby="hex-tab" tabindex="0">
-          <input type="text" id="hex" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" maxlength="7">
-        </div>
+      </div>
+      <div class="tab-pane fade" id="premade-tab-pane" aria-labelledby="premade-tab" tabindex="0">
+        <div style="min-height: 30px; background-color: DarkViolet;"></div>
+        <button class="row m-2 btn btn-outline-light" id="PurpleLight">light</button>
+        <button class="row m-2 btn btn-outline-light" id="PurpleDim">dim</button>
+        <button class="row m-2 btn btn-outline-light" id="PurpleDark">dark</button>
+        <hr />
       </div>
     </div>
   </div>

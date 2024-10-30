@@ -41,7 +41,7 @@ function init() {
   setColor();
 }
 function updateColor() {
-  let tab = document.querySelector(".nav-link.active").id.split("-")[0];
+  let tab = Array.from(document.getElementById("colorTab").childNodes).filter(x => x.type != undefined && Array.from(x.firstElementChild.classList).includes("active"))[0].firstElementChild.id.split("-")[0];
   let color = "";
 
   switch (tab) {
@@ -75,7 +75,7 @@ function updateColor() {
 }
 function setColor() {
   let color = localStorage.getItem(colorName.value) ?? "rgb(0,0,0)";
-  color = convertToRgb(color);
+  color = convertToRgb(color) ?? { 'r': '0', 'g': '0', 'b': '0' };
 
   swatch.style["background-color"] = "rgb(" + color['r'] + "," + color['g'] + "," + color['b'] + ")";
 
@@ -91,6 +91,17 @@ function setColor() {
   updateHslVal();
 
   hex.value = rgbToHex(color['r'], color['g'], color['b']);
+}
+function reset() {
+  var options = Array.from(colorName.options).map(x => x.value);
+
+  for (let i = 0; i < options.length; i++) {
+    colorName.value = options[i];
+
+    setColor();
+    updateColor();
+    init();
+  }
 }
 
 function updateRgbVal() {
@@ -197,4 +208,49 @@ function convertToRgb(color) {
   }
   return null;
 }
+
+// #region PreMadeThemes
+let purpleLight = document.getElementById("PurpleLight");
+purpleLight.addEventListener("click", PurpleLight)
+function PurpleLight() {
+  localStorage.setItem("ColorMap--accent-color", '#a375e4');
+  localStorage.setItem("ColorMap--accent-color-hover", '#8a2be2');
+  localStorage.setItem("ColorMap--butterfly-icon", '#8a2be2');
+  localStorage.setItem("ColorMap--background", '#ffffff');
+  localStorage.setItem("ColorMap--content-warnings", '#dfcfff');
+  localStorage.setItem("ColorMap--content-warnings-hover", '#baa3e7');
+  localStorage.setItem("ColorMap--text-primary", '#000000');
+  localStorage.setItem("ColorMap--text-secondary", '#535353');
+  localStorage.setItem("ColorMap--border-color", '#000000');
+  reset();
+}
+let purpleDim = document.getElementById("PurpleDim");
+purpleDim.addEventListener("click", PurpleDim)
+function PurpleDim() {
+  localStorage.setItem("ColorMap--accent-color", '#bb98ff');
+  localStorage.setItem("ColorMap--accent-color-hover", '#8a2be2');
+  localStorage.setItem("ColorMap--butterfly-icon", '#8a2be2');
+  localStorage.setItem("ColorMap--background", '#200d46');
+  localStorage.setItem("ColorMap--content-warnings", '#322d3c');
+  localStorage.setItem("ColorMap--content-warnings-hover", '#4b435b');
+  localStorage.setItem("ColorMap--text-primary", '#fff');
+  localStorage.setItem("ColorMap--text-secondary", '#7f7f7f');
+  localStorage.setItem("ColorMap--border-color", 'rgb(46, 64, 82)');
+  reset();
+}
+let purpleDark = document.getElementById("PurpleDark");
+purpleDark.addEventListener("click", PurpleDark)
+function PurpleDark() {
+  localStorage.setItem("ColorMap--accent-color", '#7636c5');
+  localStorage.setItem("ColorMap--accent-color-hover", '#8b2be2');
+  localStorage.setItem("ColorMap--butterfly-icon", '#8a2be2');
+  localStorage.setItem("ColorMap--background", '#0e000e');
+  localStorage.setItem("ColorMap--content-warnings", '#3c1157');
+  localStorage.setItem("ColorMap--content-warnings-hover", '#3c2c57');
+  localStorage.setItem("ColorMap--text-primary", '#fff');
+  localStorage.setItem("ColorMap--text-secondary", '#8f9eb7');
+  localStorage.setItem("ColorMap--border-color", '#ffffff');
+  reset();
+}
+// #endregion
 // #endregions
