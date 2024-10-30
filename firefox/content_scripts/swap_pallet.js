@@ -2,7 +2,7 @@ const dimTheme = {
   '--accent-color-val1': 'rgb(32, 139, 254)',
   '--accent-color-val2': '#0085ff',
   '--accent-color-val3': 'rgb(76, 162, 254)',
-  '--accent-color-val4': 'hsl(211, 20%, 95.3%)',
+  '--accent-color-val4': 'hsl(211, 99%, 56%)',
   '--accent-color-val5': 'rgb(0, 133, 255)',
   '--accent-color-hover-val1': 'rgb(76, 162, 254)',
   '--accent-color-hover-val2': 'rgb(19, 63, 109)',
@@ -11,12 +11,13 @@ const dimTheme = {
   '--background-change-val': 'rgb(22, 30, 39)',
   '--text-primary-val1': 'rgb(241, 243, 245)',
   '--text-primary-val2': 'hsl(211, 20%, 95.3%)',
-  '--text-secondary-val1': 'rgb(140, 158, 178)',
+  '--text-secondary-val1': 'rgb(174, 187, 201)',
   '--text-secondary-val2': 'hsl(211, 20%, 53%)',
   '--text-secondary-val3': 'rgb(20, 27, 35)',
   '--text-secondary-val4': 'rgb(212, 219, 226)',
   '--text-secondary-val5': 'hsl(211, 20%, 62.4%)',
-  '--border-color-val': 'rgb(46, 64, 82)',
+  '--border-color-val1': 'rgb(46, 64, 82)',
+  '--border-color-val2': 'rgb(54, 75, 97)'
 };
 const darkTheme = {
   '--accent-color-val1': 'rgb(16, 131, 254)',
@@ -36,7 +37,8 @@ const darkTheme = {
   '--text-secondary-val3': 'rgb(20, 27, 35)',
   '--text-secondary-val4': 'rgb(212, 219, 226)',
   '--text-secondary-val5': 'hsl(211, 20%, 62.4%)',
-  '--border-color-val': 'rgb(37, 51, 66)',
+  '--border-color-val1': 'rgb(37, 51, 66)',
+  '--border-color-val2': 'rgb(46, 63, 81)'
 };
 const lightTheme = {
   '--accent-color-val1': 'rgb(16, 131, 254)',
@@ -56,7 +58,8 @@ const lightTheme = {
   '--text-secondary-val3': 'rgb(11, 15, 20)',
   '--text-secondary-val4': 'rgb(37, 51, 66)',
   '--text-secondary-val5': 'hsl(211, 24%, 34.2%)',
-  '--border-color-val': 'rgb(212, 219, 226)'
+  '--border-color-val1': 'rgb(212, 219, 226)',
+  '--border-color-val2': 'rgb(197, 207, 217)'
 };
 
 function applyTheme(colorMap) {
@@ -77,8 +80,6 @@ function applyTheme(colorMap) {
       console.warn('No matching theme class found');
       return;
   }
-
-  // Inject CSS variables into the document
 
   const innerStyle = `
     :root {
@@ -166,7 +167,8 @@ function applyTheme(colorMap) {
         fill: var(--text-secondary-change) !important;
     }
 
-    *[style*="border-color: ${pickedTheme['--border-color-val']}"] {
+    *[style*="border-color: ${pickedTheme['--border-color-val1']}"],
+    *[style*="border-color: ${pickedTheme['--border-color-val2']}"] {
         border-color: var(--border-color-change) !important;
     }
 `;
@@ -197,7 +199,6 @@ function getColor() {
 
   return colorMap;
 }
-
 function setColor(colorMap) {
   localStorage.setItem("ColorMap--accent-color", colorMap["--accent-color"]);
   localStorage.setItem("ColorMap--accent-color-hover", colorMap["--accent-color-hover"]);
@@ -216,8 +217,6 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     setColor(message.response['ColorMap'])
   }
 });
-
-
 
 // Use MutationObserver to wait for class changes
 const observer = new MutationObserver((mutationsList) => {

@@ -50,7 +50,7 @@ function getStorageValue(key) {
   });
 }
 function updateColor() {
-  let tab = document.querySelector(".nav-link.active").id.split("-")[0];
+  let tab = Array.from(document.getElementById("colorTab").childNodes).filter(x => x.type != undefined && Array.from(x.firstElementChild.classList).includes("active"))[0].firstElementChild.id.split("-")[0];
   let color = "";
 
   switch (tab) {
@@ -79,7 +79,7 @@ function updateColor() {
 }
 async function setColor() {
   let color = await getStorageValue(colorName.value) ?? "rgb(0,0,0)";
-  color = convertToRgb(color);
+  color = convertToRgb(color) ?? { 'r': '0', 'g': '0', 'b': '0' };
 
   swatch.style["background-color"] = "rgb(" + color['r'] + "," + color['g'] + "," + color['b'] + ")";
 
@@ -96,6 +96,18 @@ async function setColor() {
 
   hex.value = rgbToHex(color['r'], color['g'], color['b']);
 }
+async function reset() {
+  const options = Array.from(colorName.options).map(x => x.value);
+
+  for (let option of options) {
+    colorName.value = option;
+
+    await setColor(); 
+    await updateColor();
+    await init(); 
+  }
+}
+
 
 function updateRgbVal() {
   redVal.innerHTML = red.value;
@@ -201,4 +213,58 @@ function convertToRgb(color) {
   }
   return null;
 }
+
+// #region PreMadeThemes
+const purpleLight = document.getElementById("PurpleLight");
+if (purpleLight) {
+    purpleLight.addEventListener("click", PurpleLight);
+}
+function PurpleLight() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#bb98ff',
+    "ColorMap--accent-color-hover": '#8a2be2',
+    "ColorMap--butterfly-icon": '#8a2be2',
+    "ColorMap--background": '#ffffff',
+    "ColorMap--content-warnings": '#dfcfff',
+    "ColorMap--content-warnings-hover": '#baa3e7',
+    "ColorMap--text-primary": '#000000',
+    "ColorMap--text-secondary": '#535353',
+    "ColorMap--border-color": '#000000'
+  }, reset);
+}
+const purpleDim = document.getElementById("PurpleDim");
+if (purpleDim) {
+  purpleDim.addEventListener("click", PurpleDim);
+}
+function PurpleDim() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#bb98ff',
+    "ColorMap--accent-color-hover": '#8a2be2',
+    "ColorMap--butterfly-icon": '#8a2be2',
+    "ColorMap--background": '#200d46',
+    "ColorMap--content-warnings": '#322d3c',
+    "ColorMap--content-warnings-hover": '#4b435b',
+    "ColorMap--text-primary": '#fff',
+    "ColorMap--text-secondary": '#7f7f7f',
+    "ColorMap--border-color": 'rgb(46, 64, 82)'
+  }, reset);
+}
+const purpleDark = document.getElementById("PurpleDark");
+if (purpleDark) {
+  purpleDark.addEventListener("click", PurpleDark);
+}
+function PurpleDark() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#7636c5',
+    "ColorMap--accent-color-hover": '#8b2be2',
+    "ColorMap--butterfly-icon": '#8a2be2',
+    "ColorMap--background": '#0e000e',
+    "ColorMap--content-warnings": '#3c1157',
+    "ColorMap--content-warnings-hover": '#3c2c57',
+    "ColorMap--text-primary": '#fff',
+    "ColorMap--text-secondary": '#8f9eb7',
+    "ColorMap--border-color": '#ffffff'
+  }, reset);
+}
+// #endregion
 // #endregions
