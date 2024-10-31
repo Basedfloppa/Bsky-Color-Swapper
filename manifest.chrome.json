@@ -23,9 +23,7 @@
   },
   "permissions": [
     "storage",
-    "tabs",
-    "scripting",
-    "activeTab"
+    "tabs"
   ],
   "action": {
     "default_title": "BlueSkyColorPalletSwapper",
