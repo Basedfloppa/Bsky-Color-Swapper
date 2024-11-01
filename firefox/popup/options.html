@@ -197,16 +197,24 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane fade" id="premade-tab-pane" aria-labelledby="premade-tab" tabindex="0">
-        <div style="min-height: 30px; background-color: DarkViolet;"></div>
-        <button class="row m-2 btn btn-outline-light" id="PurpleLight">light</button>
-        <button class="row m-2 btn btn-outline-light" id="PurpleDim">dim</button>
-        <button class="row m-2 btn btn-outline-light" id="PurpleDark">dark</button>
+      <div class="tab-pane fade m-3" id="premade-tab-pane" aria-labelledby="premade-tab" tabindex="0">
+        <div class="row">
+          <p class="d-flex justify-content-center">Default</p>
+          <div style="min-height: 30px; background-color: rgb(16, 131, 254);"></div>
+          <button class="col btn btn-outline-light" id="DefaultLight">light</button>
+          <button class="col btn btn-outline-light" id="DefaultDim">dim</button>
+          <button class="col btn btn-outline-light" id="DefaultDark">dark</button>
+        </div>
         <hr />
+        <div class="row">
+          <div style="min-height: 30px; background-color: DarkViolet;"></div>
+          <button class="col btn btn-outline-light" id="PurpleLight">light</button>
+          <button class="col btn btn-outline-light" id="PurpleDim">dim</button>
+          <button class="col btn btn-outline-light" id="PurpleDark">dark</button>
+          <hr />
+        </div>
       </div>
-    </div>
-  </div>
-  <script src="options.js"></script>
+      <script src="options.js"></script>
 </body>
 
 </html>

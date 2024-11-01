@@ -228,6 +228,54 @@ function convertToRgb(color) {
 }
 
 // #region PreMadeThemes
+const defaultLight = document.getElementById("DefaultLight");
+defaultLight.addEventListener("click", DefaultLight)
+function DefaultLight() {
+  localStorage.setItem("ColorMap--accent-color", 'rgb(16, 131, 254)');
+  localStorage.setItem("ColorMap--accent-color-hover", 'rgb(1, 104, 213)');
+  localStorage.setItem("ColorMap--butterfly-icon", 'rgb(16, 131, 254)');
+  localStorage.setItem("ColorMap--background", 'rgb(255, 255, 255)');
+  localStorage.setItem("ColorMap--content-warnings", 'rgb(241, 243, 245)');
+  localStorage.setItem("ColorMap--content-warnings-hover", 'rgb(226, 231, 236)');
+  localStorage.setItem("ColorMap--text-primary", 'rgb(11, 15, 20)');
+  localStorage.setItem("ColorMap--text-secondary", 'rgb(66, 87, 108)');
+  localStorage.setItem("ColorMap--border-color", 'rgb(212, 219, 226)');
+  localStorage.setItem("ColorMap--main-button-text", 'rgb(11, 15, 20)');
+  reset();
+}
+
+const defaultDim = document.getElementById("DefaultDim");
+defaultDim.addEventListener("click", DefaultDim)
+function DefaultDim() {
+  localStorage.setItem("ColorMap--accent-color", 'rgb(32, 139, 254)');
+  localStorage.setItem("ColorMap--accent-color-hover", 'rgb(76, 162, 254)');
+  localStorage.setItem("ColorMap--butterfly-icon", 'rgb(32, 139, 254)');
+  localStorage.setItem("ColorMap--background", 'rgb(22, 30, 39)');
+  localStorage.setItem("ColorMap--content-warnings", 'rgb(30, 41, 54)');
+  localStorage.setItem("ColorMap--content-warnings-hover", 'rgb(30, 41, 54)');
+  localStorage.setItem("ColorMap--text-primary", 'rgb(241, 243, 245)');
+  localStorage.setItem("ColorMap--text-secondary", 'rgb(174, 187, 201)');
+  localStorage.setItem("ColorMap--border-color", 'rgb(46, 64, 82)');
+  localStorage.setItem("ColorMap--main-button-text", 'rgb(241, 243, 245)');
+  reset();
+}
+
+const defaultDark = document.getElementById("DefaultDark");
+defaultDark.addEventListener("click", DefaultDark)
+function DefaultDark() {
+  localStorage.setItem("ColorMap--accent-color", 'rgb(16, 131, 254)');
+  localStorage.setItem("ColorMap--accent-color-hover", 'rgb(52, 150, 254)');
+  localStorage.setItem("ColorMap--butterfly-icon", 'rgb(16, 131, 254)');
+  localStorage.setItem("ColorMap--background", 'rgb(0, 0, 0)');
+  localStorage.setItem("ColorMap--content-warnings", 'rgb(20, 27, 35)');
+  localStorage.setItem("ColorMap--content-warnings-hover", 'rgb(28, 39, 50)');
+  localStorage.setItem("ColorMap--text-primary", 'rgb(241, 243, 245)');
+  localStorage.setItem("ColorMap--text-secondary", 'rgb(140, 158, 178)');
+  localStorage.setItem("ColorMap--border-color", 'rgb(37, 51, 66)');
+  localStorage.setItem("ColorMap--main-button-text", 'rgb(241, 243, 245)');
+  reset();
+}
+
 const purpleLight = document.getElementById("PurpleLight");
 purpleLight.addEventListener("click", PurpleLight)
 function PurpleLight() {
