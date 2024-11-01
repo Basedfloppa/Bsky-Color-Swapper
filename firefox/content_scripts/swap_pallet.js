@@ -227,6 +227,21 @@ function setColor(colorMap) {
   localStorage.setItem("ColorMap--main-button-text", colorMap["--main-button-text"]);
 }
 
+function init() {
+  if (!JSON.stringify(localStorage).includes("ColorMap")) {
+    localStorage.setItem("ColorMap--accent-color", '#bb98ff');
+    localStorage.setItem("ColorMap--accent-color-hover", '#8a2be2');
+    localStorage.setItem("ColorMap--butterfly-icon", '#8a2be2');
+    localStorage.setItem("ColorMap--background", '#200d46');
+    localStorage.setItem("ColorMap--content-warnings", '#322d3c');
+    localStorage.setItem("ColorMap--content-warnings-hover", '#4b435b');
+    localStorage.setItem("ColorMap--text-primary", '#fff');
+    localStorage.setItem("ColorMap--text-secondary", '#7f7f7f');
+    localStorage.setItem("ColorMap--border-color", 'rgb(46, 64, 82)');
+    localStorage.setItem("ColorMap--main-button-text", "#fff");
+  }
+}
+
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'applyTheme') {
     applyTheme(message.response['ColorMap']);
@@ -248,3 +263,5 @@ observer.observe(document.documentElement, { attributes: true, attributeFilter: 
 if (document.documentElement.classList.length > 0) {
   applyTheme(getColor());
 }
+
+init();
