@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "BlueSkyColorPalletSwapper",
   "description": "Allows users to freely swap color themes",
-  "version": "2",
+  "version": "2.1",
   "icons": {
     "32": "icons/bsky32.png",
     "64": "icons/bsky64.png",

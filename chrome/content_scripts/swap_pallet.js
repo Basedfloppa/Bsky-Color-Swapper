@@ -6,6 +6,7 @@ const dimTheme = {
   '--accent-color-val5': 'rgb(0, 133, 255)',
   '--accent-color-hover-val1': 'rgb(76, 162, 254)',
   '--accent-color-hover-val2': 'rgb(19, 63, 109)',
+  '--accent-color-hover-val3': `rgb(240, 247, 255)`,
   '--content-warnings-val': 'rgb(30, 41, 54)',
   '--content-warnings-hover-val': 'rgb(38, 53, 68)',
   '--background-change-val': 'rgb(22, 30, 39)',
@@ -17,7 +18,8 @@ const dimTheme = {
   '--text-secondary-val4': 'rgb(212, 219, 226)',
   '--text-secondary-val5': 'hsl(211, 20%, 62.4%)',
   '--border-color-val1': 'rgb(46, 64, 82)',
-  '--border-color-val2': 'rgb(54, 75, 97)'
+  '--border-color-val2': 'rgb(54, 75, 97)',
+  '--notification-color': '',
 };
 const darkTheme = {
   '--accent-color-val1': 'rgb(16, 131, 254)',
@@ -38,7 +40,8 @@ const darkTheme = {
   '--text-secondary-val4': 'rgb(212, 219, 226)',
   '--text-secondary-val5': 'hsl(211, 20%, 62.4%)',
   '--border-color-val1': 'rgb(37, 51, 66)',
-  '--border-color-val2': 'rgb(46, 63, 81)'
+  '--border-color-val2': 'rgb(46, 63, 81)',
+  '--notification-color': '',
 };
 const lightTheme = {
   '--accent-color-val1': 'rgb(16, 131, 254)',
@@ -59,8 +62,9 @@ const lightTheme = {
   '--text-secondary-val4': 'rgb(37, 51, 66)',
   '--text-secondary-val5': 'hsl(211, 24%, 34.2%)',
   '--border-color-val1': 'rgb(212, 219, 226)',
-  '--border-color-val2': 'rgb(197, 207, 217)'
-};
+  '--border-color-val2': 'rgb(197, 207, 217)',
+  '--notification-color': 'rgb(240, 247, 255)'
+}
 
 async function applyTheme(colorMap) {
   let pickedTheme = {};
