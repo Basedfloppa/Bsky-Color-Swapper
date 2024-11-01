@@ -1,102 +1,113 @@
-let red = document.getElementById("red");
-let blue = document.getElementById("blue");
-let green = document.getElementById("green");
+const elements = {
+  sliders: {
+    red: document.getElementById("red"),
+    blue: document.getElementById("blue"),
+    green: document.getElementById("green"),
+    hue: document.getElementById("hue"),
+    saturation: document.getElementById("saturation"),
+    lightness: document.getElementById("lightness")
+  },
+  values: {
+    redVal: document.getElementById("redValue"),
+    blueVal: document.getElementById("blueValue"),
+    greenVal: document.getElementById("greenValue"),
+    hueVal: document.getElementById("hueValue"),
+    saturationVal: document.getElementById("saturationValue"),
+    lightnessVal: document.getElementById("lightnessValue")
+  },
+  hex: document.getElementById("hex"),
+  swatch: document.getElementById("colorSwatch"),
+  colorId: document.getElementById("colorId"),
+  colorLabel: document.getElementById("colorLabel"),
+  buttons: document.querySelectorAll('.table button')
+};
 
-let redVal = document.getElementById("redValue");
-let blueVal = document.getElementById("blueValue");
-let greenVal = document.getElementById("greenValue");
+// Event Listeners on input sliders
+Object.values(elements.sliders).forEach(slider => slider.addEventListener("input", updateColor));
+elements.hex.addEventListener("input", updateColor);
 
-let hue = document.getElementById("hue");
-let saturation = document.getElementById("saturation");
-let lightness = document.getElementById("lightness");
+// Event Listeners on color group button click
+elements.buttons.forEach(button => {
+  button.addEventListener('click', () => {
+    const svgElement = button.querySelector('svg');
+    elements.colorId.innerHTML = svgElement.id;
+    if (svgElement) setColor(svgElement.id);
+  });
+});
 
-let hueVal = document.getElementById("hueValue");
-let saturationVal = document.getElementById("saturationValue");
-let lightnessVal = document.getElementById("lightnessValue");
-
-let hex = document.getElementById("hex");
-
-let swatch = document.getElementById("colorSwatch");
-
-let colorName = document.getElementById("colorName");
-
-colorName.addEventListener("input", setColor);
-
-red.addEventListener("input", updateColor);
-green.addEventListener("input", updateColor);
-blue.addEventListener("input", updateColor);
-
-hue.addEventListener("input", updateColor);
-saturation.addEventListener("input", updateColor);
-lightness.addEventListener("input", updateColor);
-
-hex.addEventListener("input", updateColor);
-
+// Initializations of color values
 function init() {
-  for (let i = 0; i <= colorName.options.length; i++) {
-    if (!colorName.options[i])
-      continue;
-    document.getElementById(colorName.options[i].value).style["background-color"] = localStorage.getItem(colorName.options[i].value) ?? "rgb(0,0,0)";
-  }
-  setColor();
+  // Get options from id values of svg nodes
+  const options = Array.from(document.querySelectorAll("div svg")).map(x => x.id);
+
+  options.forEach(id => {
+    if (id) document.getElementById(id).style.fill = localStorage.getItem(id) ?? "rgb(0,0,0)";
+  });
+
+  setColor(elements.colorId.innerHTML);
 }
+
+//Update input values
 function updateColor() {
-  let tab = Array.from(document.getElementById("colorTab").childNodes).filter(x => x.type != undefined && Array.from(x.firstElementChild.classList).includes("active"))[0].firstElementChild.id.split("-")[0];
+  //Get input tab
+  const activeTab = document.querySelector("#colorTab .nav-item .active")?.id.split("-")[0];
   let color = "";
 
-  switch (tab) {
+  //Depending on tab value change color values
+  switch (activeTab) {
     case "rgb":
       color = "rgb(" + red.value + "," + green.value + "," + blue.value + ")";
-      swatch.style["background-color"] = color;
-      document.getElementById(colorName.value).style["background-color"] = color;
 
       updateRgbVal();
       break;
     case "hsl":
       color = convertToRgb("hsl(" + hue.value + "," + saturation.value + "%," + lightness.value + "%)");
       color = "rgb(" + color['r'] + "," + color['g'] + "," + color['b'] + ")";
-      swatch.style["background-color"] = color;
-      document.getElementById(colorName.value).style["background-color"] = color;
 
       updateHslVal();
       break;
     case "hex":
       color = hexToRgb(hex.value);
       color = "rgb(" + color['r'] + "," + color['g'] + "," + color['b'] + ")";
-
-      swatch.style["background-color"] = color;
-      document.getElementById(colorName.value).style["background-color"] = color;
       break;
   }
 
-  localStorage.setItem(colorName.value, color);
+  document.getElementById(elements.colorId.innerHTML).style["fill"] = color;
+  elements.swatch.style["background-color"] = color;
+  localStorage.setItem(elements.colorId.innerHTML, color);
 
   window.browser.runtime.sendMessage({ type: 'applyTheme' });
 }
-function setColor() {
-  let color = localStorage.getItem(colorName.value) ?? "rgb(0,0,0)";
+
+//Change input values and color
+function setColor(id) {
+  id = id ?? elements.colorId.innerHTML
+  let color = localStorage.getItem(id) ?? "rgb(0,0,0)";
   color = convertToRgb(color) ?? { 'r': '0', 'g': '0', 'b': '0' };
 
-  swatch.style["background-color"] = "rgb(" + color['r'] + "," + color['g'] + "," + color['b'] + ")";
+  elements.colorLabel.innerHTML = "Picked: " + id.replace('ColorMap--', ' ').replaceAll('-', ' ');
 
-  red.value = color['r'];
-  green.value = color['g'];
-  blue.value = color['b'];
+  elements.swatch.style["background-color"] = "rgb(" + color['r'] + "," + color['g'] + "," + color['b'] + ")";
+
+  elements.sliders.red.value = color['r'];
+  elements.sliders.green.value = color['g'];
+  elements.sliders.blue.value = color['b'];
   updateRgbVal();
 
   let hslColor = rgbToHsl(color['r'], color['g'], color['b']);
-  hue.value = hslColor['h'];
-  saturation.value = hslColor['s'];
-  lightness.value = hslColor['l'];
+  elements.sliders.hue.value = hslColor['h'];
+  elements.sliders.saturation.value = hslColor['s'];
+  elements.sliders.lightness.value = hslColor['l'];
   updateHslVal();
 
-  hex.value = rgbToHex(color['r'], color['g'], color['b']);
+  elements.hex.value = rgbToHex(color['r'], color['g'], color['b']);
 }
-function reset() {
-  var options = Array.from(colorName.options).map(x => x.value);
 
-  for (let i = 0; i < options.length; i++) {
-    colorName.value = options[i];
+function reset() {
+  let options = Array.from(document.querySelectorAll("div svg")).map(x => x.id);
+
+  for (let option of options) {
+    elements.colorId.innerHTML = option;
 
     setColor();
     updateColor();
@@ -105,14 +116,15 @@ function reset() {
 }
 
 function updateRgbVal() {
-  redVal.innerHTML = red.value;
-  greenVal.innerHTML = green.value;
-  blueVal.innerHTML = blue.value;
+  elements.values.redVal.innerHTML = red.value;
+  elements.values.greenVal.innerHTML = green.value;
+  elements.values.blueVal.innerHTML = blue.value;
 }
+
 function updateHslVal() {
-  hueVal.innerHTML = hue.value;
-  saturationVal.innerHTML = saturation.value;
-  lightnessVal.innerHTML = lightness.value;
+  elements.values.hueVal.innerHTML = hue.value;
+  elements.values.saturationVal.innerHTML = saturation.value;
+  elements.values.lightnessVal.innerHTML = lightness.value;
 }
 
 init();
@@ -130,6 +142,7 @@ function hexToRgb(hex) {
     b: bigint & 255
   };
 }
+
 // Convert RGB to Hex
 function rgbToHex(r, g, b) {
   return (
@@ -142,6 +155,7 @@ function rgbToHex(r, g, b) {
       .join("")
   );
 }
+
 // Convert HSL to RGB
 function hslToRgb(h, s, l) {
   s /= 100;
@@ -155,6 +169,7 @@ function hslToRgb(h, s, l) {
     b: Math.round(f(4) * 255)
   };
 }
+
 // Convert RGB to HSL
 function rgbToHsl(r, g, b) {
   r /= 255;
@@ -184,17 +199,20 @@ function rgbToHsl(r, g, b) {
   }
   return { h: Math.round(h), s: Math.round(s * 100), l: Math.round(l * 100) };
 }
+
 // Convert Hex to HSL
 function hexToHsl(hex) {
   const { r, g, b } = hexToRgb(hex);
   return rgbToHsl(r, g, b);
 }
+
 // Parse an RGB string to RGB object
 function parseRgbString(rgbString) {
   const match = rgbString.match(/\d+/g);
   if (!match) return null;
   return { r: parseInt(match[0]), g: parseInt(match[1]), b: parseInt(match[2]) };
 }
+
 // Convert color string to RGB
 function convertToRgb(color) {
   if (color.startsWith("hsl")) {
@@ -210,7 +228,7 @@ function convertToRgb(color) {
 }
 
 // #region PreMadeThemes
-let purpleLight = document.getElementById("PurpleLight");
+const purpleLight = document.getElementById("PurpleLight");
 purpleLight.addEventListener("click", PurpleLight)
 function PurpleLight() {
   localStorage.setItem("ColorMap--accent-color", '#a375e4');
@@ -222,9 +240,11 @@ function PurpleLight() {
   localStorage.setItem("ColorMap--text-primary", '#000000');
   localStorage.setItem("ColorMap--text-secondary", '#535353');
   localStorage.setItem("ColorMap--border-color", '#000000');
+  localStorage.setItem("ColorMap--main-button-text", '#000000');
   reset();
 }
-let purpleDim = document.getElementById("PurpleDim");
+
+const purpleDim = document.getElementById("PurpleDim");
 purpleDim.addEventListener("click", PurpleDim)
 function PurpleDim() {
   localStorage.setItem("ColorMap--accent-color", '#bb98ff');
@@ -236,9 +256,11 @@ function PurpleDim() {
   localStorage.setItem("ColorMap--text-primary", '#fff');
   localStorage.setItem("ColorMap--text-secondary", '#7f7f7f');
   localStorage.setItem("ColorMap--border-color", 'rgb(46, 64, 82)');
+  localStorage.setItem("ColorMap--main-button-text", '#fff');
   reset();
 }
-let purpleDark = document.getElementById("PurpleDark");
+
+const purpleDark = document.getElementById("PurpleDark");
 purpleDark.addEventListener("click", PurpleDark)
 function PurpleDark() {
   localStorage.setItem("ColorMap--accent-color", '#7636c5');
@@ -250,7 +272,8 @@ function PurpleDark() {
   localStorage.setItem("ColorMap--text-primary", '#fff');
   localStorage.setItem("ColorMap--text-secondary", '#8f9eb7');
   localStorage.setItem("ColorMap--border-color", '#ffffff');
+  localStorage.setItem("ColorMap--main-button-text", '#fff');
   reset();
 }
 // #endregion
-// #endregions
+// #endregion

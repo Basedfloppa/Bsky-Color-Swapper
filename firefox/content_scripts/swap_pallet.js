@@ -92,6 +92,7 @@ function applyTheme(colorMap) {
         --text-primary-change: ${colorMap['--text-primary']};
         --text-secondary-change: ${colorMap['--text-secondary']};
         --border-color-change: ${colorMap['--border-color']};
+        --main-button-text: ${colorMap['--main-button-text']}
     }
 
     *[style*="background-color: ${pickedTheme['--accent-color-val1']}"],
@@ -144,7 +145,7 @@ function applyTheme(colorMap) {
     .theme--dim, .theme--dark, .theme--light {
         background-color: var(--background-change) !important;
     }
-
+        
     *[style*="color: ${pickedTheme['--text-primary-val1']}"] {
         color: var(--text-primary-change) !important;
     }
@@ -166,6 +167,18 @@ function applyTheme(colorMap) {
     path[fill="${pickedTheme['--text-secondary-val5']}"] {
         fill: var(--text-secondary-change) !important;
     }
+
+    *[style*="border-color: ${pickedTheme['--border-color-val1']}"],
+    *[style*="border-color: ${pickedTheme['--border-color-val2']}"] {
+        border-color: var(--border-color-change) !important;
+    }
+
+    button div[style*="color: ${pickedTheme['--text-primary-val1']}"] {
+        color: var(--main-button-text) !important;
+    }
+    button div div svg path[fill="${pickedTheme['--text-primary-val2']}"] {
+        fill: var(--main-button-text) !important;
+    } 
 
     *[style*="border-color: ${pickedTheme['--border-color-val1']}"],
     *[style*="border-color: ${pickedTheme['--border-color-val2']}"] {
@@ -194,11 +207,13 @@ function getColor() {
     '--content-warnings-hover': localStorage.getItem("ColorMap--content-warnings-hover"),
     '--text-primary': localStorage.getItem("ColorMap--text-primary"),
     '--text-secondary': localStorage.getItem("ColorMap--text-secondary"),
-    '--border-color': localStorage.getItem("ColorMap--border-color")
+    '--border-color': localStorage.getItem("ColorMap--border-color"),
+    '--main-button-text': localStorage.getItem("ColorMap--main-button-text")
   };
 
   return colorMap;
 }
+
 function setColor(colorMap) {
   localStorage.setItem("ColorMap--accent-color", colorMap["--accent-color"]);
   localStorage.setItem("ColorMap--accent-color-hover", colorMap["--accent-color-hover"]);
@@ -209,6 +224,7 @@ function setColor(colorMap) {
   localStorage.setItem("ColorMap--text-primary", colorMap["--text-primary"]);
   localStorage.setItem("ColorMap--text-secondary", colorMap["--text-secondary"]);
   localStorage.setItem("ColorMap--border-color", colorMap["--border-color"]);
+  localStorage.setItem("ColorMap--main-button-text", colorMap["--main-button-text"]);
 }
 
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {

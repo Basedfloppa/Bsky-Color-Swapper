@@ -92,6 +92,7 @@ async function applyTheme(colorMap) {
         --text-primary-change: ${colorMap['--text-primary']};
         --text-secondary-change: ${colorMap['--text-secondary']};
         --border-color-change: ${colorMap['--border-color']};
+        --main-button-text: ${colorMap['--main-button-text']}
     }
 
     *[style*="background-color: ${pickedTheme['--accent-color-val1']}"],
@@ -144,7 +145,7 @@ async function applyTheme(colorMap) {
     .theme--dim, .theme--dark, .theme--light {
         background-color: var(--background-change) !important;
     }
-
+        
     *[style*="color: ${pickedTheme['--text-primary-val1']}"] {
         color: var(--text-primary-change) !important;
     }
@@ -171,13 +172,25 @@ async function applyTheme(colorMap) {
     *[style*="border-color: ${pickedTheme['--border-color-val2']}"] {
         border-color: var(--border-color-change) !important;
     }
+
+    button div[style*="color: ${pickedTheme['--text-primary-val1']}"] {
+        color: var(--main-button-text) !important;
+    }
+    button div div svg path[fill="${pickedTheme['--text-primary-val2']}"] {
+        fill: var(--main-button-text) !important;
+    } 
+
+    *[style*="border-color: ${pickedTheme['--border-color-val1']}"],
+    *[style*="border-color: ${pickedTheme['--border-color-val2']}"] {
+        border-color: var(--border-color-change) !important;
+    }
 `;
 
   if (document.getElementById('style-inject-bsky')) {
     document.getElementById('style-inject-bsky').innerHTML = innerStyle;
   }
   else {
-    let styleElement = document.createElement('style');
+    const styleElement = document.createElement('style');
     styleElement.innerHTML = innerStyle;
     styleElement.id = 'style-inject-bsky';
     document.head.appendChild(styleElement);
@@ -195,7 +208,8 @@ function getColor() {
       "ColorMap--content-warnings-hover",
       "ColorMap--text-primary",
       "ColorMap--text-secondary",
-      "ColorMap--border-color"
+      "ColorMap--border-color",
+      "ColorMap--main-button-text"
     ], (result) => {
       const colorMap = {
         '--accent-color': result["ColorMap--accent-color"],
@@ -206,12 +220,14 @@ function getColor() {
         '--content-warnings-hover': result["ColorMap--content-warnings-hover"],
         '--text-primary': result["ColorMap--text-primary"],
         '--text-secondary': result["ColorMap--text-secondary"],
-        '--border-color': result["ColorMap--border-color"]
+        '--border-color': result["ColorMap--border-color"],
+        '--main-button-text': result["ColorMap--main-button-text"]
       };
       resolve(colorMap);
     });
   });
 }
+
 function setColor(colorMap) {
   chrome.storage.local.set({
     "ColorMap--accent-color": colorMap["--accent-color"],
@@ -222,12 +238,12 @@ function setColor(colorMap) {
     "ColorMap--content-warnings-hover": colorMap["--content-warnings-hover"],
     "ColorMap--text-primary": colorMap["--text-primary"],
     "ColorMap--text-secondary": colorMap["--text-secondary"],
-    "ColorMap--border-color": colorMap["--border-color"]
+    "ColorMap--border-color": colorMap["--border-color"],
+    "ColorMap--main-button-text": colorMap["--main-button-text"]
   });
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log(message.type);
   if (message.type === 'applyTheme') {
     applyTheme(message.response['ColorMap']);
     setColor(message.response['ColorMap'])
