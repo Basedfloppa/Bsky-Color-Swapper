@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "BlueSkyColorPalletSwapper",
   "description": "Allows users to freely swap color themes",
-  "version": "2.2",
+  "version": "2.3",
   "icons": {
     "32": "icons/bsky32.png",
     "64": "icons/bsky64.png",
@@ -23,10 +23,6 @@
       "firefox/background.js"
     ]
   },
-  "permissions": [
-    "storage",
-    "tabs"
-  ],
   "browser_action": {
     "default_title": "BlueSkyColorPalletSwapper",
     "default_popup": "firefox/popup/options.html"

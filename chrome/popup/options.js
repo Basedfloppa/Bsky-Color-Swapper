@@ -223,6 +223,57 @@ function convertToRgb(color) {
 }
 
 // #region PreMadeThemes
+const defaultLight = document.getElementById("DefaultLight");
+defaultLight.addEventListener("click", DefaultLight)
+function DefaultLight() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": 'rgb(16, 131, 254)',
+    "ColorMap--accent-color-hover": 'rgb(1, 104, 213)',
+    "ColorMap--butterfly-icon": 'rgb(16, 131, 254)',
+    "ColorMap--background": 'rgb(255, 255, 255)',
+    "ColorMap--content-warnings": 'rgb(241, 243, 245)',
+    "ColorMap--content-warnings-hover": 'rgb(226, 231, 236)',
+    "ColorMap--text-primary": 'rgb(11, 15, 20)',
+    "ColorMap--text-secondary": 'rgb(66, 87, 108)',
+    "ColorMap--border-color": 'rgb(212, 219, 226)',
+    "ColorMap--main-button-text": 'rgb(11, 15, 20)',
+  }, reset);
+}
+
+const defaultDim = document.getElementById("DefaultDim");
+defaultDim.addEventListener("click", DefaultDim)
+function DefaultDim() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": 'rgb(32, 139, 254)',
+    "ColorMap--accent-color-hover": 'rgb(76, 162, 254)',
+    "ColorMap--butterfly-icon": 'rgb(32, 139, 254)',
+    "ColorMap--background": 'rgb(22, 30, 39)',
+    "ColorMap--content-warnings": 'rgb(30, 41, 54)',
+    "ColorMap--content-warnings-hover": 'rgb(30, 41, 54)',
+    "ColorMap--text-primary": 'rgb(241, 243, 245)',
+    "ColorMap--text-secondary": 'rgb(174, 187, 201)',
+    "ColorMap--border-color": 'rgb(46, 64, 82)',
+    "ColorMap--main-button-text": 'rgb(241, 243, 245)',
+  }, reset);
+}
+
+const defaultDark = document.getElementById("DefaultDark");
+defaultDark.addEventListener("click", DefaultDark)
+function DefaultDark() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": 'rgb(16, 131, 254)',
+    "ColorMap--accent-color-hover": 'rgb(52, 150, 254)',
+    "ColorMap--butterfly-icon": 'rgb(16, 131, 254)',
+    "ColorMap--background": 'rgb(0, 0, 0)',
+    "ColorMap--content-warnings": 'rgb(20, 27, 35)',
+    "ColorMap--content-warnings-hover": 'rgb(28, 39, 50)',
+    "ColorMap--text-primary": 'rgb(241, 243, 245)',
+    "ColorMap--text-secondary": 'rgb(140, 158, 178)',
+    "ColorMap--border-color": 'rgb(37, 51, 66)',
+    "ColorMap--main-button-text": 'rgb(241, 243, 245)'
+  }, reset);
+}
+
 const purpleLight = document.getElementById("PurpleLight");
 if (purpleLight) {
   purpleLight.addEventListener("click", PurpleLight);
