@@ -264,4 +264,4 @@ if (document.documentElement.classList.length > 0) {
   applyTheme(getColor());
 }
 
-init();
+document.addEventListener("DOMContentLoaded", init);
