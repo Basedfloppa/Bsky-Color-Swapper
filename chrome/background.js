@@ -56,20 +56,17 @@ async function getMap() {
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === 'applyTheme') {
-    try {
-      const map = await getMap();
-      const response = { "ColorMap": map };
+    const map = await getMap();
+    const response = { "ColorMap": map };
 
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (tabs[0]) {
-          chrome.tabs.sendMessage(tabs[0].id, { type: 'applyTheme', response });
-        }
-      });
-    } catch (error) {
-      console.error('Error fetching color map:', error);
-    }
+    // Send message to the content script of the active tab
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, { type: 'applyTheme', response });
+      }
+    });
   }
-  return true;
+  return true; // Keep the message channel open for sendResponse
 });
 
 // Initialize theme on load

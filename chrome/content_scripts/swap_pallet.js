@@ -201,6 +201,7 @@ async function applyTheme(colorMap) {
   }
 }
 
+// Get colors from storage
 function getColor() {
   return new Promise((resolve) => {
     chrome.storage.local.get([
@@ -232,6 +233,7 @@ function getColor() {
   });
 }
 
+// Set colors into storage from background script (Potentially redundant bc of unified storage)
 function setColor(colorMap) {
   chrome.storage.local.set({
     "ColorMap--accent-color": colorMap["--accent-color"],
@@ -247,6 +249,7 @@ function setColor(colorMap) {
   });
 }
 
+// Listen for messages from background script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'applyTheme') {
     applyTheme(message.response['ColorMap']);
@@ -254,6 +257,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
+// Use MutationObserver to wait for class changes
 function observeThemeChanges() {
   const observer = new MutationObserver(async (mutationsList) => {
     for (const mutation of mutationsList) {
@@ -266,10 +270,11 @@ function observeThemeChanges() {
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 }
 
+// Init if root element contains theme
 (async function initTheme() {
   if (document.documentElement.classList.length > 0) {
     const colorMap = await getColor();
-    applyTheme(colorMap);
+    await applyTheme(colorMap);
   }
   observeThemeChanges();
 })();

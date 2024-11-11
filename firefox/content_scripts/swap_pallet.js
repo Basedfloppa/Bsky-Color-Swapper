@@ -62,7 +62,7 @@ const lightTheme = {
   '--border-color-val2': 'rgb(197, 207, 217)'
 };
 
-function applyTheme(colorMap) {
+async function applyTheme(colorMap) {
   let pickedTheme = {};
   const themeClass = document.documentElement.classList[0];
 
@@ -197,51 +197,55 @@ function applyTheme(colorMap) {
   }
 }
 
+// Get colors from storage
 function getColor() {
-  const colorMap = {
-    '--accent-color': localStorage.getItem("ColorMap--accent-color"),
-    '--accent-color-hover': localStorage.getItem("ColorMap--accent-color-hover"),
-    '--butterfly-icon': localStorage.getItem("ColorMap--butterfly-icon"),
-    '--background': localStorage.getItem("ColorMap--background"),
-    '--content-warnings': localStorage.getItem("ColorMap--content-warnings"),
-    '--content-warnings-hover': localStorage.getItem("ColorMap--content-warnings-hover"),
-    '--text-primary': localStorage.getItem("ColorMap--text-primary"),
-    '--text-secondary': localStorage.getItem("ColorMap--text-secondary"),
-    '--border-color': localStorage.getItem("ColorMap--border-color"),
-    '--main-button-text': localStorage.getItem("ColorMap--main-button-text")
-  };
-
-  return colorMap;
+  return new Promise((resolve) => {
+    browser.storage.local.get([
+      "ColorMap--accent-color",
+      "ColorMap--accent-color-hover",
+      "ColorMap--butterfly-icon",
+      "ColorMap--background",
+      "ColorMap--content-warnings",
+      "ColorMap--content-warnings-hover",
+      "ColorMap--text-primary",
+      "ColorMap--text-secondary",
+      "ColorMap--border-color",
+      "ColorMap--main-button-text"
+    ], (result) => {
+      const colorMap = {
+        '--accent-color': result["ColorMap--accent-color"],
+        '--accent-color-hover': result["ColorMap--accent-color-hover"],
+        '--butterfly-icon': result["ColorMap--butterfly-icon"],
+        '--background': result["ColorMap--background"],
+        '--content-warnings': result["ColorMap--content-warnings"],
+        '--content-warnings-hover': result["ColorMap--content-warnings-hover"],
+        '--text-primary': result["ColorMap--text-primary"],
+        '--text-secondary': result["ColorMap--text-secondary"],
+        '--border-color': result["ColorMap--border-color"],
+        '--main-button-text': result["ColorMap--main-button-text"]
+      };
+      resolve(colorMap);
+    });
+  });
 }
 
+// Set colors into storage from background script (Potentially redundant bc of unified storage)
 function setColor(colorMap) {
-  localStorage.setItem("ColorMap--accent-color", colorMap["--accent-color"]);
-  localStorage.setItem("ColorMap--accent-color-hover", colorMap["--accent-color-hover"]);
-  localStorage.setItem("ColorMap--butterfly-icon", colorMap["--butterfly-icon"]);
-  localStorage.setItem("ColorMap--background", colorMap["--background"]);
-  localStorage.setItem("ColorMap--content-warnings", colorMap["--content-warnings"]);
-  localStorage.setItem("ColorMap--content-warnings-hover", colorMap["--content-warnings-hover"]);
-  localStorage.setItem("ColorMap--text-primary", colorMap["--text-primary"]);
-  localStorage.setItem("ColorMap--text-secondary", colorMap["--text-secondary"]);
-  localStorage.setItem("ColorMap--border-color", colorMap["--border-color"]);
-  localStorage.setItem("ColorMap--main-button-text", colorMap["--main-button-text"]);
+  chrome.storage.local.set({
+    "ColorMap--accent-color": colorMap["--accent-color"],
+    "ColorMap--accent-color-hover": colorMap["--accent-color-hover"],
+    "ColorMap--butterfly-icon": colorMap["--butterfly-icon"],
+    "ColorMap--background": colorMap["--background"],
+    "ColorMap--content-warnings": colorMap["--content-warnings"],
+    "ColorMap--content-warnings-hover": colorMap["--content-warnings-hover"],
+    "ColorMap--text-primary": colorMap["--text-primary"],
+    "ColorMap--text-secondary": colorMap["--text-secondary"],
+    "ColorMap--border-color": colorMap["--border-color"],
+    "ColorMap--main-button-text": colorMap["--main-button-text"]
+  });
 }
 
-function init() {
-  if (!JSON.stringify(localStorage).includes("ColorMap")) {
-    localStorage.setItem("ColorMap--accent-color", '#bb98ff');
-    localStorage.setItem("ColorMap--accent-color-hover", '#8a2be2');
-    localStorage.setItem("ColorMap--butterfly-icon", '#8a2be2');
-    localStorage.setItem("ColorMap--background", '#200d46');
-    localStorage.setItem("ColorMap--content-warnings", '#322d3c');
-    localStorage.setItem("ColorMap--content-warnings-hover", '#4b435b');
-    localStorage.setItem("ColorMap--text-primary", '#fff');
-    localStorage.setItem("ColorMap--text-secondary", '#7f7f7f');
-    localStorage.setItem("ColorMap--border-color", 'rgb(46, 64, 82)');
-    localStorage.setItem("ColorMap--main-button-text", "#fff");
-  }
-}
-
+// Listen for messages from background script
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'applyTheme') {
     applyTheme(message.response['ColorMap']);
@@ -250,18 +254,23 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // Use MutationObserver to wait for class changes
-const observer = new MutationObserver((mutationsList) => {
-  for (const mutation of mutationsList) {
-    if (mutation.attributeName === 'class' && document.documentElement.classList.length > 0) {
-      applyTheme(getColor());
+function observeThemeChanges() {
+  const observer = new MutationObserver(async (mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (mutation.attributeName === 'class' && document.documentElement.classList.length > 0) {
+        const colorMap = await getColor();  // Await to ensure resolved value
+        applyTheme(colorMap);
+      }
     }
-  }
-});
-// Start observing changes to the class attribute on the html element
-observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-
-if (document.documentElement.classList.length > 0) {
-  applyTheme(getColor());
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 }
 
-document.addEventListener("DOMContentLoaded", init);
+// Init if root element contains theme
+(async function initTheme() {
+  if (document.documentElement.classList.length > 0) {
+    const colorMap = await getColor();
+    await applyTheme(colorMap);
+  }
+  observeThemeChanges();
+})();

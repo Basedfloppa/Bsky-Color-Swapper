@@ -30,100 +30,100 @@ elements.hex.addEventListener("input", updateColor);
 elements.buttons.forEach(button => {
   button.addEventListener('click', () => {
     const svgElement = button.querySelector('svg');
-    elements.colorId.innerHTML = svgElement.id;
-    if (svgElement) setColor(svgElement.id);
+    if (svgElement) {
+      elements.colorId.innerHTML = svgElement.id;
+      setColor(svgElement.id);
+    }
   });
 });
 
 // Initializations of color values
-function init() {
-  // Get options from id values of svg nodes
+async function init() {
   const options = Array.from(document.querySelectorAll("div svg")).map(x => x.id);
-  const colors = options.map(x => localStorage.getItem(x)).filter(x => x);
-
-  if (Array.from(colors).length <= 0) addColors();
-
-  options.forEach(id => {
-    if (id) document.getElementById(id).style.fill = localStorage.getItem(id) ?? "rgb(0,0,0)";
-  });
-  
-  setColor(elements.colorId.innerHTML);
+  for (let option of options) {
+    document.getElementById(option).style.fill = await getStorageValue(option) ?? "rgb(0,0,0)";
+  }
+  await setColor(elements.colorId.innerHTML);
 }
 
-//Update input values
+// Wrapper for getting values from extention storage
+function getStorageValue(key) {
+  return new Promise((resolve) => {
+    browser.storage.local.get([key], (result) => {
+      resolve(result[key]);
+    });
+  });
+}
+
+// Update input values
 function updateColor() {
-  //Get input tab
   const activeTab = document.querySelector("#colorTab .nav-item .active")?.id.split("-")[0];
   let color = "";
 
-  //Depending on tab value change color values
   switch (activeTab) {
     case "rgb":
-      color = "rgb(" + red.value + "," + green.value + "," + blue.value + ")";
-
+      color = `rgb(${elements.sliders.red.value}, ${elements.sliders.green.value}, ${elements.sliders.blue.value})`;
       updateRgbVal();
       break;
     case "hsl":
-      color = convertToRgb("hsl(" + hue.value + "," + saturation.value + "%," + lightness.value + "%)");
-      color = "rgb(" + color['r'] + "," + color['g'] + "," + color['b'] + ")";
-
+      const hslRgb = convertToRgb(`hsl(${elements.sliders.hue.value}, ${elements.sliders.saturation.value}%, ${elements.sliders.lightness.value}%)`);
+      color = `rgb(${hslRgb.r}, ${hslRgb.g}, ${hslRgb.b})`;
       updateHslVal();
       break;
     case "hex":
-      color = hexToRgb(hex.value);
-      color = "rgb(" + color['r'] + "," + color['g'] + "," + color['b'] + ")";
+      const hexRgb = hexToRgb(elements.hex.value);
+      color = `rgb(${hexRgb.r}, ${hexRgb.g}, ${hexRgb.b})`;
       break;
   }
 
-  document.getElementById(elements.colorId.innerHTML).style["fill"] = color;
-  elements.swatch.style["background-color"] = color;
-  localStorage.setItem(elements.colorId.innerHTML, color);
-
-  window.browser.runtime.sendMessage({ type: 'applyTheme' });
+  document.getElementById(elements.colorId.innerHTML).style.fill = color;
+  elements.swatch.style.backgroundColor = color;
+  chrome.storage.local.set({ [elements.colorId.innerHTML]: color });
+  chrome.runtime.sendMessage({ type: 'applyTheme' });
 }
 
-//Change input values and color
-function setColor(id) {
-  id = id ?? elements.colorId.innerHTML
-  let color = localStorage.getItem(id) ?? "rgb(0,0,0)";
-  color = convertToRgb(color) ?? { 'r': '0', 'g': '0', 'b': '0' };
+// Change input values and color
+async function setColor(id) {
+  id = id ?? elements.colorId.innerHTML;
+  let color = await getStorageValue(id) || "rgb(0,0,0)";
+  const colorRgb = convertToRgb(color) || { r: '0', g: '0', b: '0' };
 
-  elements.colorLabel.innerHTML = "Picked: " + id.replace('ColorMap--', ' ').replaceAll('-', ' ');
+  elements.colorLabel.innerHTML = `Picked: ${id.replace('ColorMap--', ' ').replaceAll('-', ' ')}`;
+  elements.swatch.style.backgroundColor = `rgb(${colorRgb.r}, ${colorRgb.g}, ${colorRgb.b})`;
 
-  elements.swatch.style["background-color"] = "rgb(" + color['r'] + "," + color['g'] + "," + color['b'] + ")";
-
-  elements.sliders.red.value = color['r'];
-  elements.sliders.green.value = color['g'];
-  elements.sliders.blue.value = color['b'];
+  elements.sliders.red.value = colorRgb.r;
+  elements.sliders.green.value = colorRgb.g;
+  elements.sliders.blue.value = colorRgb.b;
   updateRgbVal();
 
-  let hslColor = rgbToHsl(color['r'], color['g'], color['b']);
-  elements.sliders.hue.value = hslColor['h'];
-  elements.sliders.saturation.value = hslColor['s'];
-  elements.sliders.lightness.value = hslColor['l'];
+  const hslColor = rgbToHsl(colorRgb.r, colorRgb.g, colorRgb.b);
+  elements.sliders.hue.value = hslColor.h;
+  elements.sliders.saturation.value = hslColor.s;
+  elements.sliders.lightness.value = hslColor.l;
   updateHslVal();
 
-  elements.hex.value = rgbToHex(color['r'], color['g'], color['b']);
+  elements.hex.value = rgbToHex(colorRgb.r, colorRgb.g, colorRgb.b);
 }
 
-function reset() {
-  let options = Array.from(document.querySelectorAll("div svg")).map(x => x.id);
-
+// Resets option menu
+async function reset() {
+  const options = Array.from(document.querySelectorAll("div svg")).map(x => x.id);
   for (let option of options) {
     elements.colorId.innerHTML = option;
-
-    setColor();
-    updateColor();
-    init();
+    await setColor(option);
+    await updateColor();
+    await init();
   }
 }
 
+// Update rgb input values
 function updateRgbVal() {
   elements.values.redVal.innerHTML = red.value;
   elements.values.greenVal.innerHTML = green.value;
   elements.values.blueVal.innerHTML = blue.value;
 }
 
+// Update hsl input values
 function updateHslVal() {
   elements.values.hueVal.innerHTML = hue.value;
   elements.values.saturationVal.innerHTML = saturation.value;
@@ -133,22 +133,8 @@ function updateHslVal() {
 document.addEventListener("DOMContentLoaded", init);
 
 // #region Colors
-function addColors()
-{
-  if (!JSON.stringify(localStorage).includes("ColorMap")) {
-    localStorage.setItem("ColorMap--accent-color", '#bb98ff');
-    localStorage.setItem("ColorMap--accent-color-hover", '#8a2be2');
-    localStorage.setItem("ColorMap--butterfly-icon", '#8a2be2');
-    localStorage.setItem("ColorMap--background", '#200d46');
-    localStorage.setItem("ColorMap--content-warnings", '#322d3c');
-    localStorage.setItem("ColorMap--content-warnings-hover", '#4b435b');
-    localStorage.setItem("ColorMap--text-primary", '#fff');
-    localStorage.setItem("ColorMap--text-secondary", '#7f7f7f');
-    localStorage.setItem("ColorMap--border-color", 'rgb(46, 64, 82)');
-    localStorage.setItem("ColorMap--main-button-text", "#fff");
-  }
-}
 
+// Convert Hex to RGB
 function hexToRgb(hex) {
   hex = hex.replace(/^#/, '');
   if (hex.length === 3) {
@@ -250,97 +236,154 @@ function convertToRgb(color) {
 const defaultLight = document.getElementById("DefaultLight");
 defaultLight.addEventListener("click", DefaultLight)
 function DefaultLight() {
-  localStorage.setItem("ColorMap--accent-color", 'rgb(16, 131, 254)');
-  localStorage.setItem("ColorMap--accent-color-hover", 'rgb(1, 104, 213)');
-  localStorage.setItem("ColorMap--butterfly-icon", 'rgb(16, 131, 254)');
-  localStorage.setItem("ColorMap--background", 'rgb(255, 255, 255)');
-  localStorage.setItem("ColorMap--content-warnings", 'rgb(241, 243, 245)');
-  localStorage.setItem("ColorMap--content-warnings-hover", 'rgb(226, 231, 236)');
-  localStorage.setItem("ColorMap--text-primary", 'rgb(11, 15, 20)');
-  localStorage.setItem("ColorMap--text-secondary", 'rgb(66, 87, 108)');
-  localStorage.setItem("ColorMap--border-color", 'rgb(212, 219, 226)');
-  localStorage.setItem("ColorMap--main-button-text", 'rgb(11, 15, 20)');
-  reset();
+  browser.storage.local.set({
+    "ColorMap--accent-color": 'rgb(16, 131, 254)',
+    "ColorMap--accent-color-hover": 'rgb(1, 104, 213)',
+    "ColorMap--butterfly-icon": 'rgb(16, 131, 254)',
+    "ColorMap--background": 'rgb(255, 255, 255)',
+    "ColorMap--content-warnings": 'rgb(241, 243, 245)',
+    "ColorMap--content-warnings-hover": 'rgb(226, 231, 236)',
+    "ColorMap--text-primary": 'rgb(11, 15, 20)',
+    "ColorMap--text-secondary": 'rgb(66, 87, 108)',
+    "ColorMap--border-color": 'rgb(212, 219, 226)',
+    "ColorMap--main-button-text": 'rgb(11, 15, 20)',
+  }, reset);
 }
 
 const defaultDim = document.getElementById("DefaultDim");
 defaultDim.addEventListener("click", DefaultDim)
 function DefaultDim() {
-  localStorage.setItem("ColorMap--accent-color", 'rgb(32, 139, 254)');
-  localStorage.setItem("ColorMap--accent-color-hover", 'rgb(76, 162, 254)');
-  localStorage.setItem("ColorMap--butterfly-icon", 'rgb(32, 139, 254)');
-  localStorage.setItem("ColorMap--background", 'rgb(22, 30, 39)');
-  localStorage.setItem("ColorMap--content-warnings", 'rgb(30, 41, 54)');
-  localStorage.setItem("ColorMap--content-warnings-hover", 'rgb(30, 41, 54)');
-  localStorage.setItem("ColorMap--text-primary", 'rgb(241, 243, 245)');
-  localStorage.setItem("ColorMap--text-secondary", 'rgb(174, 187, 201)');
-  localStorage.setItem("ColorMap--border-color", 'rgb(46, 64, 82)');
-  localStorage.setItem("ColorMap--main-button-text", 'rgb(241, 243, 245)');
-  reset();
+  browser.storage.local.set({
+    "ColorMap--accent-color": 'rgb(32, 139, 254)',
+    "ColorMap--accent-color-hover": 'rgb(76, 162, 254)',
+    "ColorMap--butterfly-icon": 'rgb(32, 139, 254)',
+    "ColorMap--background": 'rgb(22, 30, 39)',
+    "ColorMap--content-warnings": 'rgb(30, 41, 54)',
+    "ColorMap--content-warnings-hover": 'rgb(30, 41, 54)',
+    "ColorMap--text-primary": 'rgb(241, 243, 245)',
+    "ColorMap--text-secondary": 'rgb(174, 187, 201)',
+    "ColorMap--border-color": 'rgb(46, 64, 82)',
+    "ColorMap--main-button-text": 'rgb(241, 243, 245)',
+  }, reset);
 }
 
 const defaultDark = document.getElementById("DefaultDark");
 defaultDark.addEventListener("click", DefaultDark)
 function DefaultDark() {
-  localStorage.setItem("ColorMap--accent-color", 'rgb(16, 131, 254)');
-  localStorage.setItem("ColorMap--accent-color-hover", 'rgb(52, 150, 254)');
-  localStorage.setItem("ColorMap--butterfly-icon", 'rgb(16, 131, 254)');
-  localStorage.setItem("ColorMap--background", 'rgb(0, 0, 0)');
-  localStorage.setItem("ColorMap--content-warnings", 'rgb(20, 27, 35)');
-  localStorage.setItem("ColorMap--content-warnings-hover", 'rgb(28, 39, 50)');
-  localStorage.setItem("ColorMap--text-primary", 'rgb(241, 243, 245)');
-  localStorage.setItem("ColorMap--text-secondary", 'rgb(140, 158, 178)');
-  localStorage.setItem("ColorMap--border-color", 'rgb(37, 51, 66)');
-  localStorage.setItem("ColorMap--main-button-text", 'rgb(241, 243, 245)');
-  reset();
+  browser.storage.local.set({
+    "ColorMap--accent-color": 'rgb(16, 131, 254)',
+    "ColorMap--accent-color-hover": 'rgb(52, 150, 254)',
+    "ColorMap--butterfly-icon": 'rgb(16, 131, 254)',
+    "ColorMap--background": 'rgb(0, 0, 0)',
+    "ColorMap--content-warnings": 'rgb(20, 27, 35)',
+    "ColorMap--content-warnings-hover": 'rgb(28, 39, 50)',
+    "ColorMap--text-primary": 'rgb(241, 243, 245)',
+    "ColorMap--text-secondary": 'rgb(140, 158, 178)',
+    "ColorMap--border-color": 'rgb(37, 51, 66)',
+    "ColorMap--main-button-text": 'rgb(241, 243, 245)'
+  }, reset);
+}
+
+const pinkLight = document.getElementById("PinkLight");
+pinkLight.addEventListener("click", PinkLight)
+async function PinkLight() {
+  browser.storage.local.set({
+    "ColorMap--accent-color": '#ff008e',
+    "ColorMap--accent-color-hover": '#ef006a',
+    "ColorMap--butterfly-icon": '#fd0093',
+    "ColorMap--background": '#ffffff',
+    "ColorMap--content-warnings": '#fbf7f8',
+    "ColorMap--content-warnings-hover": '#eee3e9',
+    "ColorMap--text-primary": '#0f0609',
+    "ColorMap--text-secondary": '#733c59',
+    "ColorMap--border-color": '#e6d5dd',
+    "ColorMap--main-button-text": '#11060a'
+  }, reset);
+}
+
+const pinkDim = document.getElementById("PinkDim");
+pinkDim.addEventListener("click", PinkDim)
+async function PinkDim() {
+  browser.storage.local.set({
+    "ColorMap--accent-color": '#f60494',
+    "ColorMap--accent-color-hover": '#ff42a6',
+    "ColorMap--butterfly-icon": '#ff0090',
+    "ColorMap--background": '#27121b',
+    "ColorMap--content-warnings": '#39162a',
+    "ColorMap--content-warnings-hover": '#381929',
+    "ColorMap--text-primary": '#f8f4f5',
+    "ColorMap--text-secondary": '#d1b2c2',
+    "ColorMap--border-color": '562a41',
+    "ColorMap--main-button-text": '#f6f4f5'
+  }, reset);
+}
+
+const pinkDark = document.getElementById("PinkDark");
+pinkDark.addEventListener("click", PinkDark)
+async function PinkDark() {
+  browser.storage.local.set({
+    "ColorMap--accent-color": '#ff008a',
+    "ColorMap--accent-color-hover": '#ff169d',
+    "ColorMap--butterfly-icon": '#ff0188',
+    "ColorMap--background": '#000000',
+    "ColorMap--content-warnings": '#231016',
+    "ColorMap--content-warnings-hover": '#2f1822',
+    "ColorMap--text-primary": '#f7f1f3',
+    "ColorMap--text-secondary": '#bb8a9d',
+    "ColorMap--border-color": '#461f32',
+    "ColorMap--main-button-text": '#f5f3f4'
+  }, reset);
 }
 
 const purpleLight = document.getElementById("PurpleLight");
 purpleLight.addEventListener("click", PurpleLight)
-function PurpleLight() {
-  localStorage.setItem("ColorMap--accent-color", '#a375e4');
-  localStorage.setItem("ColorMap--accent-color-hover", '#8a2be2');
-  localStorage.setItem("ColorMap--butterfly-icon", '#8a2be2');
-  localStorage.setItem("ColorMap--background", '#ffffff');
-  localStorage.setItem("ColorMap--content-warnings", '#dfcfff');
-  localStorage.setItem("ColorMap--content-warnings-hover", '#baa3e7');
-  localStorage.setItem("ColorMap--text-primary", '#000000');
-  localStorage.setItem("ColorMap--text-secondary", '#535353');
-  localStorage.setItem("ColorMap--border-color", '#000000');
-  localStorage.setItem("ColorMap--main-button-text", '#000000');
-  reset();
+async function PurpleLight() {
+  browser.storage.local.set({
+    "ColorMap--accent-color": '#a375e4',
+    "ColorMap--accent-color-hover": '#8a2be2',
+    "ColorMap--butterfly-icon": '#8a2be2',
+    "ColorMap--background": '#ffffff',
+    "ColorMap--content-warnings": '#dfcfff',
+    "ColorMap--content-warnings-hover": '#baa3e7',
+    "ColorMap--text-primary": '#000000',
+    "ColorMap--text-secondary": '#535353',
+    "ColorMap--border-color": '#000000',
+    "ColorMap--main-button-text": '#000000'
+  }, reset);
 }
 
 const purpleDim = document.getElementById("PurpleDim");
 purpleDim.addEventListener("click", PurpleDim)
-function PurpleDim() {
-  localStorage.setItem("ColorMap--accent-color", '#bb98ff');
-  localStorage.setItem("ColorMap--accent-color-hover", '#8a2be2');
-  localStorage.setItem("ColorMap--butterfly-icon", '#8a2be2');
-  localStorage.setItem("ColorMap--background", '#200d46');
-  localStorage.setItem("ColorMap--content-warnings", '#322d3c');
-  localStorage.setItem("ColorMap--content-warnings-hover", '#4b435b');
-  localStorage.setItem("ColorMap--text-primary", '#fff');
-  localStorage.setItem("ColorMap--text-secondary", '#7f7f7f');
-  localStorage.setItem("ColorMap--border-color", 'rgb(46, 64, 82)');
-  localStorage.setItem("ColorMap--main-button-text", '#fff');
-  reset();
+async function PurpleDim() {
+  browser.storage.local.set({
+    "ColorMap--accent-color": '#bb98ff',
+    "ColorMap--accent-color-hover": '#8a2be2',
+    "ColorMap--butterfly-icon": '#8a2be2',
+    "ColorMap--background": '#200d46',
+    "ColorMap--content-warnings": '#322d3c',
+    "ColorMap--content-warnings-hover": '#4b435b',
+    "ColorMap--text-primary": '#fff',
+    "ColorMap--text-secondary": '#7f7f7f',
+    "ColorMap--border-color": 'rgb(46, 64, 82)',
+    "ColorMap--main-button-text": '#fff'
+  }, reset);
 }
 
 const purpleDark = document.getElementById("PurpleDark");
 purpleDark.addEventListener("click", PurpleDark)
-function PurpleDark() {
-  localStorage.setItem("ColorMap--accent-color", '#7636c5');
-  localStorage.setItem("ColorMap--accent-color-hover", '#8b2be2');
-  localStorage.setItem("ColorMap--butterfly-icon", '#8a2be2');
-  localStorage.setItem("ColorMap--background", '#0e000e');
-  localStorage.setItem("ColorMap--content-warnings", '#3c1157');
-  localStorage.setItem("ColorMap--content-warnings-hover", '#3c2c57');
-  localStorage.setItem("ColorMap--text-primary", '#fff');
-  localStorage.setItem("ColorMap--text-secondary", '#8f9eb7');
-  localStorage.setItem("ColorMap--border-color", '#ffffff');
-  localStorage.setItem("ColorMap--main-button-text", '#fff');
-  reset();
+async function PurpleDark() {
+  browser.storage.local.set({
+    "ColorMap--accent-color": '#7636c5',
+    "ColorMap--accent-color-hover": '#8b2be2',
+    "ColorMap--butterfly-icon": '#8a2be2',
+    "ColorMap--background": '#0e000e',
+    "ColorMap--content-warnings": '#3c1157',
+    "ColorMap--content-warnings-hover": '#3c2c57',
+    "ColorMap--text-primary": '#fff',
+    "ColorMap--text-secondary": '#8f9eb7',
+    "ColorMap--border-color": '#ffffff',
+    "ColorMap--main-button-text": '#fff'
+  }, reset);
 }
 // #endregion
 // #endregion
