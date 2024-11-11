@@ -22,10 +22,11 @@ const elements = {
   buttons: document.querySelectorAll('.table button')
 };
 
-// Event Listeners
+// Event Listeners on input sliders
 Object.values(elements.sliders).forEach(slider => slider.addEventListener("input", updateColor));
 elements.hex.addEventListener("input", updateColor);
 
+// Event Listeners on color group button click
 elements.buttons.forEach(button => {
   button.addEventListener('click', () => {
     const svgElement = button.querySelector('svg');
@@ -36,6 +37,7 @@ elements.buttons.forEach(button => {
   });
 });
 
+// Initializations of color values
 async function init() {
   const options = Array.from(document.querySelectorAll("div svg")).map(x => x.id);
   for (let option of options) {
@@ -44,6 +46,7 @@ async function init() {
   setColor(elements.colorId.innerHTML);
 }
 
+// Wrapper for getting values from extention storage
 function getStorageValue(key) {
   return new Promise((resolve) => {
     chrome.storage.local.get([key], (result) => {
@@ -52,6 +55,7 @@ function getStorageValue(key) {
   });
 }
 
+// Update input values
 function updateColor() {
   const activeTab = document.querySelector("#colorTab .nav-item .active")?.id.split("-")[0];
   let color = "";
@@ -78,6 +82,7 @@ function updateColor() {
   chrome.runtime.sendMessage({ type: 'applyTheme' });
 }
 
+// Change input values and color
 async function setColor(id) {
   id = id ?? elements.colorId.innerHTML;
   let color = await getStorageValue(id) || "rgb(0,0,0)";
@@ -100,6 +105,7 @@ async function setColor(id) {
   elements.hex.value = rgbToHex(colorRgb.r, colorRgb.g, colorRgb.b);
 }
 
+// Resets option menu
 async function reset() {
   const options = Array.from(document.querySelectorAll("div svg")).map(x => x.id);
   for (let option of options) {
@@ -110,12 +116,14 @@ async function reset() {
   }
 }
 
+// Update rgb input values
 function updateRgbVal() {
   elements.values.redVal.innerHTML = elements.sliders.red.value;
   elements.values.greenVal.innerHTML = elements.sliders.green.value;
   elements.values.blueVal.innerHTML = elements.sliders.blue.value;
 }
 
+// Update hsl input values
 function updateHslVal() {
   elements.values.hueVal.innerHTML = elements.sliders.hue.value;
   elements.values.saturationVal.innerHTML = elements.sliders.saturation.value;
@@ -125,6 +133,8 @@ function updateHslVal() {
 document.addEventListener("DOMContentLoaded", init);
 
 // #region Colors
+
+// Convert Hex to RGB
 function hexToRgb(hex) {
   hex = hex.replace(/^#/, '');
   if (hex.length === 3) {
@@ -274,13 +284,62 @@ function DefaultDark() {
   }, reset);
 }
 
-const purpleLight = document.getElementById("PurpleLight");
-if (purpleLight) {
-  purpleLight.addEventListener("click", PurpleLight);
-}
-function PurpleLight() {
+const pinkLight = document.getElementById("PinkLight");
+pinkLight.addEventListener("click", PinkLight)
+async function PinkLight() {
   chrome.storage.local.set({
-    "ColorMap--accent-color": '#bb98ff',
+    "ColorMap--accent-color": '#ff008e',
+    "ColorMap--accent-color-hover": '#ef006a',
+    "ColorMap--butterfly-icon": '#fd0093',
+    "ColorMap--background": '#ffffff',
+    "ColorMap--content-warnings": '#fbf7f8',
+    "ColorMap--content-warnings-hover": '#eee3e9',
+    "ColorMap--text-primary": '#0f0609',
+    "ColorMap--text-secondary": '#733c59',
+    "ColorMap--border-color": '#e6d5dd',
+    "ColorMap--main-button-text": '#11060a'
+  }, reset);
+}
+
+const pinkDim = document.getElementById("PinkDim");
+pinkDim.addEventListener("click", PinkDim)
+async function PinkDim() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#f60494',
+    "ColorMap--accent-color-hover": '#ff42a6',
+    "ColorMap--butterfly-icon": '#ff0090',
+    "ColorMap--background": '#27121b',
+    "ColorMap--content-warnings": '#39162a',
+    "ColorMap--content-warnings-hover": '#381929',
+    "ColorMap--text-primary": '#f8f4f5',
+    "ColorMap--text-secondary": '#d1b2c2',
+    "ColorMap--border-color": '562a41',
+    "ColorMap--main-button-text": '#f6f4f5'
+  }, reset);
+}
+
+const pinkDark = document.getElementById("PinkDark");
+pinkDark.addEventListener("click", PinkDark)
+async function PinkDark() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#ff008a',
+    "ColorMap--accent-color-hover": '#ff169d',
+    "ColorMap--butterfly-icon": '#ff0188',
+    "ColorMap--background": '#000000',
+    "ColorMap--content-warnings": '#231016',
+    "ColorMap--content-warnings-hover": '#2f1822',
+    "ColorMap--text-primary": '#f7f1f3',
+    "ColorMap--text-secondary": '#bb8a9d',
+    "ColorMap--border-color": '#461f32',
+    "ColorMap--main-button-text": '#f5f3f4'
+  }, reset);
+}
+
+const purpleLight = document.getElementById("PurpleLight");
+purpleLight.addEventListener("click", PurpleLight)
+async function PurpleLight() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#a375e4',
     "ColorMap--accent-color-hover": '#8a2be2',
     "ColorMap--butterfly-icon": '#8a2be2',
     "ColorMap--background": '#ffffff',
@@ -294,10 +353,8 @@ function PurpleLight() {
 }
 
 const purpleDim = document.getElementById("PurpleDim");
-if (purpleDim) {
-  purpleDim.addEventListener("click", PurpleDim);
-}
-function PurpleDim() {
+purpleDim.addEventListener("click", PurpleDim)
+async function PurpleDim() {
   chrome.storage.local.set({
     "ColorMap--accent-color": '#bb98ff',
     "ColorMap--accent-color-hover": '#8a2be2',
@@ -313,10 +370,8 @@ function PurpleDim() {
 }
 
 const purpleDark = document.getElementById("PurpleDark");
-if (purpleDark) {
-  purpleDark.addEventListener("click", PurpleDark);
-}
-function PurpleDark() {
+purpleDark.addEventListener("click", PurpleDark)
+async function PurpleDark() {
   chrome.storage.local.set({
     "ColorMap--accent-color": '#7636c5',
     "ColorMap--accent-color-hover": '#8b2be2',
