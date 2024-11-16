@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "BlueSkyColorPalletSwapper",
+  "name": "BlueSky Color Pallet",
   "description": "Allows users to freely swap color themes",
   "version": "2.3",
   "icons": {
@@ -27,7 +27,7 @@
     "storage"
   ],
   "browser_action": {
-    "default_title": "BlueSkyColorPalletSwapper",
+    "default_title": "BlueSky Color Pallet",
     "default_popup": "firefox/popup/options.html"
   },
   "homepage_url": "https://github.com/Basedfloppa/Bsky-Color-Swapper",
