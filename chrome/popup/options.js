@@ -19,12 +19,20 @@ const elements = {
   swatch: document.getElementById("colorSwatch"),
   colorId: document.getElementById("colorId"),
   colorLabel: document.getElementById("colorLabel"),
-  buttons: document.querySelectorAll('.table button')
+  buttons: document.querySelectorAll('.table button'),
+  exportButton: document.getElementById("export-button"),
+  exportText: document.getElementById("export-text-area"),
+  importButton: document.getElementById("import-button"),
+  importText: document.getElementById("import-text-area")
 };
 
 // Event Listeners on input sliders
 Object.values(elements.sliders).forEach(slider => slider.addEventListener("input", updateColor));
 elements.hex.addEventListener("input", updateColor);
+
+// Event listeners on Import/Export
+elements.exportButton.addEventListener("click", exportTheme);
+elements.importButton.addEventListener("click", importTheme);
 
 // Event Listeners on color group button click
 elements.buttons.forEach(button => {
@@ -44,6 +52,30 @@ async function init() {
     document.getElementById(option).style.fill = await getStorageValue(option) ?? "rgb(0,0,0)";
   }
   setColor(elements.colorId.innerHTML);
+}
+
+// Export current theme
+async function exportTheme() {
+  let result = [];
+
+  for (const button of elements.buttons) {
+    const svgElement = button.querySelector('svg').getAttribute("id");
+    let color = await getStorageValue(svgElement);
+    result = result.concat(svgElement + ":" + color);
+  }
+
+  elements.exportText.value = result.join(';');
+}
+
+// Import theme
+async function importTheme() {
+  let colors = elements.importText.value.split(';');
+
+  for (const color of colors) {
+    await chrome.storage.local.set({ [color.split(":")[0]]: color.split(":")[1] });
+  }
+
+  reset();
 }
 
 // Wrapper for getting values from extention storage
