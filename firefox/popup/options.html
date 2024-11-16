@@ -22,6 +22,10 @@
         <button class="nav-link w-100" id="premade-tab" data-bs-toggle="tab" data-bs-target="#premade-tab-pane"
           type="button" aria-controls="premade-tab-pane" aria-selected="false">PreMade</button>
       </li>
+      <li class="nav-item flex-grow-1">
+        <button class="nav-link w-100" id="load-tab" data-bs-toggle="tab" data-bs-target="#load-tab-pane" type="button"
+          aria-controls="load-tab-pane" aria-selected="false">Import/Export</button>
+      </li>
     </ul>
     <div class="tab-content" id="themeTabContent">
       <div class="tab-pane fade show active" id="custom-tab-pane" aria-labelledby="custom-tab" tabindex="0">
@@ -256,7 +260,27 @@
           <hr />
         </div>
       </div>
+      <div class="tab-pane fade m-3" id="load-tab-pane" aria-labelledby="load-tab" tabindex="0">
+        <div class="row">
+          <div class="input-group mb-3">
+            <button class="btn btn-outline-light input-group-prepend" id="import-button">Import</button>
+            <input type="text" class="form-control" id="import-text-area" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-group mb-3">
+            <button class="btn btn-outline-light input-group-prepend" id="export-button">Export</button>
+            <input type="text" class="form-control" id="export-text-area" />
+          </div>
+        </div>
+
+        <div class="alert alert-danger d-none" role="alert">
+          Import data was incorrect!
+        </div>
+      </div>
       <script src="options.js"></script>
+    </div>
 </body>
 
 </html>
