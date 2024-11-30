@@ -4,6 +4,10 @@ const dimTheme = {
   '--accent-color-val3': 'rgb(76, 162, 254)',
   '--accent-color-val4': 'hsl(211, 99%, 56%)',
   '--accent-color-val5': 'rgb(0, 133, 255)',
+  '--accent-color-inactive-val1': 'rgb(10, 95, 186)',
+  '--accent-color-inactive-val2': 'rgb(14, 73, 137)',
+  '--accent-color-inactive-val3': 'rgb(14, 73, 137)',
+  '--accent-color-inactive-text': 'rgb(241, 243, 245)',
   '--accent-color-hover-val1': 'rgb(76, 162, 254)',
   '--accent-color-hover-val2': 'rgb(19, 63, 109)',
   '--content-warnings-val': 'rgb(30, 41, 54)',
@@ -24,7 +28,11 @@ const darkTheme = {
   '--accent-color-val2': '#0085ff',
   '--accent-color-val3': 'rgb(52, 150, 254)',
   '--accent-color-val4': 'hsl(211, 99%, 53%)',
-  '--accent-color-val4': 'hsl(211, 99%, 56%)',
+  '--accent-color-val5': 'hsl(211, 99%, 56%)',
+  '--accent-color-inactive-val1': 'rgb(1, 84, 173)',
+  '--accent-color-inactive-val2': 'rgb(1, 64, 132)',
+  '--accent-color-inactive-val3': 'rgb(0, 44, 91)',
+  '--accent-color-inactive-text': 'rgb(241, 243, 245)',
   '--accent-color-hover-val1': 'rgb(52, 150, 254)',
   '--accent-color-hover-val2': 'rgb(19, 63, 109)',
   '--content-warnings-val': 'rgb(20, 27, 35)',
@@ -46,6 +54,10 @@ const lightTheme = {
   '--accent-color-val3': 'rgb(1, 104, 213)',
   '--accent-color-val4': 'hsl(211, 99%, 53%)',
   '--accent-color-val5': 'hsl(211, 28%, 6%)',
+  '--accent-color-inactive-val1': 'rgb(154, 202, 254)',
+  '--accent-color-inactive-val2': 'rgb(1, 84, 173)',
+  '--accent-color-inactive-val3': 'rgb(204, 229, 255)',
+  '--accent-color-inactive-text': 'rgb(255, 255, 255)',
   '--accent-color-hover-val1': 'rgb(1, 104, 213)',
   '--accent-color-hover-val2': 'rgb(19, 63, 109)',
   '--content-warnings-val': 'rgb(241, 243, 245)',
@@ -84,6 +96,8 @@ async function applyTheme(colorMap) {
   const innerStyle = `
     :root {
         --accent-color: ${colorMap['--accent-color']};
+        --accent-color-inactive: ${colorMap['--accent-color-inactive']};
+        --accent-color-inactive-text: ${colorMap['--accent-color-inactive-text']};
         --accent-color-hover: ${colorMap['--accent-color-hover']};
         --butterfly-icon: ${colorMap['--butterfly-icon']};
         --background-change: ${colorMap['--background']};
@@ -98,6 +112,16 @@ async function applyTheme(colorMap) {
     *[style*="background-color: ${pickedTheme['--accent-color-val1']}"],
     *[style*="background-color: ${pickedTheme['--accent-color-val2']}"] {
         background-color: var(--accent-color) !important;
+    }
+
+    /*Background of inactive accent color element*/
+    *[style*="background-color: ${pickedTheme['--accent-color-inactive-val1']}"] {
+        background-color: var(--accent-color-inactive) !important;
+    }
+    /*background of inactive chat message element*/
+    *[style*="background-color: ${pickedTheme['--accent-color-inactive-val2']}"],
+    *[style*="background-color: ${pickedTheme['--accent-color-inactive-val3']}"] {
+        background-color: var(--accent-color-inactive) !important;
     }
 
     .r-wzwllv {
@@ -168,6 +192,11 @@ async function applyTheme(colorMap) {
         fill: var(--text-secondary-change) !important;
     }
 
+    /*Circle indicator for amount of characters left in the post text-box*/
+    path[stroke="${pickedTheme['--accent-color-val4']}"] {
+        stroke: var(--accent-color) !important;
+    }
+
     *[style*="border-color: ${pickedTheme['--border-color-val1']}"],
     *[style*="border-color: ${pickedTheme['--border-color-val2']}"] {
         border-color: var(--border-color-change) !important;
@@ -179,6 +208,11 @@ async function applyTheme(colorMap) {
     button div div svg path[fill="${pickedTheme['--text-primary-val2']}"] {
         fill: var(--main-button-text) !important;
     } 
+
+    /*Border color around active input elements*/
+    *[style*="border-color: ${pickedTheme['--accent-color-val1']}"] {
+        border-color: var(--accent-color) !important;
+    }
 
     *[style*="border-color: ${pickedTheme['--border-color-val1']}"],
     *[style*="border-color: ${pickedTheme['--border-color-val2']}"] {
@@ -197,11 +231,27 @@ async function applyTheme(colorMap) {
   }
 }
 
+async function removeProseMirror() {
+  for (let sheet of document.styleSheets) {
+    try {
+      for (let i = sheet.cssRules.length - 1; i >= 0; i--) {
+        if (sheet.cssRules[i].selectorText === '.ProseMirror-light' || sheet.cssRules[i].selectorText === '.ProseMirror-dark') {
+          sheet.deleteRule(i);
+        }
+      }
+    } catch (e) {
+      console.warn("Unable to access stylesheet:", sheet);
+    }
+  }
+}
+
 // Get colors from storage
 function getColor() {
   return new Promise((resolve) => {
     browser.storage.local.get([
       "ColorMap--accent-color",
+      "ColorMap--accent-color-inactive",
+      "ColorMap--accent-color-inactive-text",
       "ColorMap--accent-color-hover",
       "ColorMap--butterfly-icon",
       "ColorMap--background",
@@ -214,6 +264,8 @@ function getColor() {
     ], (result) => {
       const colorMap = {
         '--accent-color': result["ColorMap--accent-color"],
+        '--accent-color-inactive': result["ColorMap--accent-color-inactive"],
+        '--accent-color-inactive-text': result["ColorMap--accent-color-inactive-text"],
         '--accent-color-hover': result["ColorMap--accent-color-hover"],
         '--butterfly-icon': result["ColorMap--butterfly-icon"],
         '--background': result["ColorMap--background"],
@@ -233,6 +285,8 @@ function getColor() {
 function setColor(colorMap) {
   chrome.storage.local.set({
     "ColorMap--accent-color": colorMap["--accent-color"],
+    "ColorMap--accent-color-inactive": colorMap["--accent-color-inactive"],
+    "ColorMap--accent-color-inactive-text": colorMap["--accent-color-inactive-text"],
     "ColorMap--accent-color-hover": colorMap["--accent-color-hover"],
     "ColorMap--butterfly-icon": colorMap["--butterfly-icon"],
     "ColorMap--background": colorMap["--background"],
@@ -259,7 +313,8 @@ function observeThemeChanges() {
     for (const mutation of mutationsList) {
       if (mutation.attributeName === 'class' && document.documentElement.classList.length > 0) {
         const colorMap = await getColor();  // Await to ensure resolved value
-        applyTheme(colorMap);
+        await applyTheme(colorMap);
+        await removeProseMirror();
       }
     }
   });
