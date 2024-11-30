@@ -162,6 +162,28 @@ function updateHslVal() {
   elements.values.lightnessVal.innerHTML = elements.sliders.lightness.value;
 }
 
+//Calculate accent-color-inactive and accent-color-inactive-text
+function calcInactive() {
+  elements.buttons.forEach(button => {
+    if (button.name == "ColorMap--accent-color") {
+      let svgColor = button.querySelector('svg').style.fill;
+      var color = convertToRgb(svgColor);
+      color = rgbToHsl(color.r, color.g, color.b)
+      color.s = color.s / 2;
+      color = "hsl(" + color.h + "," + color.s + "%," + color.l + "%)";
+      chrome.storage.local.set({ 'ColorMap--accent-color-inactive': color });
+    }
+    else if (button.name == "ColorMap--text-primary") {
+      let svgColor = button.querySelector('svg').style.fill;
+      var color = convertToRgb(svgColor);
+      color = rgbToHsl(color.r, color.g, color.b)
+      color.s = color.s / 2;
+      color = "hsl(" + color.h + "," + color.s + "%," + color.l + "%)";
+      chrome.storage.local.set({ 'ColorMap--accent-color-inactive-text': color });
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", init);
 
 // #region Colors
@@ -345,7 +367,7 @@ async function PinkDim() {
     "ColorMap--content-warnings-hover": '#381929',
     "ColorMap--text-primary": '#f8f4f5',
     "ColorMap--text-secondary": '#d1b2c2',
-    "ColorMap--border-color": '562a41',
+    "ColorMap--border-color": '#562a41',
     "ColorMap--main-button-text": '#f6f4f5'
   }, reset);
 }
@@ -367,20 +389,71 @@ async function PinkDark() {
   }, reset);
 }
 
+const fuchsiaLight = document.getElementById("FuchsiaLight");
+fuchsiaLight.addEventListener("click", FuchsiaLight)
+async function FuchsiaLight() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#f900f4',
+    "ColorMap--accent-color-hover": '#cf01c6',
+    "ColorMap--butterfly-icon": '#f901f5',
+    "ColorMap--background": '#ffffff',
+    "ColorMap--content-warnings": '#f5f5f7',
+    "ColorMap--content-warnings-hover": '#eee4ed',
+    "ColorMap--text-primary": '#0e070f',
+    "ColorMap--text-secondary": '#694068',
+    "ColorMap--border-color": '#e4d6e3',
+    "ColorMap--main-button-text": '#10060f'
+  }, reset);
+}
+
+const fuchsiaDim = document.getElementById("FuchsiaDim");
+fuchsiaDim.addEventListener("click", FuchsiaDim)
+async function FuchsiaDim() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#fa01f3',
+    "ColorMap--accent-color-hover": '#ff45f4',
+    "ColorMap--butterfly-icon": '#f900f2',
+    "ColorMap--background": '#231222',
+    "ColorMap--content-warnings": '#321a32',
+    "ColorMap--content-warnings-hover": '#321a34',
+    "ColorMap--text-primary": '#f7f5f8',
+    "ColorMap--text-secondary": '#cbb1cc',
+    "ColorMap--border-color": '#4f2c4d',
+    "ColorMap--main-button-text": '#f6f4f7'
+  }, reset);
+}
+
+const fuchsiaDark = document.getElementById("FuchsiaDark");
+fuchsiaDark.addEventListener("click", FuchsiaDark)
+async function FuchsiaDark() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#f900f4',
+    "ColorMap--accent-color-hover": '#fb1ff1',
+    "ColorMap--butterfly-icon": '#f800f7',
+    "ColorMap--background": '#000000',
+    "ColorMap--content-warnings": '#1e101d',
+    "ColorMap--content-warnings-hover": '#2f1a2d',
+    "ColorMap--text-primary": '#f4f4f6',
+    "ColorMap--text-secondary": '#b689b2',
+    "ColorMap--border-color": '#401d3d',
+    "ColorMap--main-button-text": '#f5f3f6'
+  }, reset);
+}
+
 const purpleLight = document.getElementById("PurpleLight");
 purpleLight.addEventListener("click", PurpleLight)
 async function PurpleLight() {
   chrome.storage.local.set({
-    "ColorMap--accent-color": '#a375e4',
-    "ColorMap--accent-color-hover": '#8a2be2',
-    "ColorMap--butterfly-icon": '#8a2be2',
+    "ColorMap--accent-color": '#c100fe',
+    "ColorMap--accent-color-hover": '#a003ea',
+    "ColorMap--butterfly-icon": '#bf00fe',
     "ColorMap--background": '#ffffff',
-    "ColorMap--content-warnings": '#dfcfff',
-    "ColorMap--content-warnings-hover": '#baa3e7',
-    "ColorMap--text-primary": '#000000',
-    "ColorMap--text-secondary": '#535353',
-    "ColorMap--border-color": '#000000',
-    "ColorMap--main-button-text": '#000000'
+    "ColorMap--content-warnings": '#f6f6f8',
+    "ColorMap--content-warnings-hover": '#eae2ed',
+    "ColorMap--text-primary": '#0e070f',
+    "ColorMap--text-secondary": '#604373',
+    "ColorMap--border-color": '#e2d7e7',
+    "ColorMap--main-button-text": '#0e070f'
   }, reset);
 }
 
@@ -388,16 +461,16 @@ const purpleDim = document.getElementById("PurpleDim");
 purpleDim.addEventListener("click", PurpleDim)
 async function PurpleDim() {
   chrome.storage.local.set({
-    "ColorMap--accent-color": '#bb98ff',
-    "ColorMap--accent-color-hover": '#8a2be2',
-    "ColorMap--butterfly-icon": '#8a2be2',
-    "ColorMap--background": '#200d46',
-    "ColorMap--content-warnings": '#322d3c',
-    "ColorMap--content-warnings-hover": '#4b435b',
-    "ColorMap--text-primary": '#fff',
-    "ColorMap--text-secondary": '#7f7f7f',
-    "ColorMap--border-color": 'rgb(46, 64, 82)',
-    "ColorMap--main-button-text": '#fff'
+    "ColorMap--accent-color": '#c920ff',
+    "ColorMap--accent-color-hover": '#d45bf8',
+    "ColorMap--butterfly-icon": '#ca21ff',
+    "ColorMap--background": '#211428',
+    "ColorMap--content-warnings": '#291936',
+    "ColorMap--content-warnings-hover": '#2b1b36',
+    "ColorMap--text-primary": '#f6f6f8',
+    "ColorMap--text-secondary": '#c7b3cf',
+    "ColorMap--border-color": '#452f55',
+    "ColorMap--main-button-text": '#f6f6f8'
   }, reset);
 }
 
@@ -405,17 +478,222 @@ const purpleDark = document.getElementById("PurpleDark");
 purpleDark.addEventListener("click", PurpleDark)
 async function PurpleDark() {
   chrome.storage.local.set({
-    "ColorMap--accent-color": '#7636c5',
-    "ColorMap--accent-color-hover": '#8b2be2',
-    "ColorMap--butterfly-icon": '#8a2be2',
-    "ColorMap--background": '#0e000e',
-    "ColorMap--content-warnings": '#3c1157',
-    "ColorMap--content-warnings-hover": '#3c2c57',
-    "ColorMap--text-primary": '#fff',
-    "ColorMap--text-secondary": '#8f9eb7',
-    "ColorMap--border-color": '#ffffff',
-    "ColorMap--main-button-text": '#fff'
+    "ColorMap--accent-color": '#c401fd',
+    "ColorMap--accent-color-hover": '#d23cff',
+    "ColorMap--butterfly-icon": '#bf00fe',
+    "ColorMap--background": '#000000',
+    "ColorMap--content-warnings": '#1c1121',
+    "ColorMap--content-warnings-hover": '#281930',
+    "ColorMap--text-primary": '#f5f5f7',
+    "ColorMap--text-secondary": '#a98cba',
+    "ColorMap--border-color": '#3b2343',
+    "ColorMap--main-button-text": '#f4f4f6'
   }, reset);
 }
+
+const coldGreenLight = document.getElementById("ColdGreenLight");
+coldGreenLight.addEventListener("click", ColdGreenLight)
+async function ColdGreenLight() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#02bc71',
+    "ColorMap--accent-color-hover": '#009764',
+    "ColorMap--butterfly-icon": '#00bb6f',
+    "ColorMap--background": '#ffffff',
+    "ColorMap--content-warnings": '#f3f7f6',
+    "ColorMap--content-warnings-hover": '#e0ece8',
+    "ColorMap--text-primary": '#000c0a',
+    "ColorMap--text-secondary": '#265e51',
+    "ColorMap--border-color": '#d2dedc',
+    "ColorMap--main-button-text": '#000c0a'
+  }, reset);
+}
+
+const coldGreenDim = document.getElementById("ColdGreenDim");
+coldGreenDim.addEventListener("click", ColdGreenDim)
+async function ColdGreenDim() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#01be84',
+    "ColorMap--accent-color-hover": '#01caa0',
+    "ColorMap--butterfly-icon": '#02bf7f',
+    "ColorMap--background": '#081e1b',
+    "ColorMap--content-warnings": '#022b23',
+    "ColorMap--content-warnings-hover": '#012c23',
+    "ColorMap--text-primary": '#f4f8f7',
+    "ColorMap--text-secondary": '#a3c2bd',
+    "ColorMap--border-color": '#11463c',
+    "ColorMap--main-button-text": '#f3f7f6'
+  }, reset);
+}
+
+const coldGreenDark = document.getElementById("ColdGreenDark");
+coldGreenDark.addEventListener("click", ColdGreenDark)
+async function ColdGreenDark() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#00ba71',
+    "ColorMap--accent-color-hover": '#08c195',
+    "ColorMap--butterfly-icon": '#00ba6f',
+    "ColorMap--background": '#000000',
+    "ColorMap--content-warnings": '#061616',
+    "ColorMap--content-warnings-hover": '#062923',
+    "ColorMap--text-primary": '#f1f3f2',
+    "ColorMap--text-secondary": '#75a79e',
+    "ColorMap--border-color": '#0d3630',
+    "ColorMap--main-button-text": '#f1f3f2'
+  }, reset);
+}
+
+const greenLight = document.getElementById("GreenLight");
+greenLight.addEventListener("click", GreenLight)
+async function GreenLight() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#00a201',
+    "ColorMap--accent-color-hover": '#008601',
+    "ColorMap--butterfly-icon": '#090c01',
+    "ColorMap--background": '#fff',
+    "ColorMap--content-warnings": '#e7eae1',
+    "ColorMap--content-warnings-hover": '#e7eae1',
+    "ColorMap--text-primary": '#090c01',
+    "ColorMap--text-secondary": '#475b28',
+    "ColorMap--border-color": '#dbddd0',
+    "ColorMap--main-button-text": '#090c01'
+  }, reset);
+}
+
+const greenDim = document.getElementById("GreenDim");
+greenDim.addEventListener("click", GreenDim)
+async function GreenDim() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#2ea20d',
+    "ColorMap--accent-color-hover": '#5fbf00',
+    "ColorMap--butterfly-icon": '#2caa00',
+    "ColorMap--background": '#161e09',
+    "ColorMap--content-warnings": '#1f280b',
+    "ColorMap--content-warnings-hover": '#1f280d',
+    "ColorMap--text-primary": '#f4f6f3',
+    "ColorMap--text-secondary": '#b7c0a5',
+    "ColorMap--border-color": '#324116',
+    "ColorMap--main-button-text": '#f4f6f3'
+  }, reset);
+}
+
+const greenDark = document.getElementById("GreenDark");
+greenDark.addEventListener("click", GreenDark)
+async function GreenDark() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#01a100',
+    "ColorMap--accent-color-hover": '#47b401',
+    "ColorMap--butterfly-icon": '#01a602',
+    "ColorMap--background": '#030000',
+    "ColorMap--content-warnings": '#111709',
+    "ColorMap--content-warnings-hover": '#1b250d',
+    "ColorMap--text-primary": '#f3f5f2',
+    "ColorMap--text-secondary": '#90a376',
+    "ColorMap--border-color": '#263410',
+    "ColorMap--main-button-text": '#f1f6f2'
+  }, reset);
+}
+
+const khakiLight = document.getElementById("KhakiLight");
+khakiLight.addEventListener("click", KhakiLight)
+async function KhakiLight() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#898001',
+    "ColorMap--accent-color-hover": '#696700',
+    "ColorMap--butterfly-icon": '#897e00',
+    "ColorMap--background": '#fff',
+    "ColorMap--content-warnings": '#f5f5f3',
+    "ColorMap--content-warnings-hover": '#e9e4de',
+    "ColorMap--text-primary": '#0a0a02',
+    "ColorMap--text-secondary": '#575429',
+    "ColorMap--border-color": '#dbdcce',
+    "ColorMap--main-button-text": '#0b0b03'
+  }, reset);
+}
+
+const khakiDim = document.getElementById("KhakiDim");
+khakiDim.addEventListener("click", KhakiDim)
+async function KhakiDim() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#918900',
+    "ColorMap--accent-color-hover": '#a5a301',
+    "ColorMap--butterfly-icon": '#908a00',
+    "ColorMap--background": '#1c1b07',
+    "ColorMap--content-warnings": '#27250e',
+    "ColorMap--content-warnings-hover": '#29250a',
+    "ColorMap--text-primary": '#f6f6f4',
+    "ColorMap--text-secondary": '#bfbea2',
+    "ColorMap--border-color": '#3e3c16',
+    "ColorMap--main-button-text": '#f6f6f4'
+  }, reset);
+}
+
+const khakiDark = document.getElementById("KhakiDark");
+khakiDark.addEventListener("click", KhakiDark)
+async function KhakiDark() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#8c7e01',
+    "ColorMap--accent-color-hover": '#9c9600',
+    "ColorMap--butterfly-icon": '#877d01',
+    "ColorMap--background": '#000000',
+    "ColorMap--content-warnings": '#171806',
+    "ColorMap--content-warnings-hover": '#24220d',
+    "ColorMap--text-primary": '#f4f4f2',
+    "ColorMap--text-secondary": '#9c9d75',
+    "ColorMap--border-color": '#323113',
+    "ColorMap--main-button-text": '#f5f5f3'
+  }, reset);
+}
+
+const taroccoLight = document.getElementById("TaroccoLight");
+taroccoLight.addEventListener("click", TaroccoLight)
+async function TaroccoLight() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#e64300',
+    "ColorMap--accent-color-hover": '#b93706',
+    "ColorMap--butterfly-icon": '#e74200',
+    "ColorMap--background": '#ffffff',
+    "ColorMap--content-warnings": '#f4f4f2',
+    "ColorMap--content-warnings-hover": '#b93706',
+    "ColorMap--text-primary": '#0e0906',
+    "ColorMap--text-secondary": '#664a34',
+    "ColorMap--border-color": '#e3dad1',
+    "ColorMap--main-button-text": '#0e0906'
+  }, reset);
+}
+
+const taroccoDim = document.getElementById("TaroccoDim");
+taroccoDim.addEventListener("click", TaroccoDim)
+async function TaroccoDim() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#e75700',
+    "ColorMap--accent-color-hover": '#eb7e00',
+    "ColorMap--butterfly-icon": '#e65700',
+    "ColorMap--background": '#21170d',
+    "ColorMap--content-warnings": '#311f11',
+    "ColorMap--content-warnings-hover": '#2f1f12',
+    "ColorMap--text-primary": '#f5f4f2',
+    "ColorMap--text-secondary": '#c9b7a9',
+    "ColorMap--border-color": '#4d351d',
+    "ColorMap--main-button-text": '#f7f3f2'
+  }, reset);
+}
+
+const taroccoDark = document.getElementById("TaroccoDark");
+taroccoDark.addEventListener("click", TaroccoDark)
+async function TaroccoDark() {
+  chrome.storage.local.set({
+    "ColorMap--accent-color": '#e74200',
+    "ColorMap--accent-color-hover": '#e76c02',
+    "ColorMap--butterfly-icon": '#e64300',
+    "ColorMap--background": '#000000',
+    "ColorMap--content-warnings": '#1c150b',
+    "ColorMap--content-warnings-hover": '#2d1f16',
+    "ColorMap--text-primary": '#f4f3f1',
+    "ColorMap--text-secondary": '#ad957d',
+    "ColorMap--border-color": '#3c291a',
+    "ColorMap--main-button-text": '#f6f5f3'
+  }, reset);
+}
+
 // #endregion
 // #endregion

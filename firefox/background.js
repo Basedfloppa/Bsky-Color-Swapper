@@ -3,6 +3,8 @@ function init() {
     if (!Object.keys(items).some(key => key.startsWith("ColorMap"))) {
       browser.storage.local.set({
         "ColorMap--accent-color": '#bb98ff',
+        "ColorMap--accent-color-inactive": '#553399',
+        "ColorMap--accent-color-inactive-text": '#fff',
         "ColorMap--accent-color-hover": '#8a2be2',
         "ColorMap--butterfly-icon": '#8a2be2',
         "ColorMap--background": '#200d46',
@@ -21,6 +23,8 @@ async function getMap() {
   return new Promise((resolve, reject) => {
     browser.storage.local.get([
       "ColorMap--accent-color",
+      "ColorMap--accent-color-inactive",
+      "ColorMap--accent-color-inactive-text",
       "ColorMap--accent-color-hover",
       "ColorMap--butterfly-icon",
       "ColorMap--background",
@@ -38,6 +42,8 @@ async function getMap() {
 
       const colorMap = {
         '--accent-color': result["ColorMap--accent-color"] || '#bb98ff',
+        '--accent-color-inactive': result["ColorMap--accent-color-inactive"] || '#553399',
+        '--accent-color-inactive-text' : result["ColorMap--accent-color-inactive-text"] || '#fff',
         '--accent-color-hover': result["ColorMap--accent-color-hover"] || '#8a2be2',
         '--butterfly-icon': result["ColorMap--butterfly-icon"] || '#8a2be2',
         '--background': result["ColorMap--background"] || '#200d46',
