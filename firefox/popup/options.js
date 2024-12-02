@@ -22,8 +22,13 @@ const elements = {
   buttons: document.querySelectorAll('.table button'),
   exportButton: document.getElementById("export-button"),
   exportText: document.getElementById("export-text-area"),
+  copyExportButton: document.getElementById("copy-export-button"),
   importButton: document.getElementById("import-button"),
-  importText: document.getElementById("import-text-area")
+  importText: document.getElementById("import-text-area"),
+  icons: {
+    clipboard: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-clipboard' viewBox='0 0 16 16'><path d='M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z'/><path d='M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z'/></svg>",
+    checkmark: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-check' viewBox='0 0 16 16'><path d='M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z'/></svg>"
+  }
 };
 
 // Event Listeners on input sliders
@@ -34,24 +39,35 @@ elements.hex.addEventListener("input", updateColor);
 elements.exportButton.addEventListener("click", exportTheme);
 elements.importButton.addEventListener("click", importTheme);
 
+// Event listeners on Save/Set buttons for custom themes
+document.getElementById("save-theme-1").addEventListener("click", () => { saveTheme("1") });
+document.getElementById("save-theme-2").addEventListener("click", () => { saveTheme("2") });
+document.getElementById("set-theme-1").addEventListener("click", () => { setTheme("1") });
+document.getElementById("set-theme-2").addEventListener("click", () => { setTheme("2") });
+
 // Event Listeners on color group button click
-elements.buttons.forEach(button => {
-  button.addEventListener('click', () => {
-    const svgElement = button.querySelector('svg');
-    if (svgElement) {
-      elements.colorId.innerHTML = svgElement.id;
-      setColor(svgElement.id);
-    }
-  });
-});
+elements.buttons.forEach(button => button.addEventListener("click", () => handleButtonClick(button)));
+
+function handleButtonClick(button) {
+  const svgId = button.querySelector('svg').id;
+  elements.colorId.innerHTML = svgId;
+  setColor(svgId);
+}
+
+// Event listentr for page load
+document.addEventListener("DOMContentLoaded", init);
 
 // Initializations of color values
 async function init() {
   const options = Array.from(document.querySelectorAll("div svg")).map(x => x.id);
   for (let option of options) {
-    document.getElementById(option).style.fill = await getStorageValue(option) ?? "rgb(0,0,0)";
+    const element = document.getElementById(option);
+    if (element) {
+      const color = await getStorageValue(option);
+      element.style.fill = color ?? "rgb(0,0,0)";
+    }
   }
-  await setColor(elements.colorId.innerHTML);
+  setColor(elements.colorId.innerHTML);
 }
 
 // Export current theme
@@ -65,6 +81,8 @@ async function exportTheme() {
   }
 
   elements.exportText.value = result.join(';');
+  elements.copyExportButton.innerHTML = elements.icons.checkmark;
+  await navigator.clipboard.writeText(elements.exportText.value);
 }
 
 // Import theme
@@ -118,6 +136,7 @@ function updateColor() {
 
 // Change input values and color
 async function setColor(id) {
+
   id = id ?? elements.colorId.innerHTML;
   let color = await getStorageValue(id) || "rgb(0,0,0)";
   const colorRgb = convertToRgb(color) || { r: '0', g: '0', b: '0' };
@@ -187,7 +206,38 @@ function calcInactive() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", init);
+// Saves custom theme to storage
+async function saveTheme(themeKey) {
+    const theme = await Promise.all(Array.from(elements.buttons).map(async button => {
+      const svgElement = button.querySelector("svg");
+      if (!svgElement) { return null; }
+
+      const svgId = svgElement.id;
+      const color = await getStorageValue(svgId);
+
+      return `${svgId}:${color}`;
+    }));
+
+    // Filter out any null results
+    const validTheme = theme.filter(Boolean);
+
+    // Save theme to storage
+    await browser.storage.local.set({ [`ColorMap-${themeKey}`]: validTheme.join(';') });
+}
+
+// Sets theme from storage
+async function setTheme(themeKey) {
+  const themeData = await getStorageValue(`ColorMap-${themeKey}`);
+  const theme = themeData?.split(';') || [];
+
+  await Promise.all(theme.map(async pair => {
+    const [id, color] = pair.split(':');
+    if (id && color) {
+      await browser.storage.local.set({ [id]: color });
+    }
+  }));
+  reset();
+}
 
 // #region Colors
 
@@ -549,16 +599,16 @@ const greenLight = document.getElementById("GreenLight");
 greenLight.addEventListener("click", GreenLight)
 async function GreenLight() {
   browser.storage.local.set({
-    "ColorMap--accent-color": '#00a201',
-    "ColorMap--accent-color-hover": '#008601',
-    "ColorMap--butterfly-icon": '#090c01',
-    "ColorMap--background": '#fff',
-    "ColorMap--content-warnings": '#e7eae1',
-    "ColorMap--content-warnings-hover": '#e7eae1',
-    "ColorMap--text-primary": '#090c01',
-    "ColorMap--text-secondary": '#475b28',
-    "ColorMap--border-color": '#dbddd0',
-    "ColorMap--main-button-text": '#090c01'
+    "ColorMap--accent-color": 'rgb(0, 162, 1)',
+    "ColorMap--accent-color-hover": 'rgb(0, 134, 1)',
+    "ColorMap--content-warnings": 'rgb(243, 245, 240)',
+    "ColorMap--content-warnings-hover": 'rgb(231, 234, 225)',
+    "ColorMap--text-primary": 'rgb(9, 12, 1)',
+    "ColorMap--text-secondary": 'rgb(71, 92, 40)',
+    "ColorMap--butterfly-icon": 'rgb(9, 12, 1)',
+    "ColorMap--background": 'rgb(255, 255, 255)',
+    "ColorMap--border-color": 'rgb(219, 221, 208)',
+    "ColorMap--main-button-text": 'rgb(9, 12, 1)'
   }, reset);
 }
 
