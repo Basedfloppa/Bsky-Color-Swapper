@@ -19,9 +19,7 @@
     }
   ],
   "background": {
-    "scripts": [
-      "firefox/background.js"
-    ]
+    "scripts": [ "firefox/background.js" ]
   },
   "permissions": [
     "storage"

@@ -62,7 +62,7 @@ async function getMap() {
 
 window.browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === 'applyTheme') {
-    const map =  await getMap();
+    const map = await getMap();
     const response = { "ColorMap": map };
 
     // Send message to the content script of the active tab

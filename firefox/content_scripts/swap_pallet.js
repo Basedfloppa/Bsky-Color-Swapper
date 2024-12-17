@@ -10,6 +10,8 @@ const dimTheme = {
   '--accent-color-inactive-text': 'rgb(241, 243, 245)',
   '--accent-color-hover-val1': 'rgb(76, 162, 254)',
   '--accent-color-hover-val2': 'rgb(19, 63, 109)',
+  '--accent-color-gradient-val1': 'rgb(0, 133, 255)',
+  '--accent-color-gradient-val2': 'rgb(90, 113, 250)',
   '--content-warnings-val': 'rgb(30, 41, 54)',
   '--content-warnings-hover-val': 'rgb(38, 53, 68)',
   '--background-change-val': 'rgb(22, 30, 39)',
@@ -35,6 +37,8 @@ const darkTheme = {
   '--accent-color-inactive-text': 'rgb(241, 243, 245)',
   '--accent-color-hover-val1': 'rgb(52, 150, 254)',
   '--accent-color-hover-val2': 'rgb(19, 63, 109)',
+  '--accent-color-gradient-val1': 'rgb(0, 133, 255)',
+  '--accent-color-gradient-val2': 'rgb(90, 113, 250)',
   '--content-warnings-val': 'rgb(20, 27, 35)',
   '--content-warnings-hover-val': 'rgb(28, 39, 50)',
   '--background-change-val': 'rgb(0, 0, 0)',
@@ -60,6 +64,8 @@ const lightTheme = {
   '--accent-color-inactive-text': 'rgb(255, 255, 255)',
   '--accent-color-hover-val1': 'rgb(1, 104, 213)',
   '--accent-color-hover-val2': 'rgb(19, 63, 109)',
+  '--accent-color-gradient-val1': 'rgb(0, 133, 255)',
+  '--accent-color-gradient-val2': 'rgb(90, 113, 250)',
   '--content-warnings-val': 'rgb(241, 243, 245)',
   '--content-warnings-hover-val': 'rgb(226, 231, 236)',
   '--background-change-val': 'rgb(255, 255, 255)',
@@ -118,10 +124,16 @@ async function applyTheme(colorMap) {
     *[style*="background-color: ${pickedTheme['--accent-color-inactive-val1']}"] {
         background-color: var(--accent-color-inactive) !important;
     }
-    /*background of inactive chat message element*/
+
+    /*Background of inactive chat message element*/
     *[style*="background-color: ${pickedTheme['--accent-color-inactive-val2']}"],
     *[style*="background-color: ${pickedTheme['--accent-color-inactive-val3']}"] {
         background-color: var(--accent-color-inactive) !important;
+    }
+
+    /*Background of post button that appears on mobile and less wide displays*/
+    div[style*="background-image: linear-gradient(135deg, ${pickedTheme['--accent-color-gradient-val2']}, ${pickedTheme['--accent-color-gradient-val1']})"] {
+      background-image: linear-gradient(135deg, var(--accent-color), var(--accent-color)) !important;
     }
 
     .r-wzwllv {
@@ -218,7 +230,7 @@ async function applyTheme(colorMap) {
     *[style*="border-color: ${pickedTheme['--border-color-val2']}"] {
         border-color: var(--border-color-change) !important;
     }
-`;
+  `;
 
   if (document.getElementById('style-inject-bsky')) {
     document.getElementById('style-inject-bsky').innerHTML = innerStyle;
