@@ -128,6 +128,9 @@ function updateColor() {
 
   calcInactive();
 
+  // Handle errors for incorrectly initialized elements
+  if(!elements.colorId.innerHTML) return;
+
   document.getElementById(elements.colorId.innerHTML).style.fill = color;
   elements.swatch.style.backgroundColor = color;
   chrome.storage.local.set({ [elements.colorId.innerHTML]: color });
