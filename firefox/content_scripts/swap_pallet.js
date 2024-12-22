@@ -4,6 +4,7 @@ const dimTheme = {
   '--accent-color-val3': 'rgb(76, 162, 254)',
   '--accent-color-val4': 'hsl(211, 99%, 56%)',
   '--accent-color-val5': 'rgb(0, 133, 255)',
+  '--accent-color-val6': 'hsl(211, 99%, 64.8%)',
   '--accent-color-inactive-val1': 'rgb(10, 95, 186)',
   '--accent-color-inactive-val2': 'rgb(14, 73, 137)',
   '--accent-color-inactive-val3': 'rgb(14, 73, 137)',
@@ -31,6 +32,7 @@ const darkTheme = {
   '--accent-color-val3': 'rgb(52, 150, 254)',
   '--accent-color-val4': 'hsl(211, 99%, 53%)',
   '--accent-color-val5': 'hsl(211, 99%, 56%)',
+  '--accent-color-val6': 'hsl(211, 99%, 60%)',
   '--accent-color-inactive-val1': 'rgb(1, 84, 173)',
   '--accent-color-inactive-val2': 'rgb(1, 64, 132)',
   '--accent-color-inactive-val3': 'rgb(0, 44, 91)',
@@ -58,6 +60,7 @@ const lightTheme = {
   '--accent-color-val3': 'rgb(1, 104, 213)',
   '--accent-color-val4': 'hsl(211, 99%, 53%)',
   '--accent-color-val5': 'hsl(211, 28%, 6%)',
+  '--accent-color-val6': 'hsl(211, 99%, 42%)',
   '--accent-color-inactive-val1': 'rgb(154, 202, 254)',
   '--accent-color-inactive-val2': 'rgb(1, 84, 173)',
   '--accent-color-inactive-val3': 'rgb(204, 229, 255)',
@@ -153,7 +156,8 @@ async function applyTheme(colorMap) {
     }
     path[fill="${pickedTheme['--accent-color-val1']}"],
     path[fill="${pickedTheme['--accent-color-val2']}"],
-    path[fill="${pickedTheme['--accent-color-val4']}"] {
+    path[fill="${pickedTheme['--accent-color-val4']}"],
+    path[fill="${pickedTheme['--accent-color-val6']}"] {
         fill: var(--accent-color) !important;
     }
     svg[stroke="${pickedTheme['--accent-color-val4']}"] {
