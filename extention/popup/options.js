@@ -31,6 +31,13 @@ const elements = {
   }
 };
 
+try {
+  var browserApi = browser;
+}
+catch {
+  var browserApi = chrome;
+}
+
 // Event Listeners on input sliders
 Object.values(elements.sliders).forEach(slider => slider.addEventListener("input", updateColor));
 elements.hex.addEventListener("input", updateColor);
@@ -90,7 +97,7 @@ async function importTheme() {
   let colors = elements.importText.value.split(';');
 
   for (const color of colors) {
-    await chrome.storage.local.set({ [color.split(":")[0]]: color.split(":")[1] });
+    await browserApi.storage.local.set({ [color.split(":")[0]]: color.split(":")[1] });
   }
 
   reset();
@@ -99,7 +106,7 @@ async function importTheme() {
 // Wrapper for getting values from extention storage
 function getStorageValue(key) {
   return new Promise((resolve) => {
-    chrome.storage.local.get([key], (result) => {
+    browserApi.storage.local.get([key], (result) => {
       resolve(result[key]);
     });
   });
@@ -139,6 +146,7 @@ function updateColor() {
 
 // Change input values and color
 async function setColor(id) {
+
   id = id ?? elements.colorId.innerHTML;
   let color = await getStorageValue(id) || "rgb(0,0,0)";
   const colorRgb = convertToRgb(color) || { r: '0', g: '0', b: '0' };
@@ -165,6 +173,7 @@ async function reset() {
   const options = Array.from(document.querySelectorAll("div svg")).map(x => x.id);
   for (let option of options) {
     elements.colorId.innerHTML = option;
+    calcInactive();
     await setColor(option);
     await updateColor();
     await init();
@@ -173,16 +182,16 @@ async function reset() {
 
 // Update rgb input values
 function updateRgbVal() {
-  elements.values.redVal.innerHTML = elements.sliders.red.value;
-  elements.values.greenVal.innerHTML = elements.sliders.green.value;
-  elements.values.blueVal.innerHTML = elements.sliders.blue.value;
+  elements.values.redVal.innerHTML = red.value;
+  elements.values.greenVal.innerHTML = green.value;
+  elements.values.blueVal.innerHTML = blue.value;
 }
 
 // Update hsl input values
 function updateHslVal() {
-  elements.values.hueVal.innerHTML = elements.sliders.hue.value;
-  elements.values.saturationVal.innerHTML = elements.sliders.saturation.value;
-  elements.values.lightnessVal.innerHTML = elements.sliders.lightness.value;
+  elements.values.hueVal.innerHTML = hue.value;
+  elements.values.saturationVal.innerHTML = saturation.value;
+  elements.values.lightnessVal.innerHTML = lightness.value;
 }
 
 //Calculate accent-color-inactive and accent-color-inactive-text
@@ -194,7 +203,7 @@ function calcInactive() {
       color = rgbToHsl(color.r, color.g, color.b)
       color.s = color.s / 2;
       color = "hsl(" + color.h + "," + color.s + "%," + color.l + "%)";
-      chrome.storage.local.set({ 'ColorMap--accent-color-inactive': color });
+      browserApi.storage.local.set({ 'ColorMap--accent-color-inactive': color });
     }
     else if (button.name == "ColorMap--text-primary") {
       let svgColor = button.querySelector('svg').style.fill;
@@ -202,28 +211,28 @@ function calcInactive() {
       color = rgbToHsl(color.r, color.g, color.b)
       color.s = color.s / 2;
       color = "hsl(" + color.h + "," + color.s + "%," + color.l + "%)";
-      chrome.storage.local.set({ 'ColorMap--accent-color-inactive-text': color });
+      browserApi.storage.local.set({ 'ColorMap--accent-color-inactive-text': color });
     }
   });
 }
 
 // Saves custom theme to storage
 async function saveTheme(themeKey) {
-  const theme = await Promise.all(Array.from(elements.buttons).map(async button => {
-    const svgElement = button.querySelector("svg");
-    if (!svgElement) { return null; }
+    const theme = await Promise.all(Array.from(elements.buttons).map(async button => {
+      const svgElement = button.querySelector("svg");
+      if (!svgElement) { return null; }
 
-    const svgId = svgElement.id;
-    const color = await getStorageValue(svgId);
+      const svgId = svgElement.id;
+      const color = await getStorageValue(svgId);
 
-    return `${svgId}:${color}`;
-  }));
+      return `${svgId}:${color}`;
+    }));
 
-  // Filter out any null results
-  const validTheme = theme.filter(Boolean);
+    // Filter out any null results
+    const validTheme = theme.filter(Boolean);
 
-  // Save theme to storage
-  await chrome.storage.local.set({ [`ColorMap-${themeKey}`]: validTheme.join(';') });
+    // Save theme to storage
+    await browserApi.storage.local.set({ [`ColorMap-${themeKey}`]: validTheme.join(';') });
 }
 
 // Sets theme from storage
@@ -234,12 +243,11 @@ async function setTheme(themeKey) {
   await Promise.all(theme.map(async pair => {
     const [id, color] = pair.split(':');
     if (id && color) {
-      await chrome.storage.local.set({ [id]: color });
+      await browserApi.storage.local.set({ [id]: color });
     }
   }));
   reset();
 }
-
 
 // #region Colors
 
@@ -345,7 +353,7 @@ function convertToRgb(color) {
 const defaultLight = document.getElementById("DefaultLight");
 defaultLight.addEventListener("click", DefaultLight)
 function DefaultLight() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": 'rgb(16, 131, 254)',
     "ColorMap--accent-color-hover": 'rgb(1, 104, 213)',
     "ColorMap--butterfly-icon": 'rgb(16, 131, 254)',
@@ -362,7 +370,7 @@ function DefaultLight() {
 const defaultDim = document.getElementById("DefaultDim");
 defaultDim.addEventListener("click", DefaultDim)
 function DefaultDim() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": 'rgb(32, 139, 254)',
     "ColorMap--accent-color-hover": 'rgb(76, 162, 254)',
     "ColorMap--butterfly-icon": 'rgb(32, 139, 254)',
@@ -379,7 +387,7 @@ function DefaultDim() {
 const defaultDark = document.getElementById("DefaultDark");
 defaultDark.addEventListener("click", DefaultDark)
 function DefaultDark() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": 'rgb(16, 131, 254)',
     "ColorMap--accent-color-hover": 'rgb(52, 150, 254)',
     "ColorMap--butterfly-icon": 'rgb(16, 131, 254)',
@@ -396,7 +404,7 @@ function DefaultDark() {
 const pinkLight = document.getElementById("PinkLight");
 pinkLight.addEventListener("click", PinkLight)
 async function PinkLight() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#ff008e',
     "ColorMap--accent-color-hover": '#ef006a',
     "ColorMap--butterfly-icon": '#fd0093',
@@ -413,7 +421,7 @@ async function PinkLight() {
 const pinkDim = document.getElementById("PinkDim");
 pinkDim.addEventListener("click", PinkDim)
 async function PinkDim() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#f60494',
     "ColorMap--accent-color-hover": '#ff42a6',
     "ColorMap--butterfly-icon": '#ff0090',
@@ -430,7 +438,7 @@ async function PinkDim() {
 const pinkDark = document.getElementById("PinkDark");
 pinkDark.addEventListener("click", PinkDark)
 async function PinkDark() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#ff008a',
     "ColorMap--accent-color-hover": '#ff169d',
     "ColorMap--butterfly-icon": '#ff0188',
@@ -447,7 +455,7 @@ async function PinkDark() {
 const fuchsiaLight = document.getElementById("FuchsiaLight");
 fuchsiaLight.addEventListener("click", FuchsiaLight)
 async function FuchsiaLight() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#f900f4',
     "ColorMap--accent-color-hover": '#cf01c6',
     "ColorMap--butterfly-icon": '#f901f5',
@@ -464,7 +472,7 @@ async function FuchsiaLight() {
 const fuchsiaDim = document.getElementById("FuchsiaDim");
 fuchsiaDim.addEventListener("click", FuchsiaDim)
 async function FuchsiaDim() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#fa01f3',
     "ColorMap--accent-color-hover": '#ff45f4',
     "ColorMap--butterfly-icon": '#f900f2',
@@ -481,7 +489,7 @@ async function FuchsiaDim() {
 const fuchsiaDark = document.getElementById("FuchsiaDark");
 fuchsiaDark.addEventListener("click", FuchsiaDark)
 async function FuchsiaDark() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#f900f4',
     "ColorMap--accent-color-hover": '#fb1ff1',
     "ColorMap--butterfly-icon": '#f800f7',
@@ -498,7 +506,7 @@ async function FuchsiaDark() {
 const purpleLight = document.getElementById("PurpleLight");
 purpleLight.addEventListener("click", PurpleLight)
 async function PurpleLight() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#c100fe',
     "ColorMap--accent-color-hover": '#a003ea',
     "ColorMap--butterfly-icon": '#bf00fe',
@@ -515,7 +523,7 @@ async function PurpleLight() {
 const purpleDim = document.getElementById("PurpleDim");
 purpleDim.addEventListener("click", PurpleDim)
 async function PurpleDim() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#c920ff',
     "ColorMap--accent-color-hover": '#d45bf8',
     "ColorMap--butterfly-icon": '#ca21ff',
@@ -532,7 +540,7 @@ async function PurpleDim() {
 const purpleDark = document.getElementById("PurpleDark");
 purpleDark.addEventListener("click", PurpleDark)
 async function PurpleDark() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#c401fd',
     "ColorMap--accent-color-hover": '#d23cff',
     "ColorMap--butterfly-icon": '#bf00fe',
@@ -549,7 +557,7 @@ async function PurpleDark() {
 const coldGreenLight = document.getElementById("ColdGreenLight");
 coldGreenLight.addEventListener("click", ColdGreenLight)
 async function ColdGreenLight() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#02bc71',
     "ColorMap--accent-color-hover": '#009764',
     "ColorMap--butterfly-icon": '#00bb6f',
@@ -566,7 +574,7 @@ async function ColdGreenLight() {
 const coldGreenDim = document.getElementById("ColdGreenDim");
 coldGreenDim.addEventListener("click", ColdGreenDim)
 async function ColdGreenDim() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#01be84',
     "ColorMap--accent-color-hover": '#01caa0',
     "ColorMap--butterfly-icon": '#02bf7f',
@@ -583,7 +591,7 @@ async function ColdGreenDim() {
 const coldGreenDark = document.getElementById("ColdGreenDark");
 coldGreenDark.addEventListener("click", ColdGreenDark)
 async function ColdGreenDark() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#00ba71',
     "ColorMap--accent-color-hover": '#08c195',
     "ColorMap--butterfly-icon": '#00ba6f',
@@ -600,24 +608,24 @@ async function ColdGreenDark() {
 const greenLight = document.getElementById("GreenLight");
 greenLight.addEventListener("click", GreenLight)
 async function GreenLight() {
-  chrome.storage.local.set({
-    "ColorMap--accent-color": '#00a201',
-    "ColorMap--accent-color-hover": '#008601',
-    "ColorMap--butterfly-icon": '#090c01',
-    "ColorMap--background": '#fff',
-    "ColorMap--content-warnings": '#e7eae1',
-    "ColorMap--content-warnings-hover": '#e7eae1',
-    "ColorMap--text-primary": '#090c01',
-    "ColorMap--text-secondary": '#475b28',
-    "ColorMap--border-color": '#dbddd0',
-    "ColorMap--main-button-text": '#090c01'
+  browserApi.storage.local.set({
+    "ColorMap--accent-color": 'rgb(0, 162, 1)',
+    "ColorMap--accent-color-hover": 'rgb(0, 134, 1)',
+    "ColorMap--content-warnings": 'rgb(243, 245, 240)',
+    "ColorMap--content-warnings-hover": 'rgb(231, 234, 225)',
+    "ColorMap--text-primary": 'rgb(9, 12, 1)',
+    "ColorMap--text-secondary": 'rgb(71, 92, 40)',
+    "ColorMap--butterfly-icon": 'rgb(9, 12, 1)',
+    "ColorMap--background": 'rgb(255, 255, 255)',
+    "ColorMap--border-color": 'rgb(219, 221, 208)',
+    "ColorMap--main-button-text": 'rgb(9, 12, 1)'
   }, reset);
 }
 
 const greenDim = document.getElementById("GreenDim");
 greenDim.addEventListener("click", GreenDim)
 async function GreenDim() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#2ea20d',
     "ColorMap--accent-color-hover": '#5fbf00',
     "ColorMap--butterfly-icon": '#2caa00',
@@ -634,7 +642,7 @@ async function GreenDim() {
 const greenDark = document.getElementById("GreenDark");
 greenDark.addEventListener("click", GreenDark)
 async function GreenDark() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#01a100',
     "ColorMap--accent-color-hover": '#47b401',
     "ColorMap--butterfly-icon": '#01a602',
@@ -651,7 +659,7 @@ async function GreenDark() {
 const khakiLight = document.getElementById("KhakiLight");
 khakiLight.addEventListener("click", KhakiLight)
 async function KhakiLight() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#898001',
     "ColorMap--accent-color-hover": '#696700',
     "ColorMap--butterfly-icon": '#897e00',
@@ -668,7 +676,7 @@ async function KhakiLight() {
 const khakiDim = document.getElementById("KhakiDim");
 khakiDim.addEventListener("click", KhakiDim)
 async function KhakiDim() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#918900',
     "ColorMap--accent-color-hover": '#a5a301',
     "ColorMap--butterfly-icon": '#908a00',
@@ -685,7 +693,7 @@ async function KhakiDim() {
 const khakiDark = document.getElementById("KhakiDark");
 khakiDark.addEventListener("click", KhakiDark)
 async function KhakiDark() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#8c7e01',
     "ColorMap--accent-color-hover": '#9c9600',
     "ColorMap--butterfly-icon": '#877d01',
@@ -702,7 +710,7 @@ async function KhakiDark() {
 const taroccoLight = document.getElementById("TaroccoLight");
 taroccoLight.addEventListener("click", TaroccoLight)
 async function TaroccoLight() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#e64300',
     "ColorMap--accent-color-hover": '#b93706',
     "ColorMap--butterfly-icon": '#e74200',
@@ -719,7 +727,7 @@ async function TaroccoLight() {
 const taroccoDim = document.getElementById("TaroccoDim");
 taroccoDim.addEventListener("click", TaroccoDim)
 async function TaroccoDim() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#e75700',
     "ColorMap--accent-color-hover": '#eb7e00',
     "ColorMap--butterfly-icon": '#e65700',
@@ -736,7 +744,7 @@ async function TaroccoDim() {
 const taroccoDark = document.getElementById("TaroccoDark");
 taroccoDark.addEventListener("click", TaroccoDark)
 async function TaroccoDark() {
-  chrome.storage.local.set({
+  browserApi.storage.local.set({
     "ColorMap--accent-color": '#e74200',
     "ColorMap--accent-color-hover": '#e76c02',
     "ColorMap--butterfly-icon": '#e64300',
