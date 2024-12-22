@@ -14,19 +14,19 @@
         "*://bsky.app/*"
       ],
       "js": [
-        "firefox/content_scripts/swap_pallet.js"
+        "extention/content_scripts/swap_pallet.js"
       ]
     }
   ],
   "background": {
-    "scripts": [ "firefox/background.js" ]
+    "scripts": [ "extention/background.js" ]
   },
   "permissions": [
     "storage"
   ],
   "browser_action": {
     "default_title": "BlueSky Color Pallet",
-    "default_popup": "firefox/popup/options.html"
+    "default_popup": "extention/popup/options.html"
   },
   "homepage_url": "https://github.com/Basedfloppa/Bsky-Color-Swapper",
   "browser_specific_settings": {
