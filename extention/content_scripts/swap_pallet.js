@@ -21,7 +21,7 @@ const dimTheme = {
     '--text-secondary-val1': 'rgb(147, 165, 183)', // Usernames
     '--text-secondary-val2': 'hsl(211, 20%, 56%)', // Control nodes, like, share, comment etc..
     '--text-secondary-val3': 'rgb(20, 27, 35)',
-    '--text-secondary-val4': 'rgb(212, 219, 226)',
+    '--text-secondary-val4': 'rgb(215, 221, 228)',   // control popup text (3 dots under posts)
     '--text-secondary-val5': 'hsl(211, 20%, 62.4%)',
     '--border-color-val1': 'rgb(46, 64, 82)',
     '--border-color-val2': 'rgb(54, 75, 97)'
@@ -49,7 +49,7 @@ const darkTheme = {
     '--text-secondary-val1': 'rgb(140, 158, 178)', // Usernames
     '--text-secondary-val2': 'hsl(211, 20%, 53%)', // Control nodes, like, share, comment etc..
     '--text-secondary-val3': 'rgb(20, 27, 35)',
-    '--text-secondary-val4': 'rgb(212, 219, 226)',
+    '--text-secondary-val4': 'rgb(212, 219, 226)',  // control popup text (3 dots under posts)
     '--text-secondary-val5': 'hsl(211, 20%, 62.4%)',
     '--border-color-val1': 'rgb(37, 51, 66)',
     '--border-color-val2': 'rgb(46, 63, 81)'
@@ -77,7 +77,7 @@ const lightTheme = {
     '--text-secondary-val1': 'rgb(66, 87, 108)', // Usernames
     '--text-secondary-val2': 'hsl(211, 20%, 53%)', // Control nodes, like, share, comment etc..
     '--text-secondary-val3': 'rgb(11, 15, 20)',
-    '--text-secondary-val4': 'rgb(37, 51, 66)',
+    '--text-secondary-val4': 'rgb(37, 51, 66)',  // control popup text (3 dots under posts)
     '--text-secondary-val5': 'hsl(211, 24%, 34.2%)',
     '--border-color-val1': 'rgb(212, 219, 226)',
     '--border-color-val2': 'rgb(197, 207, 217)'
