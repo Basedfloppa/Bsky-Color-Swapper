@@ -24,6 +24,7 @@ const dimTheme = {
   "--text-secondary-val3": "rgb(20, 27, 35)",
   "--text-secondary-val4": "rgb(215, 221, 228)", // control popup text (3 dots under posts)
   "--text-secondary-val5": "hsl(211, 20%, 62.4%)",
+  "--text-secondary-val6":"hsl(218, 20.00%, 64.70%)", // up arrow svg color when inactive
   "--border-color-val1": "rgb(46, 64, 82)",
   "--border-color-val2": "rgb(54, 75, 97)",
 };
@@ -53,6 +54,7 @@ const darkTheme = {
   "--text-secondary-val3": "rgb(20, 27, 35)",
   "--text-secondary-val4": "rgb(212, 219, 226)", // control popup text (3 dots under posts)
   "--text-secondary-val5": "hsl(211, 20%, 62.4%)",
+  "--text-secondary-val6": "hsl(211, 20%, 62.4%)", // up arrow svg color when inactive
   "--border-color-val1": "rgb(37, 51, 66)",
   "--border-color-val2": "rgb(46, 63, 81)",
 };
@@ -82,6 +84,7 @@ const lightTheme = {
   "--text-secondary-val3": "rgb(11, 15, 20)",
   "--text-secondary-val4": "rgb(37, 51, 66)", // control popup text (3 dots under posts)
   "--text-secondary-val5": "hsl(211, 24%, 34.2%)",
+  "--text-secondary-val6": "hsl(211, 24%, 34.2%)", // up arrow svg color when inactive
   "--border-color-val1": "rgb(212, 219, 226)",
   "--border-color-val2": "rgb(197, 207, 217)",
 };
@@ -174,9 +177,7 @@ async function applyTheme(colorMap) {
           stroke: var(--accent-color) !important;
       }
   
-      *[style*="background-color: ${pickedTheme["--accent-color-hover-val1"]}"] {
-          background-color: var(--accent-color-hover) !important;
-      }
+      *[style*="background-color: ${pickedTheme["--accent-color-hover-val1"]}"],
       *[style*="background-color: ${pickedTheme["--accent-color-hover-val2"]}"] {
           background-color: var(--accent-color-hover) !important;
       }
@@ -189,33 +190,25 @@ async function applyTheme(colorMap) {
           background-color: var(--content-warnings-hover) !important;
       }
   
-      *[style*="background-color: ${pickedTheme["--background-change-val"]}"] {
-          background-color: var(--background-change) !important;
-      }
-  
+      *[style*="background-color: ${pickedTheme["--background-change-val"]}"],
       .theme--dim, .theme--dark, .theme--light {
           background-color: var(--background-change) !important;
       }
           
-      *[style*="color: ${pickedTheme["--text-primary-val1"]}"] {
-          color: var(--text-primary-change) !important;
-      }
+      *[style*="color: ${pickedTheme["--text-primary-val1"]}"],
       *[style*="color: ${pickedTheme["--text-secondary-val3"]}"] {
           color: var(--text-primary-change) !important;
       }
-      *[style*="color: ${pickedTheme["--text-secondary-val1"]}"] {
-          color: var(--text-secondary-change) !important;
-      }
+      *[style*="color: ${pickedTheme["--text-secondary-val1"]}"],
       *[style*="color: ${pickedTheme["--text-secondary-val4"]}"] {
           color: var(--text-secondary-change) !important;
       }
       path[fill="${pickedTheme["--text-primary-val2"]}"] {
           fill: var(--text-primary-change) !important;
       }
-      path[fill="${pickedTheme["--text-secondary-val2"]}"] {
-          fill: var(--text-secondary-change) !important;
-      }
-      path[fill="${pickedTheme["--text-secondary-val5"]}"] {
+      path[fill="${pickedTheme["--text-secondary-val2"]}"],
+      path[fill="${pickedTheme["--text-secondary-val5"]}"],
+      path[fill="${pickedTheme["--text-secondary-val6"]}"] {
           fill: var(--text-secondary-change) !important;
       }
   
