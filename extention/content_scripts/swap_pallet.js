@@ -24,7 +24,7 @@ const dimTheme = {
   "--text-secondary-val3": "rgb(20, 27, 35)",
   "--text-secondary-val4": "rgb(215, 221, 228)", // control popup text (3 dots under posts)
   "--text-secondary-val5": "hsl(211, 20%, 62.4%)",
-  "--text-secondary-val6":"hsl(218, 20.00%, 64.70%)", // up arrow svg color when inactive
+  "--text-secondary-val6":"hsl(211, 20%, 64.8%)", // up arrow svg color when inactive
   "--border-color-val1": "rgb(46, 64, 82)",
   "--border-color-val2": "rgb(54, 75, 97)",
 };
