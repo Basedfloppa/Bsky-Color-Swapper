@@ -38,11 +38,11 @@
 
 ## 📫 FaQ
 
-If you want to share a theme, Export your palette JSON and attach it to a GitHub issue.
-
 If you want to install extention:
 - [Firefox](https://addons.mozilla.org/firefox/addon/bluesky-color-pallet-swapper)  
 - [Chrome](https://chromewebstore.google.com/detail/blueskycolorpalletswapper/befmbenmkbhjkkcdngmnfapgfpdiafbe)
+
+If you want to share a theme, Export your palette JSON and attach it to a GitHub issue.
 
 If you have questions or additions you’d like me to make, you can:
 - Create an issue
