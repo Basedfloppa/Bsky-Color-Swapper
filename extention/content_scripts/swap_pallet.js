@@ -5,6 +5,8 @@ const dimTheme = {
   "--accent-color-val4": "hsl(211, 99%, 56%)",
   "--accent-color-val5": "rgb(0, 133, 255)",
   "--accent-color-val6": "hsl(211, 99%, 64.8%)",
+  "--accent-color-val7": "rgb(121, 185, 254)", // Notification popup text color
+  "--accent-color-val8": "hsl(211, 99%, 73.6%)", // Notification popup svg color
   "--accent-color-inactive-val1": "rgb(10, 95, 186)",
   "--accent-color-inactive-val2": "rgb(14, 73, 137)",
   "--accent-color-inactive-val3": "rgb(14, 73, 137)",
@@ -16,7 +18,8 @@ const dimTheme = {
   "--content-warnings-val1": "rgb(30, 41, 54)",
   "--content-warnings-val2": "rgb(21, 52, 85)", // Background on Up arrow
   "--content-warnings-hover-val": "rgb(38, 53, 68)",
-  "--background-change-val": "rgb(22, 30, 39)",
+  "--background-change-val1": "rgb(22, 30, 39)",
+  "--background-change-val2": "rgb(21, 41, 63)", // Notification popup background
   "--text-primary-val1": "rgb(241, 243, 245)",
   "--text-primary-val2": "hsl(211, 20%, 95.3%)",
   "--text-secondary-val1": "rgb(147, 165, 183)", // Usernames
@@ -24,9 +27,11 @@ const dimTheme = {
   "--text-secondary-val3": "rgb(20, 27, 35)",
   "--text-secondary-val4": "rgb(215, 221, 228)", // control popup text (3 dots under posts)
   "--text-secondary-val5": "hsl(211, 20%, 62.4%)",
-  "--text-secondary-val6":"hsl(211, 20%, 64.8%)", // up arrow svg color when inactive
+  "--text-secondary-val6": "hsl(211, 20%, 64.8%)", // up arrow svg color when inactive
+  "--text-secondary-val7": "rgb(84, 110, 138)", // Secondary text in profile dropdown
   "--border-color-val1": "rgb(46, 64, 82)",
   "--border-color-val2": "rgb(54, 75, 97)",
+  "--border-color-val3": "rgb(14, 73, 137)", // Notification popup border
 };
 const darkTheme = {
   "--accent-color-val1": "rgb(16, 131, 254)",
@@ -35,6 +40,8 @@ const darkTheme = {
   "--accent-color-val4": "hsl(211, 99%, 53%)",
   "--accent-color-val5": "hsl(211, 99%, 56%)",
   "--accent-color-val6": "hsl(211, 99%, 60%)",
+  "--accent-color-val7": "rgb(103, 176, 254)", // Notification popup text color
+  "--accent-color-val8": "hsl(211, 99%, 70%)", // Notification popup svg color
   "--accent-color-inactive-val1": "rgb(1, 84, 173)",
   "--accent-color-inactive-val2": "rgb(1, 64, 132)",
   "--accent-color-inactive-val3": "rgb(0, 44, 91)",
@@ -46,7 +53,8 @@ const darkTheme = {
   "--content-warnings-val1": "rgb(20, 27, 35)",
   "--content-warnings-val2": "rgb(0, 25, 51)", // Background on Up arrow
   "--content-warnings-hover-val": "rgb(28, 39, 50)",
-  "--background-change-val": "rgb(0, 0, 0)",
+  "--background-change-val1": "rgb(0, 0, 0)",
+  "--background-change-val2": "rgb(0, 17, 36)", // Notification popup background
   "--text-primary-val1": "rgb(241, 243, 245)",
   "--text-primary-val2": "hsl(211, 20%, 95.3%)",
   "--text-secondary-val1": "rgb(140, 158, 178)", // Usernames
@@ -55,8 +63,10 @@ const darkTheme = {
   "--text-secondary-val4": "rgb(212, 219, 226)", // control popup text (3 dots under posts)
   "--text-secondary-val5": "hsl(211, 20%, 62.4%)",
   "--text-secondary-val6": "hsl(211, 20%, 62.4%)", // up arrow svg color when inactive
+  "--text-secondary-val7": "rgb(84, 110, 138)", // Secondary text in profile dropdown
   "--border-color-val1": "rgb(37, 51, 66)",
   "--border-color-val2": "rgb(46, 63, 81)",
+  "--border-color-val3": "rgb(0, 44, 91)", // Notification popup border
 };
 const lightTheme = {
   "--accent-color-val1": "rgb(16, 131, 254)",
@@ -65,6 +75,8 @@ const lightTheme = {
   "--accent-color-val4": "hsl(211, 99%, 53%)",
   "--accent-color-val5": "hsl(211, 28%, 6%)",
   "--accent-color-val6": "hsl(211, 99%, 42%)",
+  "--accent-color-val7": "rgb(1, 104, 213)", // Notification popup text color
+  "--accent-color-val8": "hsl(211, 99%, 42%)", // Notification popup svg color
   "--accent-color-inactive-val1": "rgb(154, 202, 254)",
   "--accent-color-inactive-val2": "rgb(1, 84, 173)",
   "--accent-color-inactive-val3": "rgb(204, 229, 255)",
@@ -76,7 +88,8 @@ const lightTheme = {
   "--content-warnings-val1": "rgb(241, 243, 245)",
   "--content-warnings-val2": "rgb(230, 242, 255)", // Background on Up arrow
   "--content-warnings-hover-val": "rgb(226, 231, 236)",
-  "--background-change-val": "rgb(255, 255, 255)",
+  "--background-change-val1": "rgb(255, 255, 255)",
+  "--background-change-val2": "rgb(240, 247, 255)", // Notification popup background
   "--text-primary-val1": "rgb(11, 15, 20)",
   "--text-primary-val2": "hsl(211, 28%, 6%)",
   "--text-secondary-val1": "rgb(66, 87, 108)", // Usernames
@@ -85,8 +98,10 @@ const lightTheme = {
   "--text-secondary-val4": "rgb(37, 51, 66)", // control popup text (3 dots under posts)
   "--text-secondary-val5": "hsl(211, 24%, 34.2%)",
   "--text-secondary-val6": "hsl(211, 24%, 34.2%)", // up arrow svg color when inactive
+  "--text-secondary-val7": "rgb(140, 158, 178)", // Secondary text in profile dropdown
   "--border-color-val1": "rgb(212, 219, 226)",
   "--border-color-val2": "rgb(197, 207, 217)",
+  "--border-color-val3": "rgb(103, 176, 254)", // Notification popup border
 };
 
 try {
@@ -170,7 +185,8 @@ async function applyTheme(colorMap) {
       path[fill="${pickedTheme["--accent-color-val1"]}"],
       path[fill="${pickedTheme["--accent-color-val2"]}"],
       path[fill="${pickedTheme["--accent-color-val4"]}"],
-      path[fill="${pickedTheme["--accent-color-val6"]}"] {
+      path[fill="${pickedTheme["--accent-color-val6"]}"],
+      path[fill="${pickedTheme["--accent-color-val8"]}"] {
           fill: var(--accent-color) !important;
       }
       svg[stroke="${pickedTheme["--accent-color-val4"]}"] {
@@ -190,7 +206,8 @@ async function applyTheme(colorMap) {
           background-color: var(--content-warnings-hover) !important;
       }
   
-      *[style*="background-color: ${pickedTheme["--background-change-val"]}"],
+      *[style*="background-color: ${pickedTheme["--background-change-val1"]}"],
+      *[style*="background-color: ${pickedTheme["--background-change-val2"]}"],
       .theme--dim, .theme--dark, .theme--light {
           background-color: var(--background-change) !important;
       }
@@ -200,7 +217,8 @@ async function applyTheme(colorMap) {
           color: var(--text-primary-change) !important;
       }
       *[style*="color: ${pickedTheme["--text-secondary-val1"]}"],
-      *[style*="color: ${pickedTheme["--text-secondary-val4"]}"] {
+      *[style*="color: ${pickedTheme["--text-secondary-val4"]}"],
+      *[style*="color: ${pickedTheme["--text-secondary-val7"]}"] {
           color: var(--text-secondary-change) !important;
       }
       path[fill="${pickedTheme["--text-primary-val2"]}"] {
@@ -216,12 +234,7 @@ async function applyTheme(colorMap) {
       path[stroke="${pickedTheme["--accent-color-val4"]}"] {
           stroke: var(--accent-color) !important;
       }
-  
-      *[style*="border-color: ${pickedTheme["--border-color-val1"]}"],
-      *[style*="border-color: ${pickedTheme["--border-color-val2"]}"] {
-          border-color: var(--border-color-change) !important;
-      }
-  
+    
       button div[style*="color: ${pickedTheme["--text-primary-val1"]}"] {
           color: var(--main-button-text) !important;
       }
@@ -235,8 +248,18 @@ async function applyTheme(colorMap) {
       }
   
       *[style*="border-color: ${pickedTheme["--border-color-val1"]}"],
-      *[style*="border-color: ${pickedTheme["--border-color-val2"]}"] {
+      *[style*="border-color: ${pickedTheme["--border-color-val2"]}"],
+      *[style*="border-color: ${pickedTheme["--border-color-val3"]}"] { /*Border around notification popup*/
           border-color: var(--border-color-change) !important;
+      }
+      
+      *[style*="background-color: ${pickedTheme["--border-color-val1"]}"] { /*Separator in profile dropdown*/
+          background-color: var(--border-color-change) !important;
+      }
+
+      /*Text in notification popup*/
+      *[style*="color: ${pickedTheme["--accent-color-val7"]}"] {
+          color: var(--accent-color) !important;
       }
     `;
 
