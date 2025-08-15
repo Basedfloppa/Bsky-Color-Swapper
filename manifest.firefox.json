@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "BlueSky Color Pallet",
-  "description": "Allows users to freely swap color themes",
+  "name": "Bluesky Color Palette Swapper",
+  "description": "Swap color palettes on Bluesky (bsky.app). Create and share themes with a simple, cross‑browser extension.",
   "version": "3.1.6",
   "icons": {
     "32": "icons/bsky32.png",
@@ -25,7 +25,7 @@
     "storage"
   ],
   "browser_action": {
-    "default_title": "BlueSky Color Pallet",
+    "default_title": "Bluesky Color Palette Swapper",
     "default_popup": "extention/popup/options.html"
   },
   "homepage_url": "https://github.com/Basedfloppa/Bsky-Color-Swapper",
