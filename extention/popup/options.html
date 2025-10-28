@@ -1,161 +1,186 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 
 <head>
-  <meta charset="utf-8">
-
-  <link href="lib/bootstrap.min.css" rel="stylesheet">
+  <meta charset="utf-8" />
+  <link href="lib/bootstrap.min.css" rel="stylesheet" />
   <script src="lib/bootstrap.bundle.min.js"></script>
 </head>
 
-<body class="bg-dark">
-  <div class="m-1 text-white d-flex flex-column align-items-center" style="width: 380px; max-width: 100%;">
-    <p class="align-middle">Bluesky Color Palette Swapper</p>
-    <p id="log"></p>
+<body class="bg-dark text-white d-flex justify-content-center py-3">
+  <div class="m-1 d-flex flex-column align-items-center" style="max-width:380px">
+    <h1 class="h5 mb-2">Bluesky Color Palette Swapper</h1>
+
     <ul class="nav nav-tabs d-flex w-100" id="themeTab">
       <li class="nav-item flex-grow-1">
-        <button class="nav-link active w-100" id="custom-tab" data-bs-toggle="tab" data-bs-target="#custom-tab-pane"
-          type="button" aria-controls="custom-tab-pane" aria-selected="true">Custom</button>
+        <button class="nav-link active w-100 py-2" id="custom-tab" data-bs-toggle="tab"
+          data-bs-target="#custom-tab-pane" type="button" aria-controls="custom-tab-pane"
+          aria-selected="true">Custom</button>
       </li>
       <li class="nav-item flex-grow-1">
-        <button class="nav-link w-100" id="premade-tab" data-bs-toggle="tab" data-bs-target="#premade-tab-pane"
-          type="button" aria-controls="premade-tab-pane" aria-selected="false">PreMade</button>
+        <button class="nav-link w-100 py-2" id="premade-tab" data-bs-toggle="tab" data-bs-target="#premade-tab-pane"
+          type="button" aria-controls="premade-tab-pane" aria-selected="false">Pre-made</button>
       </li>
       <li class="nav-item flex-grow-1">
-        <button class="nav-link w-100" id="load-tab" data-bs-toggle="tab" data-bs-target="#load-tab-pane" type="button"
-          aria-controls="load-tab-pane" aria-selected="false">Import/Export</button>
+        <button class="nav-link w-100 py-2" id="load-tab" data-bs-toggle="tab" data-bs-target="#load-tab-pane"
+          type="button" aria-controls="load-tab-pane" aria-selected="false">Import/Export</button>
       </li>
     </ul>
-    <div class="tab-content" id="themeTabContent">
-      <div class="tab-pane fade show active" id="custom-tab-pane" aria-labelledby="custom-tab" tabindex="0">
-        <table class="table table-dark">
-          <tbody>
-            <tr>
-              <td class="p-0">
-                <button class="w-100 h-100 btn btn-outline-light d-flex align-items-left justify-content-left"
-                  name="ColorMap--accent-color">
-                  <svg width="30" height="30" id="ColorMap--accent-color">
-                    <circle r="15" cx="15" cy="15"></circle>
-                  </svg>
-                  <span class="m-1">Accent Color</span>
-                </button>
-              </td>
-              <td class="p-0">
-                <button class="w-100 h-100 btn btn-outline-light d-flex align-items-left justify-content-left"
-                  name="ColorMap--accent-color-hover">
-                  <svg width="30" height="30" id="ColorMap--accent-color-hover">
-                    <circle r="15" cx="15" cy="15"></circle>
-                  </svg>
-                  <span class="m-1">Hover</span>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td class="p-0">
-                <button class="w-100 h-100 btn btn-outline-light d-flex align-items-left justify-content-left"
-                  name="ColorMap--content-warnings">
-                  <svg width="30" height="30" id="ColorMap--content-warnings">
-                    <circle r="15" cx="15" cy="15"></circle>
-                  </svg>
-                  <span class="m-1">Content Warnings</span>
-                </button>
-              </td>
-              <td class="p-0">
-                <button class="w-100 h-100 btn btn-outline-light d-flex align-items-left justify-content-left"
-                  name="ColorMap--content-warnings-hover">
-                  <svg width="30" height="30" id="ColorMap--content-warnings-hover">
-                    <circle r="15" cx="15" cy="15"></circle>
-                  </svg>
-                  <span class="m-1">Hover</span>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td class="p-0">
-                <button class="w-100 h-100 btn btn-outline-light d-flex align-items-left justify-content-left"
-                  name="ColorMap--text-primary">
-                  <svg width="30" height="30" id="ColorMap--text-primary">
-                    <circle r="15" cx="15" cy="15"></circle>
-                  </svg>
-                  <span class="m-1">Text Primary</span>
-                </button>
-              </td>
-              <td class="p-0">
-                <button class="w-100 h-100 btn btn-outline-light d-flex align-items-left justify-content-left"
-                  name="ColorMap--text-secondary">
-                  <svg width="30" height="30" id="ColorMap--text-secondary">
-                    <circle r="15" cx="15" cy="15"></circle>
-                  </svg>
-                  <span class="m-1">Secondary</span>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td class="p-0">
-                <button class="w-100 h-100 btn btn-outline-light d-flex align-items-left justify-content-left"
-                  name="ColorMap--butterfly-icon">
-                  <svg width="30" height="30" id="ColorMap--butterfly-icon">
-                    <circle r="15" cx="15" cy="15"></circle>
-                  </svg>
-                  <span class="m-1">Icons</span>
-                </button>
-              </td>
-              <td class="p-0">
-                <button class="w-100 h-100 btn btn-outline-light d-flex align-items-left justify-content-left"
-                  name="ColorMap--background">
-                  <svg width="30" height="30" id="ColorMap--background">
-                    <circle r="15" cx="15" cy="15"></circle>
-                  </svg>
-                  <span class="m-1">Background</span>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td class="p-0">
-                <button class="w-100 h-100 btn btn-outline-light d-flex align-items-left justify-content-left"
-                  name="ColorMap--border-color">
-                  <svg width="30" height="30" id="ColorMap--border-color">
-                    <circle r="15" cx="15" cy="15"></circle>
-                  </svg>
-                  <span class="m-1">Border Color</span>
-                </button>
-              </td>
-              <td class="p-0">
-                <button class="w-100 h-100 btn btn-outline-light d-flex align-items-left justify-content-left"
-                  name="ColorMap--main-button-text">
-                  <svg width="30" height="30" id="ColorMap--main-button-text">
-                    <circle r="15" cx="15" cy="15"></circle>
-                  </svg>
-                  <span class="m-1">Main button text</span>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
 
-        <div>
-          <div class="d-flex justify-content-center">
+    <div class="tab-content w-100" id="themeTabContent">
+      <div class="tab-pane fade show active pt-3" id="custom-tab-pane" aria-labelledby="custom-tab" tabindex="0">
+        <div class="row row-cols-2 g-2" aria-label="Custom color entries">
+          <div class="col">
+            <button class="btn btn-outline-light d-flex align-items-center gap-2 w-100 text-start py-2 px-3"
+              name="ColorMap--accent-color" aria-label="Accent Color" style="height:56px">
+              <span class="d-inline-block rounded-circle border border-white border-opacity-25 flex-shrink-0"
+                style="width:28px;height:28px">
+                <svg width="30" height="30" id="ColorMap--accent-color">
+                  <circle r="15" cx="15" cy="15"></circle>
+                </svg>
+              </span>
+              <span>Accent Color</span>
+            </button>
+          </div>
+          <div class="col">
+            <button class="btn btn-outline-light d-flex align-items-center gap-2 w-100 text-start py-2 px-3"
+              name="ColorMap--accent-color-hover" aria-label="Accent Hover" style="height:56px">
+              <span class="d-inline-block rounded-circle border border-white border-opacity-25 flex-shrink-0"
+                style="width:28px;height:28px">
+                <svg width="30" height="30" id="ColorMap--accent-color-hover">
+                  <circle r="15" cx="15" cy="15"></circle>
+                </svg>
+              </span>
+              <span>Hover</span>
+            </button>
+          </div>
+
+          <div class="col">
+            <button class="btn btn-outline-light d-flex align-items-center gap-2 w-100 text-start py-2 px-3"
+              name="ColorMap--content-warnings" aria-label="Content Warnings" style="height:56px">
+              <span class="d-inline-block rounded-circle border border-white border-opacity-25 flex-shrink-0"
+                style="width:28px;height:28px">
+                <svg width="30" height="30" id="ColorMap--content-warnings">
+                  <circle r="15" cx="15" cy="15"></circle>
+                </svg>
+              </span>
+              <span>Content Warnings</span>
+            </button>
+          </div>
+          <div class="col">
+            <button class="btn btn-outline-light d-flex align-items-center gap-2 w-100 text-start py-2 px-3"
+              name="ColorMap--content-warnings-hover" aria-label="Content Warnings Hover" style="height:56px">
+              <span class="d-inline-block rounded-circle border border-white border-opacity-25 flex-shrink-0"
+                style="width:28px;height:28px">
+                <svg width="30" height="30" id="ColorMap--content-warnings-hover">
+                  <circle r="15" cx="15" cy="15"></circle>
+                </svg>
+              </span>
+              <span>Hover</span>
+            </button>
+          </div>
+
+          <div class="col">
+            <button class="btn btn-outline-light d-flex align-items-center gap-2 w-100 text-start py-2 px-3"
+              name="ColorMap--text-primary" aria-label="Text Primary" style="height:56px">
+              <span class="d-inline-block rounded-circle border border-white border-opacity-25 flex-shrink-0"
+                style="width:28px;height:28px">
+                <svg width="30" height="30" id="ColorMap--text-primary">
+                  <circle r="15" cx="15" cy="15"></circle>
+                </svg>
+              </span>
+              <span>Text Primary</span>
+            </button>
+          </div>
+          <div class="col">
+            <button class="btn btn-outline-light d-flex align-items-center gap-2 w-100 text-start py-2 px-3"
+              name="ColorMap--text-secondary" aria-label="Text Secondary" style="height:56px">
+              <span class="d-inline-block rounded-circle border border-white border-opacity-25 flex-shrink-0"
+                style="width:28px;height:28px">
+                <svg width="30" height="30" id="ColorMap--text-secondary">
+                  <circle r="15" cx="15" cy="15"></circle>
+                </svg>
+              </span>
+              <span>Secondary</span>
+            </button>
+          </div>
+
+          <div class="col">
+            <button class="btn btn-outline-light d-flex align-items-center gap-2 w-100 text-start py-2 px-3"
+              name="ColorMap--butterfly-icon" aria-label="Icons" style="height:56px">
+              <span class="d-inline-block rounded-circle border border-white border-opacity-25 flex-shrink-0"
+                style="width:28px;height:28px">
+                <svg width="30" height="30" id="ColorMap--butterfly-icon">
+                  <circle r="15" cx="15" cy="15"></circle>
+                </svg>
+              </span>
+              <span>Icons</span>
+            </button>
+          </div>
+          <div class="col">
+            <button class="btn btn-outline-light d-flex align-items-center gap-2 w-100 text-start py-2 px-3"
+              name="ColorMap--background" aria-label="Background" style="height:56px">
+              <span class="d-inline-block rounded-circle border border-white border-opacity-25 flex-shrink-0"
+                style="width:28px;height:28px">
+                <svg width="30" height="30" id="ColorMap--background">
+                  <circle r="15" cx="15" cy="15"></circle>
+                </svg>
+              </span>
+              <span>Background</span>
+            </button>
+          </div>
+
+          <div class="col">
+            <button class="btn btn-outline-light d-flex align-items-center gap-2 w-100 text-start py-2 px-3"
+              name="ColorMap--border-color" aria-label="Border Color" style="height:56px">
+              <span class="d-inline-block rounded-circle border border-white border-opacity-25 flex-shrink-0"
+                style="width:28px;height:28px">
+                <svg width="30" height="30" id="ColorMap--border-color">
+                  <circle r="15" cx="15" cy="15"></circle>
+                </svg>
+              </span>
+              <span>Border Color</span>
+            </button>
+          </div>
+          <div class="col">
+            <button class="btn btn-outline-light d-flex align-items-center gap-2 w-100 text-start py-2 px-3"
+              name="ColorMap--main-button-text" aria-label="Main button text" style="height:56px">
+              <span class="d-inline-block rounded-circle border border-white border-opacity-25 flex-shrink-0"
+                style="width:28px;height:28px">
+                <svg width="30" height="30" id="ColorMap--main-button-text">
+                  <circle r="15" cx="15" cy="15"></circle>
+                </svg>
+              </span>
+              <span>Main button text</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <div class="d-flex justify-content-center align-items-center gap-2">
             <div class="d-none" id="colorId">ColorMap--accent-color</div>
-            <p id="colorLabel">Picked: accent color</p>
+            <p class="mb-0" id="colorLabel">Picked: accent color</p>
           </div>
-          <div id="colorSwatch" style="height: 30px; background-color: rgb(0,0,0);">
-          </div>
+
+          <div id="colorSwatch" class="mt-2 rounded-2 border border-white border-opacity-25"
+            style="height:34px; background-color: rgb(0,0,0);"></div>
 
           <ul class="nav nav-tabs d-flex w-100" id="colorTab">
             <li class="nav-item flex-grow-1">
-              <button class="nav-link active w-100" id="rgb-tab" data-bs-toggle="tab" data-bs-target="#rgb-tab-pane"
-                type="button" aria-controls="rgb-tab-pane" aria-selected="true">RGB</button>
+              <button class="nav-link active w-100" id="rgb-tab" data-bs-toggle="tab"
+                data-bs-target="#rgb-tab-pane" type="button" aria-controls="rgb-tab-pane"
+                aria-selected="true">RGB</button>
             </li>
             <li class="nav-item flex-grow-1">
               <button class="nav-link w-100" id="hsl-tab" data-bs-toggle="tab" data-bs-target="#hsl-tab-pane"
-                type="button" aria-controls="profile-tab-pane" aria-selected="false">HSL</button>
+                type="button" aria-controls="hsl-tab-pane" aria-selected="false">HSL</button>
             </li>
             <li class="nav-item flex-grow-1">
               <button class="nav-link w-100" id="hex-tab" data-bs-toggle="tab" data-bs-target="#hex-tab-pane"
-                type="button" aria-controls="contact-tab-pane" aria-selected="false">HEX</button>
+                type="button" aria-controls="hex-tab-pane" aria-selected="false">HEX</button>
             </li>
           </ul>
+
           <div class="tab-content d-flex justify-content-center" id="colorTabContent">
             <div class="tab-pane fade show active" id="rgb-tab-pane" aria-labelledby="rgb-tab" tabindex="0">
               <table>
@@ -222,100 +247,110 @@
           <button class="col btn btn-outline-light" id="FuchsiaLight">light</button>
           <button class="col btn btn-outline-light" id="FuchsiaDim">dim</button>
           <button class="col btn btn-outline-light" id="FuchsiaDark">dark</button>
-          <hr />
+        <hr />
         </div>
         <div class="row">
           <div style="min-height: 30px; background-color: #C000FC;"></div>
           <button class="col btn btn-outline-light" id="PurpleLight">light</button>
           <button class="col btn btn-outline-light" id="PurpleDim">dim</button>
           <button class="col btn btn-outline-light" id="PurpleDark">dark</button>
-          <hr />
+        <hr />
         </div>
         <div class="row">
           <div style="min-height: 30px; background-color: #02BC71;"></div>
           <button class="col btn btn-outline-light" id="ColdGreenLight">light</button>
           <button class="col btn btn-outline-light" id="ColdGreenDim">dim</button>
           <button class="col btn btn-outline-light" id="ColdGreenDark">dark</button>
-          <hr />
+        <hr />
         </div>
         <div class="row">
           <div style="min-height: 30px; background-color: #02A003;"></div>
           <button class="col btn btn-outline-light" id="GreenLight">light</button>
           <button class="col btn btn-outline-light" id="GreenDim">dim</button>
           <button class="col btn btn-outline-light" id="GreenDark">dark</button>
-          <hr />
+        <hr />
         </div>
         <div class="row">
           <div style="min-height: 30px; background-color: #8B7C07;"></div>
           <button class="col btn btn-outline-light" id="KhakiLight">light</button>
           <button class="col btn btn-outline-light" id="KhakiDim">dim</button>
           <button class="col btn btn-outline-light" id="KhakiDark">dark</button>
-          <hr />
+        <hr />
         </div>
         <div class="row">
           <div style="min-height: 30px; background-color: #E54400;"></div>
           <button class="col btn btn-outline-light" id="TaroccoLight">light</button>
           <button class="col btn btn-outline-light" id="TaroccoDim">dim</button>
           <button class="col btn btn-outline-light" id="TaroccoDark">dark</button>
-          <hr />
+        <hr />
         </div>
       </div>
-      <div class="tab-pane fade m-3" id="load-tab-pane" aria-labelledby="load-tab" tabindex="0">
+
+      <div class="tab-pane fade p-3" id="load-tab-pane" aria-labelledby="load-tab" tabindex="0">
         <div class="row">
           <div class="input-group mb-3">
-            <button class="btn btn-outline-light input-group-prepend" id="import-button">Import</button>
-            <input type="text" class="form-control" id="import-text-area" />
+            <button class="btn btn-outline-light" id="import-button" aria-label="Import theme JSON">Import</button>
+            <input type="text" class="form-control" id="import-text-area" placeholder="Paste JSON here" />
           </div>
         </div>
 
         <div class="row">
           <div class="input-group mb-3">
-            <button class="btn btn-outline-light input-group-prepend" id="export-button">Export</button>
-            <input type="text" class="form-control" id="export-text-area" />
-            <span class="m-2" id="copy-export-button"><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'
-                fill='currentColor' class='bi bi-clipboard' viewBox='0 0 16 16'>
+            <button class="btn btn-outline-light" id="export-button" aria-label="Export theme JSON">Export</button>
+            <input type="text" class="form-control" id="export-text-area" placeholder="Theme JSON will appear here" />
+            <button class="btn btn-outline-light d-flex align-items-center" id="copy-export-button"
+              aria-label="Copy export to clipboard" title="Copy">
+              <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-clipboard'
+                viewBox='0 0 16 16'>
                 <path
                   d='M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z' />
                 <path
                   d='M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z' />
               </svg>
-            </span>
+            </button>
           </div>
         </div>
 
-        <div class="row d-flex flex-row align-items-center">
+        <div class="row align-items-center">
           <hr />
-          <p style="text-align: center;">Custom themes</p>
-          
+          <p class="text-center">Custom themes</p>
           <div class="col">
-            <p style="text-align: center;">№1</p>
-            <div class="btn-group d-flex flex-row align-items-center">
+            <p class="text-center">№1</p>
+            <div class="btn-group d-flex flex-row align-items-center w-100">
               <button class="btn btn-outline-success" id="save-theme-1">Save
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy" viewBox="0 0 16 16">
-                  <path d="M11 2H9v3h2z"/>
-                  <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy"
+                  viewBox="0 0 16 16">
+                  <path d="M11 2H9v3h2z" />
+                  <path
+                    d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z" />
                 </svg>
               </button>
               <button class="btn btn-outline-info" id="set-theme-1">Set
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-index" viewBox="0 0 16 16">
-                  <path d="M6.75 1a.75.75 0 0 1 .75.75V8a.5.5 0 0 0 1 0V5.467l.086-.004c.317-.012.637-.008.816.027.134.027.294.096.448.182.077.042.15.147.15.314V8a.5.5 0 1 0 1 0V6.435l.106-.01c.316-.024.584-.01.708.04.118.046.3.207.486.43.081.096.15.19.2.259V8.5a.5.5 0 0 0 1 0v-1h.342a1 1 0 0 1 .995 1.1l-.271 2.715a2.5 2.5 0 0 1-.317.991l-1.395 2.442a.5.5 0 0 1-.434.252H6.035a.5.5 0 0 1-.416-.223l-1.433-2.15a1.5 1.5 0 0 1-.243-.666l-.345-3.105a.5.5 0 0 1 .399-.546L5 8.11V9a.5.5 0 0 0 1 0V1.75A.75.75 0 0 1 6.75 1M8.5 4.466V1.75a1.75 1.75 0 1 0-3.5 0v5.34l-1.2.24a1.5 1.5 0 0 0-1.196 1.636l.345 3.106a2.5 2.5 0 0 0 .405 1.11l1.433 2.15A1.5 1.5 0 0 0 6.035 16h6.385a1.5 1.5 0 0 0 1.302-.756l1.395-2.441a3.5 3.5 0 0 0 .444-1.389l.271-2.715a2 2 0 0 0-1.99-2.199h-.581a5 5 0 0 0-.195-.248c-.191-.229-.51-.568-.88-.716-.364-.146-.846-.132-1.158-.108l-.132.012a1.26 1.26 0 0 0-.56-.642 2.6 2.6 0 0 0-.738-.288c-.31-.062-.739-.058-1.05-.046zm2.094 2.025"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-hand-index" viewBox="0 0 16 16">
+                  <path
+                    d="M6.75 1a.75.75 0 0 1 .75.75V8a.5.5 0 0 0 1 0V5.467l.086-.004c.317-.012.637-.008.816.027.134.027.294.096.448.182.077.042.15.147.15.314V8a.5.5 0 1 0 1 0V6.435l.106-.01c.316-.024.584-.01.708.04.118.046.3.207.486.43.081.096.15.19.2.259V8.5a.5.5 0 0 0 1 0v-1h.342a1 1 0 0 1 .995 1.1l-.271 2.715a2.5 2.5 0 0 1-.317.991l-1.395 2.442a.5.5 0 0 1-.434.252H6.035a.5.5 0 0 1-.416-.223l-1.433-2.15a1.5 1.5 0 0 1-.243-.666l-.345-3.105a.5.5 0 0 1 .399-.546L5 8.11V9a.5.5 0 0 0 1 0V1.75A.75.75 0 0 1 6.75 1M8.5 4.466V1.75a1.75 1.75 0 1 0-3.5 0v5.34l-1.2.24a1.5 1.5 0 0 0-1.196 1.636l.345 3.106a2.5 2.5 0 0 0 .405 1.11l1.433 2.15A1.5 1.5 0 0 0 6.035 16h6.385a1.5 1.5 0 0 0 1.302-.756l1.395-2.441a3.5 3.5 0 0 0 .444-1.389l.271-2.715a2 2 0 0 0-1.99-2.199h-.581a5 5 0 0 0-.195-.248c-.191-.229-.51-.568-.88-.716-.364-.146-.846-.132-1.158-.108l-.132.012a1.26 1.26 0 0 0-.56-.642 2.6 2.6 0 0 0-.738-.288c-.31-.062-.739-.058-1.05-.046zm2.094 2.025" />
                 </svg>
               </button>
             </div>
           </div>
 
           <div class="col">
-            <p style="text-align: center;">№2</p>
-            <div class="btn-group d-flex flex-row align-items-center">
-              <button class="btn btn-outline-success" id="save-theme-2">Save
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy" viewBox="0 0 16 16">
-                  <path d="M11 2H9v3h2z"/>
-                  <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z"/>
+            <p class="text-center">№2</p>
+            <div class="btn-group d-flex flex-row align-items-center w-100">
+              <button class="btn btn-outline-success flex-fill" id="save-theme-2">Save
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy"
+                  viewBox="0 0 16 16">
+                  <path d="M11 2H9v3h2z" />
+                  <path
+                    d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z" />
                 </svg>
               </button>
-              <button class="btn btn-outline-info" id="set-theme-2">Set
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-index" viewBox="0 0 16 16">
-                  <path d="M6.75 1a.75.75 0 0 1 .75.75V8a.5.5 0 0 0 1 0V5.467l.086-.004c.317-.012.637-.008.816.027.134.027.294.096.448.182.077.042.15.147.15.314V8a.5.5 0 1 0 1 0V6.435l.106-.01c.316-.024.584-.01.708.04.118.046.3.207.486.43.081.096.15.19.2.259V8.5a.5.5 0 0 0 1 0v-1h.342a1 1 0 0 1 .995 1.1l-.271 2.715a2.5 2.5 0 0 1-.317.991l-1.395 2.442a.5.5 0 0 1-.434.252H6.035a.5.5 0 0 1-.416-.223l-1.433-2.15a1.5 1.5 0 0 1-.243-.666l-.345-3.105a.5.5 0 0 1 .399-.546L5 8.11V9a.5.5 0 0 0 1 0V1.75A.75.75 0 0 1 6.75 1M8.5 4.466V1.75a1.75 1.75 0 1 0-3.5 0v5.34l-1.2.24a1.5 1.5 0 0 0-1.196 1.636l.345 3.106a2.5 2.5 0 0 0 .405 1.11l1.433 2.15A1.5 1.5 0 0 0 6.035 16h6.385a1.5 1.5 0 0 0 1.302-.756l1.395-2.441a3.5 3.5 0 0 0 .444-1.389l.271-2.715a2 2 0 0 0-1.99-2.199h-.581a5 5 0 0 0-.195-.248c-.191-.229-.51-.568-.88-.716-.364-.146-.846-.132-1.158-.108l-.132.012a1.26 1.26 0 0 0-.56-.642 2.6 2.6 0 0 0-.738-.288c-.31-.062-.739-.058-1.05-.046zm2.094 2.025"/>
+              <button class="btn btn-outline-info flex-fill" id="set-theme-2">Set
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-hand-index" viewBox="0 0 16 16">
+                  <path
+                    d="M6.75 1a.75.75 0 0 1 .75.75V8a.5.5 0 0 0 1 0V5.467l.086-.004c.317-.012.637-.008.816.027.134.027.294.096.448.182.077.042.15.147.15.314V8a.5.5 0 1 0 1 0V6.435l.106-.01c.316-.024.584-.01.708.04.118.046.3.207.486.43.081.096.15.19.2.259V8.5a.5.5 0 0 0 1 0v-1h.342a1 1 0 0 1 .995 1.1l-.271 2.715a2.5 2.5 0 0 1-.317.991l-1.395 2.442a.5.5 0 0 1-.434.252H6.035a.5.5 0 0 1-.416-.223l-1.433-2.15a1.5 1.5 0 0 1-.243-.666l-.345-3.105a.5.5 0 0 1 .399-.546L5 8.11V9a.5.5 0 0 0 1 0V1.75A.75.75 0 0 1 6.75 1M8.5 4.466V1.75a1.75 1.75 0 1 0-3.5 0v5.34l-1.2.24a1.5 1.5 0 0 0-1.196 1.636l.345 3.106a2.5 2.5 0 0 0 .405 1.11l1.433 2.15A1.5 1.5 0 0 0 6.035 16h6.385a1.5 1.5 0 0 0 1.302-.756l1.395-2.441a3.5 3.5 0 0 0 .444-1.389l.271-2.715a2 2 0 0 0-1.99-2.199h-.581a5 5 0 0 0-.195-.248c-.191-.229-.51-.568-.88-.716-.364-.146-.846-.132-1.158-.108l-.132.012a1.26 1.26 0 0 0-.56-.642 2.6 2.6 0 0 0-.738-.288c-.31-.062-.739-.058-1.05-.046zm2.094 2.025" />
                 </svg>
               </button>
             </div>
@@ -324,7 +359,17 @@
       </div>
       <script src="options.js"></script>
     </div>
-    <a href="https://forms.gle/xXn3qYcCzp2CD7ua6" target="_blank">Feedback form</a>
+
+    <div class="row w-100">
+      <div class="col">
+        <a href="https://forms.gle/xXn3qYcCzp2CD7ua6" target="_blank">Feedback form</a>
+      </div>
+      <div class="col">
+        <a href="https://github.com/Basedfloppa/Bsky-Color-Swapper/blob/main/extention/content_scripts/swap_pallet.js"
+          target="_blank">HELP WANTED</a>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

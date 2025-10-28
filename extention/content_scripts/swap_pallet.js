@@ -1,5 +1,5 @@
 const dimTheme = {
-  "--accent-color-val1": "rgb(32, 139, 254)",
+  "--accent-color-val1": "rgb(15, 115, 255)",
   "--accent-color-val2": "#0085ff",
   "--accent-color-val3": "rgb(76, 162, 254)",
   "--accent-color-val4": "hsl(211, 99%, 56%)",
@@ -15,26 +15,26 @@ const dimTheme = {
   "--accent-color-hover-val2": "rgb(19, 63, 109)",
   "--accent-color-gradient-val1": "rgb(0, 133, 255)",
   "--accent-color-gradient-val2": "rgb(90, 113, 250)",
-  "--content-warnings-val1": "rgb(30, 41, 54)",
-  "--content-warnings-val2": "rgb(21, 52, 85)", // Background on Up arrow
-  "--content-warnings-hover-val": "rgb(38, 53, 68)",
-  "--background-change-val1": "rgb(22, 30, 39)",
-  "--background-change-val2": "rgb(21, 41, 63)", // Notification popup background
-  "--text-primary-val1": "rgb(241, 243, 245)",
+  "--content-warnings-val1": "rgb(34, 46, 63)",
+  "--content-warnings-val2": "rgb(18, 41, 73)", // Background on Up arrow
+  "--content-warnings-hover-val": "rgb(28, 39, 54)",
+  "--background-change-val1": "rgb(21, 29, 40)",
+  "--background-change-val2": "rgb(35, 46, 63)", // Notification popup background
+  "--text-primary-val1": "rgb(255, 255, 255)",
   "--text-primary-val2": "hsl(211, 20%, 95.3%)",
-  "--text-secondary-val1": "rgb(147, 165, 183)", // Usernames
-  "--text-secondary-val2": "hsl(211, 20%, 56%)", // Control nodes, like, share, comment etc..
+  "--text-secondary-val1": "rgb(111, 131, 159)", // Usernames
+  "--text-secondary-val2": "#6F839F", // Control nodes, like, share, comment etc..
   "--text-secondary-val3": "rgb(20, 27, 35)",
   "--text-secondary-val4": "rgb(215, 221, 228)", // control popup text (3 dots under posts)
   "--text-secondary-val5": "hsl(211, 20%, 62.4%)",
-  "--text-secondary-val6": "hsl(211, 20%, 64.8%)", // up arrow svg color when inactive
+  "--text-secondary-val6": "#ABB8C9", // up arrow svg color when inactive
   "--text-secondary-val7": "rgb(84, 110, 138)", // Secondary text in profile dropdown
-  "--border-color-val1": "rgb(46, 64, 82)",
-  "--border-color-val2": "rgb(54, 75, 97)",
+  "--border-color-val1": "rgb(44, 58, 78)",
+  "--border-color-val2": "rgb(46, 64, 82)",
   "--border-color-val3": "rgb(14, 73, 137)", // Notification popup border
 };
 const darkTheme = {
-  "--accent-color-val1": "rgb(16, 131, 254)",
+  "--accent-color-val1": "rgb(0, 106, 255)",
   "--accent-color-val2": "#0085ff",
   "--accent-color-val3": "rgb(52, 150, 254)",
   "--accent-color-val4": "hsl(211, 99%, 53%)",
@@ -50,26 +50,26 @@ const darkTheme = {
   "--accent-color-hover-val2": "rgb(19, 63, 109)",
   "--accent-color-gradient-val1": "rgb(0, 133, 255)",
   "--accent-color-gradient-val2": "rgb(90, 113, 250)",
-  "--content-warnings-val1": "rgb(20, 27, 35)",
-  "--content-warnings-val2": "rgb(0, 25, 51)", // Background on Up arrow
-  "--content-warnings-hover-val": "rgb(28, 39, 50)",
+  "--content-warnings-val1": "rgb(25, 34, 46)",
+  "--content-warnings-val2": "rgb(0, 30, 71)", // Background on Up arrow
+  "--content-warnings-hover-val": "rgb(17, 24, 34)",
   "--background-change-val1": "rgb(0, 0, 0)",
   "--background-change-val2": "rgb(0, 17, 36)", // Notification popup background
-  "--text-primary-val1": "rgb(241, 243, 245)",
+  "--text-primary-val1": "rgb(255, 255, 255)",
   "--text-primary-val2": "hsl(211, 20%, 95.3%)",
-  "--text-secondary-val1": "rgb(140, 158, 178)", // Usernames
-  "--text-secondary-val2": "hsl(211, 20%, 53%)", // Control nodes, like, share, comment etc..
+  "--text-secondary-val1": "rgb(102, 123, 153)", // Usernames
+  "--text-secondary-val2": "#667B99", // Control nodes, like, share, comment etc..
   "--text-secondary-val3": "rgb(20, 27, 35)",
   "--text-secondary-val4": "rgb(212, 219, 226)", // control popup text (3 dots under posts)
   "--text-secondary-val5": "hsl(211, 20%, 62.4%)",
   "--text-secondary-val6": "hsl(211, 20%, 62.4%)", // up arrow svg color when inactive
   "--text-secondary-val7": "rgb(84, 110, 138)", // Secondary text in profile dropdown
-  "--border-color-val1": "rgb(37, 51, 66)",
+  "--border-color-val1": "rgb(35, 46, 62)",
   "--border-color-val2": "rgb(46, 63, 81)",
   "--border-color-val3": "rgb(0, 44, 91)", // Notification popup border
 };
 const lightTheme = {
-  "--accent-color-val1": "rgb(16, 131, 254)",
+  "--accent-color-val1": "rgb(0, 106, 255)",
   "--accent-color-val2": "#0085ff",
   "--accent-color-val3": "rgb(1, 104, 213)",
   "--accent-color-val4": "hsl(211, 99%, 53%)",
@@ -85,21 +85,21 @@ const lightTheme = {
   "--accent-color-hover-val2": "rgb(19, 63, 109)",
   "--accent-color-gradient-val1": "rgb(0, 133, 255)",
   "--accent-color-gradient-val2": "rgb(90, 113, 250)",
-  "--content-warnings-val1": "rgb(241, 243, 245)",
+  "--content-warnings-val1": "rgb(239, 242, 246)",
   "--content-warnings-val2": "rgb(230, 242, 255)", // Background on Up arrow
-  "--content-warnings-hover-val": "rgb(226, 231, 236)",
+  "--content-warnings-hover-val": "rgb(249, 250, 251)",
   "--background-change-val1": "rgb(255, 255, 255)",
   "--background-change-val2": "rgb(240, 247, 255)", // Notification popup background
-  "--text-primary-val1": "rgb(11, 15, 20)",
-  "--text-primary-val2": "hsl(211, 28%, 6%)",
-  "--text-secondary-val1": "rgb(66, 87, 108)", // Usernames
+  "--text-primary-val1": "rgb(0, 0, 0)",
+  "--text-primary-val2": "#000000",
+  "--text-secondary-val1": "rgb(64, 81, 104)", // Usernames
   "--text-secondary-val2": "hsl(211, 20%, 53%)", // Control nodes, like, share, comment etc..
   "--text-secondary-val3": "rgb(11, 15, 20)",
-  "--text-secondary-val4": "rgb(37, 51, 66)", // control popup text (3 dots under posts)
+  "--text-secondary-val4": "rgb(35, 46, 62)", // control popup text (3 dots under posts)
   "--text-secondary-val5": "hsl(211, 24%, 34.2%)",
   "--text-secondary-val6": "hsl(211, 24%, 34.2%)", // up arrow svg color when inactive
   "--text-secondary-val7": "rgb(140, 158, 178)", // Secondary text in profile dropdown
-  "--border-color-val1": "rgb(212, 219, 226)",
+  "--border-color-val1": "rgb(220, 226, 234)",
   "--border-color-val2": "rgb(197, 207, 217)",
   "--border-color-val3": "rgb(103, 176, 254)", // Notification popup border
 };
