@@ -23,7 +23,7 @@ const dimTheme = {
   "--text-primary-val1": "rgb(255, 255, 255)",
   "--text-primary-val2": "hsl(211, 20%, 95.3%)",
   "--text-secondary-val1": "rgb(111, 131, 159)", // Usernames
-  "--text-secondary-val2": "#6F839F", // Control nodes, like, share, comment etc..
+  "--text-secondary-val2": "#FFFFFF", // Control nodes, like, share, comment etc..
   "--text-secondary-val3": "rgb(20, 27, 35)",
   "--text-secondary-val4": "rgb(215, 221, 228)", // control popup text (3 dots under posts)
   "--text-secondary-val5": "hsl(211, 20%, 62.4%)",
@@ -58,7 +58,7 @@ const darkTheme = {
   "--text-primary-val1": "rgb(255, 255, 255)",
   "--text-primary-val2": "hsl(211, 20%, 95.3%)",
   "--text-secondary-val1": "rgb(102, 123, 153)", // Usernames
-  "--text-secondary-val2": "#667B99", // Control nodes, like, share, comment etc..
+  "--text-secondary-val2": "#FFFFFF", // Control nodes, like, share, comment etc..
   "--text-secondary-val3": "rgb(20, 27, 35)",
   "--text-secondary-val4": "rgb(212, 219, 226)", // control popup text (3 dots under posts)
   "--text-secondary-val5": "hsl(211, 20%, 62.4%)",
