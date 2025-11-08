@@ -8,18 +8,16 @@ function init() {
   browserApi.storage.local.get(null, (items) => {
     if (!Object.keys(items).some((key) => key.startsWith("ColorMap"))) {
       browserApi.storage.local.set({
-        "ColorMap--accent-color": "#bb98ff",
-        "ColorMap--accent-color-inactive": "#553399",
-        "ColorMap--accent-color-inactive-text": "#fff",
-        "ColorMap--accent-color-hover": "#8a2be2",
-        "ColorMap--butterfly-icon": "#8a2be2",
-        "ColorMap--background": "#200d46",
-        "ColorMap--content-warnings": "#322d3c",
-        "ColorMap--content-warnings-hover": "#4b435b",
-        "ColorMap--text-primary": "#fff",
-        "ColorMap--text-secondary": "#7f7f7f",
-        "ColorMap--border-color": "rgb(46, 64, 82)",
-        "ColorMap--main-button-text": "#fff",
+        "ColorMap--accent-color": "#c920ff",
+        "ColorMap--accent-color-hover": "#d45bf8",
+        "ColorMap--butterfly-icon": "#ca21ff",
+        "ColorMap--background": "#211428",
+        "ColorMap--content-warnings": "#291936",
+        "ColorMap--content-warnings-hover": "#2b1b36",
+        "ColorMap--text-primary": "#f6f6f8",
+        "ColorMap--text-secondary": "#c7b3cf",
+        "ColorMap--border-color": "#452f55",
+        "ColorMap--main-button-text": "#f6f6f8",
       });
     }
   });
@@ -30,8 +28,6 @@ async function getMap() {
     browserApi.storage.local.get(
       [
         "ColorMap--accent-color",
-        "ColorMap--accent-color-inactive",
-        "ColorMap--accent-color-inactive-text",
         "ColorMap--accent-color-hover",
         "ColorMap--butterfly-icon",
         "ColorMap--background",
@@ -49,24 +45,16 @@ async function getMap() {
         }
 
         const colorMap = {
-          "--accent-color": result["ColorMap--accent-color"] || "#bb98ff",
-          "--accent-color-inactive":
-            result["ColorMap--accent-color-inactive"] || "#553399",
-          "--accent-color-inactive-text":
-            result["ColorMap--accent-color-inactive-text"] || "#fff",
-          "--accent-color-hover":
-            result["ColorMap--accent-color-hover"] || "#8a2be2",
-          "--butterfly-icon": result["ColorMap--butterfly-icon"] || "#8a2be2",
-          "--background": result["ColorMap--background"] || "#200d46",
-          "--content-warnings":
-            result["ColorMap--content-warnings"] || "#322d3c",
-          "--content-warnings-hover":
-            result["ColorMap--content-warnings-hover"] || "#4b435b",
-          "--text-primary": result["ColorMap--text-primary"] || "#fff",
-          "--text-secondary": result["ColorMap--text-secondary"] || "#7f7f7f",
-          "--border-color":
-            result["ColorMap--border-color"] || "rgb(46, 64, 82)",
-          "--main-button-text": result["ColorMap--main-button-text"] || "#fff",
+          "--accent-color": result["ColorMap--accent-color"] || "#c920ff",
+          "--accent-color-hover": result["ColorMap--accent-color-hover"] || "#d45bf8",
+          "--butterfly-icon": result["ColorMap--butterfly-icon"] || "#ca21ff",
+          "--background": result["ColorMap--background"] || "#211428",
+          "--content-warnings": result["ColorMap--content-warnings"] || "#291936",
+          "--content-warnings-hover": result["ColorMap--content-warnings-hover"] || "#2b1b36",
+          "--text-primary": result["ColorMap--text-primary"] || "#f6f6f8",
+          "--text-secondary": result["ColorMap--text-secondary"] || "#c7b3cf",
+          "--border-color": result["ColorMap--border-color"] || "#452f55",
+          "--main-button-text": result["ColorMap--main-button-text"] || "#f6f6f8",
         };
 
         resolve(colorMap);
