@@ -154,8 +154,6 @@ function updateColor() {
       break;
   }
 
-  calcInactive();
-
   // Handle errors for incorrectly initialized elements
   if (!elements.colorId.innerHTML) return;
 
@@ -197,7 +195,6 @@ async function reset() {
   );
   for (let option of options) {
     elements.colorId.innerHTML = option;
-    calcInactive();
     await setColor(option);
     await updateColor();
     await init();
@@ -216,31 +213,6 @@ function updateHslVal() {
   elements.values.hueVal.innerHTML = hue.value;
   elements.values.saturationVal.innerHTML = saturation.value;
   elements.values.lightnessVal.innerHTML = lightness.value;
-}
-
-//Calculate accent-color-inactive and accent-color-inactive-text
-function calcInactive() {
-  elements.buttons.forEach((button) => {
-    if (button.name == "ColorMap--accent-color") {
-      let svgColor = button.querySelector("svg").style.fill;
-      var color = convertToRgb(svgColor);
-      color = rgbToHsl(color.r, color.g, color.b);
-      color.s = color.s / 2;
-      color = "hsl(" + color.h + "," + color.s + "%," + color.l + "%)";
-      browserApi.storage.local.set({
-        "ColorMap--accent-color-inactive": color,
-      });
-    } else if (button.name == "ColorMap--text-primary") {
-      let svgColor = button.querySelector("svg").style.fill;
-      var color = convertToRgb(svgColor);
-      color = rgbToHsl(color.r, color.g, color.b);
-      color.s = color.s / 2;
-      color = "hsl(" + color.h + "," + color.s + "%," + color.l + "%)";
-      browserApi.storage.local.set({
-        "ColorMap--accent-color-inactive-text": color,
-      });
-    }
-  });
 }
 
 // Saves custom theme to storage
