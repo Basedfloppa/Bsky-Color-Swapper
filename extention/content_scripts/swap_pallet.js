@@ -76,16 +76,16 @@ async function applyTheme(colorMap) {
 
   const root = `
       :root {
-          --accent-color: ${colorMap["--accent-color"]};
-          --accent-color-hover: ${colorMap["--accent-color-hover"]};
-          --butterfly-icon: ${colorMap["--butterfly-icon"]};
-          --background-change: ${colorMap["--background"]};
-          --content-warnings: ${colorMap["--content-warnings"]};
-          --content-warnings-hover: ${colorMap["--content-warnings-hover"]};
-          --text-primary-change: ${colorMap["--text-primary"]};
-          --text-secondary-change: ${colorMap["--text-secondary"]};
-          --border-color-change: ${colorMap["--border-color"]};
-          --main-button-text: ${colorMap["--main-button-text"]}
+          --accent-color: ${sanitizeColor(colorMap["--accent-color"])};
+          --accent-color-hover: ${sanitizeColor(colorMap["--accent-color-hover"])};
+          --butterfly-icon: ${sanitizeColor(colorMap["--butterfly-icon"])};
+          --background-change: ${sanitizeColor(colorMap["--background"])};
+          --content-warnings: ${sanitizeColor(colorMap["--content-warnings"])};
+          --content-warnings-hover: ${sanitizeColor(colorMap["--content-warnings-hover"])};
+          --text-primary-change: ${sanitizeColor(colorMap["--text-primary"])};
+          --text-secondary-change: ${sanitizeColor(colorMap["--text-secondary"])};
+          --border-color-change: ${sanitizeColor(colorMap["--border-color"])};
+          --main-button-text: ${sanitizeColor(colorMap["--main-button-text"])}
       }
     `;
 
@@ -132,10 +132,10 @@ async function applyTheme(colorMap) {
   const innerStyle = root + "\n" + blocks.join("\n\n");
 
   if (document.getElementById("style-inject-bsky")) {
-    document.getElementById("style-inject-bsky").innerHTML = innerStyle;
+    document.getElementById("style-inject-bsky").textContent = innerStyle;
   } else {
     const styleElement = document.createElement("style");
-    styleElement.innerHTML = innerStyle;
+    styleElement.textContent = innerStyle;
     styleElement.id = "style-inject-bsky";
     document.head.appendChild(styleElement);
   }
@@ -151,6 +151,11 @@ function pathFill(values, decl) {
 
 function strokeFill(values, decl) {
   return values.map(v => `path[stroke="${v}"]`).join(",\n") + ` { ${decl} }`;
+}
+
+function sanitizeColor(value) {
+  const cssColorRe = /^(?:#[0-9a-fA-F]{3,8}|rgb[a]?\([^)]*\)|hsl[a]?\([^)]*\)|[a-zA-Z]+)$/; // hex + rgb(a) + hsl(a)
+  return cssColorRe.test(value) ? value : "transparent";
 }
 
 async function removeProseMirror() {
