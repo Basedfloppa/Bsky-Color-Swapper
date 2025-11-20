@@ -57,5 +57,4 @@ If you have questions or additions you’d like me to make, you can:
   <img src="https://contrib.rocks/image?repo=Basedfloppa/Bsky-Color-Swapper" alt="Contributors">
 </a>
 
-<img src="https://repobeats.axiom.co/api/embed/660e2fc08491a9fef276b7624abdf69c42b5b934.svg" alt="Repobeats analytics" />
 
