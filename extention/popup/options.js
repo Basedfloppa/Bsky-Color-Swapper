@@ -70,7 +70,7 @@ elements.buttons.forEach((button) =>
 
 function handleButtonClick(button) {
   const svgId = button.querySelector("svg").id;
-  elements.colorId.innerHTML = svgId;
+  elements.colorId.textContent = svgId;
   setColor(svgId);
 }
 
@@ -89,7 +89,7 @@ async function init() {
       element.style.fill = color ?? "rgb(0,0,0)";
     }
   }
-  setColor(elements.colorId.innerHTML);
+  setColor(elements.colorId.textContent);
 }
 
 // Export current theme
@@ -103,7 +103,7 @@ async function exportTheme() {
   }
 
   elements.exportText.value = result.join(";");
-  elements.copyExportButton.innerHTML = elements.icons.checkmark;
+  elements.copyExportButton.textContent = elements.icons.checkmark;
   await navigator.clipboard.writeText(elements.exportText.value);
 }
 
@@ -155,21 +155,21 @@ function updateColor() {
   }
 
   // Handle errors for incorrectly initialized elements
-  if (!elements.colorId.innerHTML) return;
+  if (!elements.colorId.textContent) return;
 
-  document.getElementById(elements.colorId.innerHTML).style.fill = color;
+  document.getElementById(elements.colorId.textContent).style.fill = color;
   elements.swatch.style.backgroundColor = color;
-  chrome.storage.local.set({ [elements.colorId.innerHTML]: color });
+  chrome.storage.local.set({ [elements.colorId.textContent]: color });
   chrome.runtime.sendMessage({ type: "applyTheme" });
 }
 
 // Change input values and color
 async function setColor(id) {
-  id = id ?? elements.colorId.innerHTML;
+  id = id ?? elements.colorId.textContent;
   let color = (await getStorageValue(id)) || "rgb(0,0,0)";
   const colorRgb = convertToRgb(color) || { r: "0", g: "0", b: "0" };
 
-  elements.colorLabel.innerHTML = `Picked: ${id
+  elements.colorLabel.textContent = `Picked: ${id
     .replace("ColorMap--", " ")
     .replaceAll("-", " ")}`;
   elements.swatch.style.backgroundColor = `rgb(${colorRgb.r}, ${colorRgb.g}, ${colorRgb.b})`;
@@ -194,7 +194,7 @@ async function reset() {
     (x) => x.id
   );
   for (let option of options) {
-    elements.colorId.innerHTML = option;
+    elements.colorId.textContent = option;
     await setColor(option);
     await updateColor();
     await init();
@@ -203,16 +203,16 @@ async function reset() {
 
 // Update rgb input values
 function updateRgbVal() {
-  elements.values.redVal.innerHTML = red.value;
-  elements.values.greenVal.innerHTML = green.value;
-  elements.values.blueVal.innerHTML = blue.value;
+  elements.values.redVal.textContent = red.value;
+  elements.values.greenVal.textContent = green.value;
+  elements.values.blueVal.textContent = blue.value;
 }
 
 // Update hsl input values
 function updateHslVal() {
-  elements.values.hueVal.innerHTML = hue.value;
-  elements.values.saturationVal.innerHTML = saturation.value;
-  elements.values.lightnessVal.innerHTML = lightness.value;
+  elements.values.hueVal.textContent = hue.value;
+  elements.values.saturationVal.textContent = saturation.value;
+  elements.values.lightnessVal.textContent = lightness.value;
 }
 
 // Saves custom theme to storage
