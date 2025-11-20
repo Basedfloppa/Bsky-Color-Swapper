@@ -51,10 +51,4 @@ If you have questions or additions you’d like me to make, you can:
 
 ---
 
-## 📈 Project Activity 
-
-<a href="https://github.com/Basedfloppa/Bsky-Color-Swapper/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Basedfloppa/Bsky-Color-Swapper" alt="Contributors">
-</a>
-
 
