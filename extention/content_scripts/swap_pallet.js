@@ -1,11 +1,11 @@
 const theme = {
   light: {
     accent: ["#006AFF", "rgb(0, 106, 255)", "#0059D6"],
-    accent_hover: ["rgb(0, 89, 214)"],
+    accent_hover: ["rgb(0, 89, 214)", "rgb(117, 175, 255)"],
 
     background: ["rgb(255, 255, 255)", "rgb(229, 240, 255)"],
 
-    border: ["rgb(220, 226, 234)", "rgb(192, 202, 216)", "rgb(117, 175, 255);"],
+    border: ["rgb(220, 226, 234)", "rgb(192, 202, 216)", "rgb(168, 204, 255)", "#DCE2EA", "rgb(204, 225, 255)"],
 
     text_primary: ["#000000", "rgb(0, 0, 0)", "rgb(35, 46, 62)", "rgb(255, 255, 255)", "#FFFFFF"],
     text_secondary: ["rgb(64, 81, 104)", "hsl(211, 24%, 34.2%)", "rgb(102, 123, 153)", "rgb(0, 89, 214)", "#405168", "#667B99", "#526580"],
@@ -17,11 +17,11 @@ const theme = {
   },
   dark: {
     accent: ["#006AFF","rgb(0, 106, 255)", "#75AFFF"],
-    accent_hover: ["rgb(66, 145, 255)"],
+    accent_hover: ["rgb(66, 145, 255)", "rgb(0, 72, 173)"],
 
     background: ["rgb(0, 0, 0)"],
 
-    border: ["rgb(35, 46, 62)", "rgb(0, 40, 97)", "rgb(49, 63, 84)"],
+    border: ["rgb(35, 46, 62)", "rgb(0, 40, 97)", "rgb(49, 63, 84)", "rgb(0, 57, 138)", "#232E3E"],
 
     text_primary: ["#FFFFFF", "rgb(255, 255, 255)"],
     text_secondary: ["rgb(102, 123, 153)", "hsla(212, 20%, 62%, 1.00)", "rgb(165, 178, 197)", "rgb(117, 175, 255)", "#667B99", "#A5B2C5"],
@@ -32,12 +32,12 @@ const theme = {
     butterfly: ["#0085ff"],
   },
   dim: {
-    accent: ["#0F73FF", "rgb(15, 115, 255)", "#80B5FF"],
-    accent_hover: ["rgb(77, 151, 255)"],
+    accent: ["#0F73FF", "rgb(15, 115, 255)", "rgb(25, 118, 210)", "#80B5FF"],
+    accent_hover: ["rgb(77, 151, 255)", "rgb(10, 82, 184)"],
 
     background: ["rgb(21, 29, 40)"],
 
-    border: ["rgb(44, 58, 78)", "rgb(14, 68, 144)", "rgb(57, 73, 96)"],
+    border: ["rgb(44, 58, 78)", "rgb(14, 68, 144)", "rgb(57, 73, 96)", "rgb(18, 52, 100)", "#2C3A4E"],
 
     text_primary: ["#FFFFFF", "rgb(255, 255, 255)"],
     text_secondary: ["rgb(171, 184, 201)", "rgb(111, 131, 159)", "rgb(128, 181, 255)", "#6F839F", "#ABB8C9", "#8D9DB4"],
@@ -93,20 +93,26 @@ async function applyTheme(colorMap) {
     `.${themeClass} { background-color: var(--background-change) !important; }`,
 
     cssMatch("background-color", pickedTheme.background, "background-color: var(--background-change) !important;"),
+    cssMatch("border-color", pickedTheme.background, "border-color: var(--background-change) !important;"),
 
     cssMatch("background-color", pickedTheme.content_warning, "background-color: var(--content-warnings) !important;"),
 
     cssMatch("background-color", pickedTheme.content_warning_hover, "background-color: var(--content-warnings-hover) !important;"),
 
     cssMatch("border-color", pickedTheme.border, "border-color: var(--border-color-change) !important;"),
+    cssMatch("background-color", pickedTheme.border, "background-color: var(--border-color-change) !important;"),
+    strokeFill(pickedTheme.border, "stroke: var(--border-color-change) !important;"),
 
     pathFill(pickedTheme.accent, "fill: var(--accent-color) !important;"),
+    strokeFill(pickedTheme.accent, "stroke: var(--accent-color) !important;"),
     cssMatch("color", pickedTheme.accent, "color: var(--accent-color) !important;"),
+    cssMatch("stroke", pickedTheme.accent, "stroke: var(--accent-color) !important;"),
     cssMatch("background-color", pickedTheme.accent, "background-color: var(--accent-color) !important;"),
     cssMatch("text-decoration-color", pickedTheme.accent, "text-decoration-color: var(--accent-color) !important;"),
     cssMatch("border-color", pickedTheme.accent, "border-color: var(--accent-color) !important;"),
 
     cssMatch("background-color", pickedTheme.accent_hover, "background-color: var(--accent-color-hover) !important;"),
+    cssMatch("color", pickedTheme.accent_hover, "color: var(--accent-color-hover) !important;"),
 
     cssMatch("color", pickedTheme.text_primary, "color: var(--text-primary-change) !important;"),
     pathFill(pickedTheme.text_primary, "fill: var(--text-primary-change) !important;"),
@@ -119,6 +125,8 @@ async function applyTheme(colorMap) {
 
     pickedTheme.text_primary.map(v => `div > button > div > div > svg > path[fill="${v}"]`).join(",\n") + `{ fill: var(--main-button-text) !important; }`,
     pickedTheme.text_primary.map(v => `div > button > div[style*="color: ${v}"]`).join(",\n") + `{ color: var(--main-button-text) !important; }`,
+
+    'div[style*="background-image: linear-gradient(135deg, rgb(90, 113, 250), rgb(0, 133, 255))"] { background-image: linear-gradient(0deg, var(--accent-color), var(--accent-color)) !important;}',
   ];
   
   const innerStyle = root + "\n" + blocks.join("\n\n");
@@ -139,6 +147,10 @@ function cssMatch(prop, values, decl) {
 
 function pathFill(values, decl) {
   return values.map(v => `path[fill="${v}"]`).join(",\n") + ` { ${decl} }`;
+}
+
+function strokeFill(values, decl) {
+  return values.map(v => `path[stroke="${v}"]`).join(",\n") + ` { ${decl} }`;
 }
 
 async function removeProseMirror() {
