@@ -15,11 +15,12 @@ const elements = {
     saturationVal: document.getElementById("saturationValue"),
     lightnessVal: document.getElementById("lightnessValue"),
   },
+  rainbow: document.getElementById("rainbow"),
   hex: document.getElementById("hex"),
   swatch: document.getElementById("colorSwatch"),
   colorId: document.getElementById("colorId"),
   colorLabel: document.getElementById("colorLabel"),
-  buttons: document.querySelectorAll(".table button"),
+  buttons: document.querySelectorAll(".container button"),
   exportButton: document.getElementById("export-button"),
   exportText: document.getElementById("export-text-area"),
   copyExportButton: document.getElementById("copy-export-button"),
@@ -39,11 +40,16 @@ try {
   var browserApi = chrome;
 }
 
+let timer = 0;
+let rainbow = false;
+let baseRainbowTheme = null;
+
 // Event Listeners on input sliders
 Object.values(elements.sliders).forEach((slider) =>
   slider.addEventListener("input", updateColor)
 );
 elements.hex.addEventListener("input", updateColor);
+elements.rainbow.addEventListener("change", toggleRainbow);
 
 // Event listeners on Import/Export
 elements.exportButton.addEventListener("click", exportTheme);
@@ -77,11 +83,16 @@ function handleButtonClick(button) {
 // Event listentr for page load
 document.addEventListener("DOMContentLoaded", init);
 
+// Helper for getting all color ids
+function getSvgIds() {
+  return Array.from(document.querySelectorAll("div svg"))
+    .map((x) => x.id)
+    .filter((x) => x !== "");
+}
+
 // Initializations of color values
 async function init() {
-  const options = Array.from(document.querySelectorAll("div svg")).map(
-    (x) => x.id
-  );
+  const options = getSvgIds();
   for (let option of options) {
     const element = document.getElementById(option);
     if (element) {
@@ -89,7 +100,86 @@ async function init() {
       element.style.fill = color ?? "rgb(0,0,0)";
     }
   }
-  setColor(elements.colorId.textContent);
+
+  if (elements.colorId.textContent) {
+    setColor(elements.colorId.textContent);
+  }
+}
+
+// Toggle rainbow effect
+async function toggleRainbow() {
+  const shouldEnable = elements.rainbow.checked;
+
+  if (shouldEnable && !rainbow) {
+    rainbow = true;
+    const options = getSvgIds();
+
+    baseRainbowTheme = {};
+    for (let option of options) {
+      let color = (await getStorageValue(option)) || "rgb(0,0,0)";
+      baseRainbowTheme[option] = color;
+
+      color = convertToRgb(color);
+      const hsl = rgbToHsl(color.r, color.g, color.b);
+      await browserApi.storage.local.set({
+        [option]: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,
+      });
+    }
+
+    timer = setInterval(advanceRainbow, 120);
+  } else if (!shouldEnable && rainbow) {
+    rainbow = false;
+    clearInterval(timer);
+
+    if (baseRainbowTheme) {
+      await Promise.all(
+        Object.entries(baseRainbowTheme).map(([id, color]) =>
+          browserApi.storage.local.set({ [id]: color })
+        )
+      );
+      baseRainbowTheme = null;
+      browserApi.runtime.sendMessage({ type: "applyTheme" });
+    }
+  }
+}
+
+// Tick 1 frame of ranbow animation 
+async function advanceRainbow() {
+  if (!rainbow) {
+    clearInterval(timer);
+    return;
+  }
+
+  const options = getSvgIds();
+  const selectedId = elements.colorId.textContent;
+
+  for (let option of options) {
+    let color = (await getStorageValue(option)) || "hsl(0, 0%, 0%)";
+    let hsl;
+
+    if (color.startsWith("hsl")) {
+      hsl = parseHslString(color) || { h: 0, s: 0, l: 0 };
+    } else {
+      const rgb = convertToRgb(color) || { r: 0, g: 0, b: 0 };
+      hsl = rgbToHsl(rgb.r, rgb.g, rgb.b) || { h: 0, s: 0, l: 0 };
+    }
+
+    hsl.h = (hsl.h + 2) % 360;
+    const hslString = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+
+    if (option == "ColorMap--background") console.log("\noriginal:", color, "\nhsl:", hslString)
+
+    browserApi.storage.local.set({ [option]: hslString });
+
+    const element = document.getElementById(option);
+    if (element) element.style.fill = hslString;
+  }
+
+  if (selectedId && options.includes(selectedId)) {
+    await setColor(selectedId);
+  }
+
+  browserApi.runtime.sendMessage({ type: "applyTheme" });
 }
 
 // Export current theme
@@ -103,7 +193,7 @@ async function exportTheme() {
   }
 
   elements.exportText.value = result.join(";");
-  elements.copyExportButton.textContent = elements.icons.checkmark;
+  elements.copyExportButton.innerHTML = elements.icons.checkmark;
   await navigator.clipboard.writeText(elements.exportText.value);
 }
 
@@ -141,15 +231,17 @@ function updateColor() {
       color = `rgb(${elements.sliders.red.value}, ${elements.sliders.green.value}, ${elements.sliders.blue.value})`;
       updateRgbVal();
       break;
-    case "hsl":
-      const hslRgb = convertToRgb(
+    case "hsl": 
+      let hslRgb = convertToRgb(
         `hsl(${elements.sliders.hue.value}, ${elements.sliders.saturation.value}%, ${elements.sliders.lightness.value}%)`
       );
+      if (!hslRgb) hslRgb = { r: 0, g: 0, b: 0 };
       color = `rgb(${hslRgb.r}, ${hslRgb.g}, ${hslRgb.b})`;
       updateHslVal();
       break;
-    case "hex":
-      const hexRgb = hexToRgb(elements.hex.value);
+    case "hex": 
+      let hexRgb = convertToRgb(elements.hex.value);
+      if (!hexRgb) hexRgb = {r: 0, g: 0, b: 0};
       color = `rgb(${hexRgb.r}, ${hexRgb.g}, ${hexRgb.b})`;
       break;
   }
@@ -159,8 +251,8 @@ function updateColor() {
 
   document.getElementById(elements.colorId.textContent).style.fill = color;
   elements.swatch.style.backgroundColor = color;
-  chrome.storage.local.set({ [elements.colorId.textContent]: color });
-  chrome.runtime.sendMessage({ type: "applyTheme" });
+  browserApi.storage.local.set({ [elements.colorId.textContent]: color });
+  browserApi.runtime.sendMessage({ type: "applyTheme" });
 }
 
 // Change input values and color
@@ -190,29 +282,27 @@ async function setColor(id) {
 
 // Resets option menu
 async function reset() {
-  const options = Array.from(document.querySelectorAll("div svg")).map(
-    (x) => x.id
-  );
+  const options = getSvgIds();
+
   for (let option of options) {
     elements.colorId.textContent = option;
     await setColor(option);
-    await updateColor();
-    await init();
+    updateColor();
   }
 }
 
 // Update rgb input values
 function updateRgbVal() {
-  elements.values.redVal.textContent = red.value;
-  elements.values.greenVal.textContent = green.value;
-  elements.values.blueVal.textContent = blue.value;
+  elements.values.redVal.textContent = elements.sliders.red.value;
+  elements.values.greenVal.textContent = elements.sliders.green.value;
+  elements.values.blueVal.textContent = elements.sliders.blue.value;
 }
 
 // Update hsl input values
 function updateHslVal() {
-  elements.values.hueVal.textContent = hue.value;
-  elements.values.saturationVal.textContent = saturation.value;
-  elements.values.lightnessVal.textContent = lightness.value;
+  elements.values.hueVal.textContent = elements.sliders.hue.value;
+  elements.values.saturationVal.textContent = elements.sliders.saturation.value;
+  elements.values.lightnessVal.textContent = elements.sliders.lightness.value;
 }
 
 // Saves custom theme to storage
@@ -352,8 +442,21 @@ function parseRgbString(rgbString) {
   };
 }
 
+// Parse an HSL string to HSL object
+function parseHslString(hslString) {
+  const match = hslString.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+  if (!match) return null;
+  return {
+    h: parseInt(match[1]),
+    s: parseInt(match[2]),
+    l: parseInt(match[3]),
+  };
+}
+
 // Convert color string to RGB
 function convertToRgb(color) {
+  if (!color || typeof color !== "string") return null;
+
   if (color.startsWith("hsl")) {
     const match = color.match(/(\d+),\s*(\d+)%,\s*(\d+)%/);
     if (!match) return null;

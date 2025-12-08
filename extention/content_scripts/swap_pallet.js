@@ -181,8 +181,6 @@ function getColor() {
     browserApi.storage.local.get(
       [
         "ColorMap--accent-color",
-        "ColorMap--accent-color-inactive",
-        "ColorMap--accent-color-inactive-text",
         "ColorMap--accent-color-hover",
         "ColorMap--butterfly-icon",
         "ColorMap--background",
@@ -196,15 +194,11 @@ function getColor() {
       (result) => {
         const colorMap = {
           "--accent-color": result["ColorMap--accent-color"],
-          "--accent-color-inactive": result["ColorMap--accent-color-inactive"],
-          "--accent-color-inactive-text":
-            result["ColorMap--accent-color-inactive-text"],
           "--accent-color-hover": result["ColorMap--accent-color-hover"],
           "--butterfly-icon": result["ColorMap--butterfly-icon"],
           "--background": result["ColorMap--background"],
           "--content-warnings": result["ColorMap--content-warnings"],
-          "--content-warnings-hover":
-            result["ColorMap--content-warnings-hover"],
+          "--content-warnings-hover": result["ColorMap--content-warnings-hover"],
           "--text-primary": result["ColorMap--text-primary"],
           "--text-secondary": result["ColorMap--text-secondary"],
           "--border-color": result["ColorMap--border-color"],
@@ -220,8 +214,6 @@ function getColor() {
 function setColor(colorMap) {
   browserApi.storage.local.set({
     "ColorMap--accent-color": colorMap["--accent-color"],
-    "ColorMap--accent-color-inactive": colorMap["--accent-color-inactive"],
-    "ColorMap--accent-color-inactive-text": colorMap["--accent-color-inactive-text"],
     "ColorMap--accent-color-hover": colorMap["--accent-color-hover"],
     "ColorMap--butterfly-icon": colorMap["--butterfly-icon"],
     "ColorMap--background": colorMap["--background"],
