@@ -18,6 +18,9 @@ function init() {
         "ColorMap--text-secondary": "#c7b3cf",
         "ColorMap--border-color": "#452f55",
         "ColorMap--main-button-text": "#f6f6f8",
+        "rainbow": false,
+        "rainbowTimerId": 0,
+        "baseRainbowTheme": {}
       });
     }
   });

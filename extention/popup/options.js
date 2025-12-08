@@ -40,10 +40,6 @@ try {
   var browserApi = chrome;
 }
 
-let timer = 0;
-let rainbow = false;
-let baseRainbowTheme = null;
-
 // Event Listeners on input sliders
 Object.values(elements.sliders).forEach((slider) =>
   slider.addEventListener("input", updateColor)
@@ -104,32 +100,43 @@ async function init() {
   if (elements.colorId.textContent) {
     setColor(elements.colorId.textContent);
   }
+
+  elements.rainbow.checked = await getStorageValue("rainbow") == true;
+  if (elements.rainbow.checked) {
+    browserApi.storage.local.set({ "rainbow": false });
+    toggleRainbow();
+  }
 }
 
 // Toggle rainbow effect
 async function toggleRainbow() {
-  const shouldEnable = elements.rainbow.checked;
-
-  if (shouldEnable && !rainbow) {
-    rainbow = true;
+  if (await getStorageValue("rainbow") != true) {
+    browserApi.storage.local.set({ "rainbow": true });
     const options = getSvgIds();
 
-    baseRainbowTheme = {};
-    for (let option of options) {
-      let color = (await getStorageValue(option)) || "rgb(0,0,0)";
-      baseRainbowTheme[option] = color;
+    let baseRainbowTheme = await getStorageValue("baseRainbowTheme");
+    if (JSON.stringify(baseRainbowTheme) == "{}") {
+      baseRainbowTheme = {};
+      for (let option of options) {
+        let color = (await getStorageValue(option)) || "rgb(0,0,0)";
+        baseRainbowTheme[option] = color;
 
-      color = convertToRgb(color);
-      const hsl = rgbToHsl(color.r, color.g, color.b);
-      await browserApi.storage.local.set({
-        [option]: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,
-      });
+        color = convertToRgb(color);
+        const hsl = rgbToHsl(color.r, color.g, color.b);
+        await browserApi.storage.local.set({
+          [option]: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,
+        });
+      }
+      browserApi.storage.local.set({"baseRainbowTheme": baseRainbowTheme})
     }
 
-    timer = setInterval(advanceRainbow, 120);
-  } else if (!shouldEnable && rainbow) {
-    rainbow = false;
-    clearInterval(timer);
+    browserApi.storage.local.set({"rainbowTimerId" : setInterval(advanceRainbow, 120)});    
+  } else {
+    browserApi.storage.local.set({ "rainbow": false });
+    clearInterval(await getStorageValue("rainbowTimerId"));
+
+    let baseRainbowTheme = await getStorageValue("baseRainbowTheme");
+    browserApi.storage.local.set({"baseRainbowTheme": {}})
 
     if (baseRainbowTheme) {
       await Promise.all(
@@ -137,7 +144,6 @@ async function toggleRainbow() {
           browserApi.storage.local.set({ [id]: color })
         )
       );
-      baseRainbowTheme = null;
       browserApi.runtime.sendMessage({ type: "applyTheme" });
     }
   }
@@ -145,8 +151,8 @@ async function toggleRainbow() {
 
 // Tick 1 frame of ranbow animation 
 async function advanceRainbow() {
-  if (!rainbow) {
-    clearInterval(timer);
+  if (await getStorageValue("rainbow") != true) {
+    clearInterval(await getStorageValue("rainbowTimerId"));
     return;
   }
 
@@ -166,8 +172,6 @@ async function advanceRainbow() {
 
     hsl.h = (hsl.h + 2) % 360;
     const hslString = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
-
-    if (option == "ColorMap--background") console.log("\noriginal:", color, "\nhsl:", hslString)
 
     browserApi.storage.local.set({ [option]: hslString });
 
@@ -231,7 +235,7 @@ function updateColor() {
       color = `rgb(${elements.sliders.red.value}, ${elements.sliders.green.value}, ${elements.sliders.blue.value})`;
       updateRgbVal();
       break;
-    case "hsl": 
+    case "hsl":
       let hslRgb = convertToRgb(
         `hsl(${elements.sliders.hue.value}, ${elements.sliders.saturation.value}%, ${elements.sliders.lightness.value}%)`
       );
@@ -239,9 +243,9 @@ function updateColor() {
       color = `rgb(${hslRgb.r}, ${hslRgb.g}, ${hslRgb.b})`;
       updateHslVal();
       break;
-    case "hex": 
+    case "hex":
       let hexRgb = convertToRgb(elements.hex.value);
-      if (!hexRgb) hexRgb = {r: 0, g: 0, b: 0};
+      if (!hexRgb) hexRgb = { r: 0, g: 0, b: 0 };
       color = `rgb(${hexRgb.r}, ${hexRgb.g}, ${hexRgb.b})`;
       break;
   }
