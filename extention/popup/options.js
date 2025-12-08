@@ -45,7 +45,9 @@ Object.values(elements.sliders).forEach((slider) =>
   slider.addEventListener("input", updateColor)
 );
 elements.hex.addEventListener("input", updateColor);
-elements.rainbow.addEventListener("change", toggleRainbow);
+elements.rainbow.addEventListener("change", () => {
+  browserApi.runtime.sendMessage({ type: "toggleRainbow" });
+});
 
 // Event listeners on Import/Export
 elements.exportButton.addEventListener("click", exportTheme);
@@ -102,88 +104,6 @@ async function init() {
   }
 
   elements.rainbow.checked = await getStorageValue("rainbow") == true;
-  if (elements.rainbow.checked) {
-    browserApi.storage.local.set({ "rainbow": false });
-    toggleRainbow();
-  }
-}
-
-// Toggle rainbow effect
-async function toggleRainbow() {
-  if (await getStorageValue("rainbow") != true) {
-    browserApi.storage.local.set({ "rainbow": true });
-    const options = getSvgIds();
-
-    let baseRainbowTheme = await getStorageValue("baseRainbowTheme");
-    if (JSON.stringify(baseRainbowTheme) == "{}") {
-      baseRainbowTheme = {};
-      for (let option of options) {
-        let color = (await getStorageValue(option)) || "rgb(0,0,0)";
-        baseRainbowTheme[option] = color;
-
-        color = convertToRgb(color);
-        const hsl = rgbToHsl(color.r, color.g, color.b);
-        await browserApi.storage.local.set({
-          [option]: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,
-        });
-      }
-      browserApi.storage.local.set({"baseRainbowTheme": baseRainbowTheme})
-    }
-
-    browserApi.storage.local.set({"rainbowTimerId" : setInterval(advanceRainbow, 120)});    
-  } else {
-    browserApi.storage.local.set({ "rainbow": false });
-    clearInterval(await getStorageValue("rainbowTimerId"));
-
-    let baseRainbowTheme = await getStorageValue("baseRainbowTheme");
-    browserApi.storage.local.set({"baseRainbowTheme": {}})
-
-    if (baseRainbowTheme) {
-      await Promise.all(
-        Object.entries(baseRainbowTheme).map(([id, color]) =>
-          browserApi.storage.local.set({ [id]: color })
-        )
-      );
-      browserApi.runtime.sendMessage({ type: "applyTheme" });
-    }
-  }
-}
-
-// Tick 1 frame of ranbow animation 
-async function advanceRainbow() {
-  if (await getStorageValue("rainbow") != true) {
-    clearInterval(await getStorageValue("rainbowTimerId"));
-    return;
-  }
-
-  const options = getSvgIds();
-  const selectedId = elements.colorId.textContent;
-
-  for (let option of options) {
-    let color = (await getStorageValue(option)) || "hsl(0, 0%, 0%)";
-    let hsl;
-
-    if (color.startsWith("hsl")) {
-      hsl = parseHslString(color) || { h: 0, s: 0, l: 0 };
-    } else {
-      const rgb = convertToRgb(color) || { r: 0, g: 0, b: 0 };
-      hsl = rgbToHsl(rgb.r, rgb.g, rgb.b) || { h: 0, s: 0, l: 0 };
-    }
-
-    hsl.h = (hsl.h + 2) % 360;
-    const hslString = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
-
-    browserApi.storage.local.set({ [option]: hslString });
-
-    const element = document.getElementById(option);
-    if (element) element.style.fill = hslString;
-  }
-
-  if (selectedId && options.includes(selectedId)) {
-    await setColor(selectedId);
-  }
-
-  browserApi.runtime.sendMessage({ type: "applyTheme" });
 }
 
 // Export current theme
