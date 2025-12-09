@@ -278,20 +278,24 @@ async function getMap() {
   });
 }
 
+function broadcastApplyTheme() {
+  getMap().then((map) => {
+    const response = { ColorMap: map };
+    browserApi.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]) {
+        browserApi.tabs.sendMessage(tabs[0].id, {
+          type: "applyTheme",
+          response,
+        });
+      }
+    });
+  });
+}
+
 browserApi.runtime.onMessage.addListener(
   async (message, sender, sendResponse) => {
     if (message.type === "applyTheme") {
-      getMap().then((map) => {
-        const response = { ColorMap: map };
-        browserApi.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          if (tabs[0]) {
-            browserApi.tabs.sendMessage(tabs[0].id, {
-              type: "applyTheme",
-              response,
-            });
-          }
-        });
-      });
+      broadcastApplyTheme();
     }
 
     if (message.type === "toggleRainbow") {

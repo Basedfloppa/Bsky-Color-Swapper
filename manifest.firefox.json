@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Bluesky Color Palette Swapper",
   "description": "Swap color palettes on Bluesky (bsky.app). Create and share themes with a simple, cross‑browser extension.",
-  "version": "3.2.2",
+  "version": "3.3.0",
   "icons": {
     "32": "icons/bsky32.png",
     "64": "icons/bsky64.png",
