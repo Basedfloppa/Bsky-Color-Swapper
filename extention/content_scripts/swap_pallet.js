@@ -112,6 +112,7 @@ async function applyTheme(colorMap) {
     cssMatch("border-color", pickedTheme.accent, "border-color: var(--accent-color) !important;"),
 
     cssMatch("background-color", pickedTheme.accent_hover, "background-color: var(--accent-color-hover) !important;"),
+    cssMatch("border-color", pickedTheme.accent_hover, "border-color: var(--accent-color-hover) !important;"),
     cssMatch("color", pickedTheme.accent_hover, "color: var(--accent-color-hover) !important;"),
 
     cssMatch("color", pickedTheme.text_primary, "color: var(--text-primary-change) !important;"),
