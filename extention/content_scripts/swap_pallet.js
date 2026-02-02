@@ -23,7 +23,7 @@ const theme = {
 
     border: ["rgb(35, 46, 62)", "rgb(0, 40, 97)", "rgb(49, 63, 84)", "rgb(0, 57, 138)", "#232E3E"],
 
-    text_primary: ["#FFFFFF", "rgb(255, 255, 255)"],
+    text_primary: ["#FFFFFF", "rgb(255, 255, 255)", "rgb(220, 226, 234)"],
     text_secondary: ["rgb(102, 123, 153)", "hsla(212, 20%, 62%, 1.00)", "rgb(165, 178, 197)", "rgb(117, 175, 255)", "#667B99", "#A5B2C5"],
     
     content_warning: ["rgb(25, 34, 46)", "rgb(0, 30, 71)", "rgb(17, 24, 34)", "rgb(0, 21, 51)"],
@@ -39,7 +39,7 @@ const theme = {
 
     border: ["rgb(44, 58, 78)", "rgb(14, 68, 144)", "rgb(57, 73, 96)", "rgb(18, 52, 100)", "#2C3A4E"],
 
-    text_primary: ["#FFFFFF", "rgb(255, 255, 255)"],
+    text_primary: ["#FFFFFF", "rgb(255, 255, 255)", "rgb(226, 231, 238)"],
     text_secondary: ["rgb(171, 184, 201)", "rgb(111, 131, 159)", "rgb(128, 181, 255)", "#6F839F", "#ABB8C9", "#8D9DB4"],
     
     content_warning: ["rgb(18, 33, 54)", "rgb(34, 46, 63)", "rgb(28, 39, 54)", "rgb(18, 41, 73)"],
