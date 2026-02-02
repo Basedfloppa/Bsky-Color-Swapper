@@ -127,6 +127,7 @@ async function applyTheme(colorMap) {
     pickedTheme.text_primary.map(v => `div > button > div[style*="color: ${v}"]`).join(",\n") + `{ color: var(--main-button-text) !important; }`,
 
     'div[style*="background-image: linear-gradient(135deg, rgb(90, 113, 250), rgb(0, 133, 255))"] { background-image: linear-gradient(0deg, var(--accent-color), var(--accent-color)) !important;}',
+    'div.r-kemksi { background: var(--background-change) !important; }', // Specific override for alt text background
   ];
   
   const innerStyle = root + "\n" + blocks.join("\n\n");
