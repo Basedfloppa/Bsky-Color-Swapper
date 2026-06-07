@@ -116,14 +116,14 @@ async function exportTheme() {
     result = result.concat(svgElement + ":" + color);
   }
 
-  elements.exportText.value = result.join(";");
+  elements.exportText.value = compressToUrlSafe(result.join(";"));
   elements.copyExportButton.innerHTML = elements.icons.checkmark;
   await navigator.clipboard.writeText(elements.exportText.value);
 }
 
 // Import theme
 async function importTheme() {
-  let colors = elements.importText.value.split(";");
+  let colors = decompressFromUrlSafe(elements.importText.value).split(";");
 
   for (const color of colors) {
     await browserApi.storage.local.set({
@@ -269,6 +269,287 @@ async function setTheme(themeKey) {
   );
   reset();
 }
+
+// #region Compression
+
+const map = [
+  { "short": "cac", "long": "ColorMap--accent-color:" },
+  { "short": "cach", "long": "ColorMap--accent-color-hover:" },
+  { "short": "ccw", "long": "ColorMap--content-warnings:" },
+  { "short": "ccwh", "long": "ColorMap--content-warnings-hover:" },
+  { "short": "ctp", "long": "ColorMap--text-primary:" },
+  { "short": "cts", "long": "ColorMap--text-secondary:" },
+  { "short": "cbi", "long": "ColorMap--butterfly-icon:" },
+  { "short": "cb", "long": "ColorMap--background:" },
+  { "short": "cbc", "long": "ColorMap--border-color:" },
+  { "short": "cmbt", "long": "ColorMap--main-button-text:" }
+];
+
+const keyStrUriSafe =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$";
+
+function compressToUrlSafe(input) {
+  map.forEach(mapping => {
+    input = input.replace(mapping.long, mapping.short)
+  });
+  return compress(input, 6, value => keyStrUriSafe.charAt(value));
+}
+
+function decompressFromUrlSafe(compressed) {
+  let output = decompress(
+    compressed.length,
+    32, // 1 << 5
+    index => keyStrUriSafe.indexOf(compressed.charAt(index))
+  );
+  map.forEach(mapping => {
+    output = output.replace(mapping.short, mapping.long)
+  });
+  return output;
+}
+
+function compress(uncompressed, bitsPerChar, getCharFromInt) {
+  if (uncompressed == null) {
+    return "";
+  }
+
+  const context_dictionary = Object.create(null);
+  const context_dictionaryToCreate = Object.create(null);
+
+  let context_c = "";
+  let context_wc = "";
+  let context_w = "";
+  let context_enlargeIn = 2;
+  let context_dictSize = 3;
+  let context_numBits = 2;
+
+  const context_data = [];
+  let context_data_val = 0;
+  let context_data_position = 0;
+
+  const has = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
+
+  const writeBit = (bit) => {
+    context_data_val = (context_data_val << 1) | bit;
+
+    if (context_data_position === bitsPerChar - 1) {
+      context_data_position = 0;
+      context_data.push(getCharFromInt(context_data_val));
+      context_data_val = 0;
+    } else {
+      context_data_position += 1;
+    }
+  };
+
+  const writeBits = (value, count) => {
+    let current = value;
+
+    for (let i = 0; i < count; i += 1) {
+      writeBit(current & 1);
+      current >>= 1;
+    }
+  };
+
+  const enlargeDictionaryIfNeeded = () => {
+    context_enlargeIn -= 1;
+
+    if (context_enlargeIn === 0) {
+      context_enlargeIn = Math.pow(2, context_numBits);
+      context_numBits += 1;
+    }
+  };
+
+  const writeCreatedEntry = (entry) => {
+    const charCode = entry.charCodeAt(0);
+
+    if (charCode < 256) {
+      writeBits(0, context_numBits);
+      writeBits(charCode, 8);
+    } else {
+      writeBits(1, context_numBits);
+      writeBits(charCode, 16);
+    }
+
+    enlargeDictionaryIfNeeded();
+    delete context_dictionaryToCreate[entry];
+  };
+
+  for (let ii = 0; ii < uncompressed.length; ii += 1) {
+    context_c = uncompressed.charAt(ii);
+
+    if (!has(context_dictionary, context_c)) {
+      context_dictionary[context_c] = context_dictSize++;
+      context_dictionaryToCreate[context_c] = true;
+    }
+
+    context_wc = context_w + context_c;
+
+    if (has(context_dictionary, context_wc)) {
+      context_w = context_wc;
+    } else {
+      if (has(context_dictionaryToCreate, context_w)) {
+        writeCreatedEntry(context_w);
+      } else {
+        writeBits(context_dictionary[context_w], context_numBits);
+      }
+
+      enlargeDictionaryIfNeeded();
+
+      context_dictionary[context_wc] = context_dictSize++;
+      context_w = context_c;
+    }
+  }
+
+  if (context_w !== "") {
+    if (has(context_dictionaryToCreate, context_w)) {
+      writeCreatedEntry(context_w);
+    } else {
+      writeBits(context_dictionary[context_w], context_numBits);
+    }
+
+    enlargeDictionaryIfNeeded();
+  }
+
+  // Mark the end of the stream
+  writeBits(2, context_numBits);
+
+  // Flush the last char
+  while (true) {
+    context_data_val <<= 1;
+
+    if (context_data_position === bitsPerChar - 1) {
+      context_data.push(getCharFromInt(context_data_val));
+      break;
+    }
+
+    context_data_position += 1;
+  }
+
+  return context_data.join("");
+}
+
+function decompress(length, resetValue, getNextValue) {
+  const dictionary = [];
+  const result = [];
+
+  const data = {
+    val: getNextValue(0),
+    position: resetValue,
+    index: 1,
+  };
+
+  let enlargeIn = 4;
+  let dictSize = 4;
+  let numBits = 3;
+  let entry = "";
+  let c;
+
+  for (let i = 0; i < 3; i += 1) {
+    dictionary[i] = String(i);
+  }
+
+  const readBits = (bitCount) => {
+    let bits = 0;
+    let maxpower = Math.pow(2, bitCount);
+    let power = 1;
+
+    while (power !== maxpower) {
+      const resb = data.val & data.position;
+
+      data.position >>= 1;
+
+      if (data.position === 0) {
+        data.position = resetValue;
+        data.val = getNextValue(data.index++);
+      }
+
+      bits |= (resb > 0 ? 1 : 0) * power;
+      power <<= 1;
+    }
+
+    return bits;
+  };
+
+  let bits = readBits(2);
+
+  switch (bits) {
+    case 0:
+      c = String.fromCharCode(readBits(8));
+      break;
+
+    case 1:
+      c = String.fromCharCode(readBits(16));
+      break;
+
+    case 2:
+      return "";
+
+    default:
+      return null;
+  }
+
+  if (c === undefined) {
+    throw new Error("No character found");
+  }
+
+  dictionary[3] = c;
+
+  let w = c;
+  result.push(c);
+
+  while (true) {
+    if (data.index > length) {
+      return "";
+    }
+
+    bits = readBits(numBits);
+    c = bits;
+
+    switch (c) {
+      case 0:
+        dictionary[dictSize++] = String.fromCharCode(readBits(8));
+        c = dictSize - 1;
+        enlargeIn -= 1;
+        break;
+
+      case 1:
+        dictionary[dictSize++] = String.fromCharCode(readBits(16));
+        c = dictSize - 1;
+        enlargeIn -= 1;
+        break;
+
+      case 2:
+        return result.join("");
+    }
+
+    if (enlargeIn === 0) {
+      enlargeIn = Math.pow(2, numBits);
+      numBits += 1;
+    }
+
+    if (dictionary[c]) {
+      entry = dictionary[c];
+    } else if (c === dictSize) {
+      entry = w + w.charAt(0);
+    } else {
+      return null;
+    }
+
+    result.push(entry);
+
+    // Add w + entry[0] to the dictionary.
+    dictionary[dictSize++] = w + entry.charAt(0);
+
+    enlargeIn -= 1;
+    w = entry;
+
+    if (enlargeIn === 0) {
+      enlargeIn = Math.pow(2, numBits);
+      numBits += 1;
+    }
+  }
+}
+
+// #endregion
 
 // #region Colors
 
